@@ -18,7 +18,7 @@
             android:clickable="true"
             android:id="@+id/informationCardView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="95dp"
             app:cardCornerRadius="0dp">
             <RelativeLayout
                 android:id="@+id/streetLayout"
@@ -76,6 +76,7 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="0dp">
                 <RelativeLayout
+                    android:id="@+id/crimeRl"
                     android:background="#FFFFFF"
                     android:layout_below="@+id/streetLayout"
                     android:layout_width="match_parent"
@@ -91,7 +92,7 @@
                         android:layout_height="wrap_content" />
                     <android.support.v7.widget.RecyclerView
                         android:layout_below="@+id/crimesTitle"
-                        android:id="@+id/crimes"
+                        android:id="@+id/crimesRv"
                         android:layout_width="match_parent"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
