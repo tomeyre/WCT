@@ -1,5 +1,7 @@
 package eyresapps.com.utils;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -24,5 +26,6 @@ public class LatitudeAndLongitudeUtil {
 
     public void setLatLng(LatLng latLng) {
         this.latLng = latLng;
+        Log.i("Set LatLng : ",latLng.latitude + "/" + latLng.longitude);
     }
 }

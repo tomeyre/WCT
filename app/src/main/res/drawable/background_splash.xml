@@ -3,7 +3,7 @@
 
     <item
         android:drawable="@color/black"/>
-
+    <application android:theme="@android:style/Theme.NoTitleBar"/>
     <item>
         <bitmap
             android:gravity="center"

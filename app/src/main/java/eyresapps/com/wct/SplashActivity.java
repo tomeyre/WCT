@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.Window;
 
 /**
  * Created by thomaseyre on 04/01/2018.
@@ -23,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 1000);
+        }, 0);
 
     }
 }

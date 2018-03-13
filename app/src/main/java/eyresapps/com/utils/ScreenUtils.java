@@ -7,8 +7,12 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import java.util.ArrayList;
+
+import eyresapps.com.wct.LockableScrollView;
 import eyresapps.com.wct.MainActivity;
 
 /**
@@ -35,6 +39,16 @@ public class ScreenUtils {
             result = context.getResources().getDimensionPixelSize(resourceId);
         }
         return result;
+    }
+
+    public static float getMeasuredHeight(ViewGroup view){
+        float measuredHeight = 0;
+
+        for (int i = 0; i < view.getChildCount(); i++) {
+            measuredHeight = view.getChildAt(i).getHeight();
+        }
+
+        return measuredHeight;
     }
 
     public static int getScreenWidth(Context context)

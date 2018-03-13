@@ -1,5 +1,7 @@
 package eyresapps.com.utils;
 
+import android.util.Log;
+
 /**
  * Created by Tom on 04/11/2017.
  */
@@ -22,5 +24,6 @@ public class CurrentAddressUtil {
 
     public void setAddress(String address) {
         this.address = address;
+        Log.i("Set address : ",address);
     }
 }
