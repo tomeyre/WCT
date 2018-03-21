@@ -19,7 +19,9 @@
     <color name="nonViolent">#80ffbf00</color>
     <color name="violent">#80ff0000</color>
 
+    <color name="transparentBlack">#90000000</color>
     <color name="black">#000000</color>
+    <color name="grey">#eeeeee</color>
     <color name="white">#ffffff</color>
 
     <color name="link">#3DCFFF</color>

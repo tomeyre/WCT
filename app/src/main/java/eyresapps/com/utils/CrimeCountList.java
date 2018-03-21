@@ -1,7 +1,10 @@
 package eyresapps.com.utils;
 
 import android.content.Context;
-import android.view.View;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -65,7 +68,8 @@ public class CrimeCountList {
         for (int i = 0; i < textViews.size(); i++) {
             if (i < counter.size()) {
                 textViews.get(i).setVisibility(VISIBLE);
-                textViews.get(i).setText(new CrimeTypeString().setString(counter.get(i).getName()) + ": " + counter.get(i).getCount());
+                String text = new CapitalizeString().getString(counter.get(i).getName()) + ": <b>" + counter.get(i).getCount()+ "</b>";
+                textViews.get(i).setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY));
             } else {
                 textViews.get(i).setVisibility(GONE);
             }

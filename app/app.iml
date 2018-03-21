@@ -100,7 +100,6 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/split-apk" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/splits-support" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/transforms" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
@@ -116,6 +115,7 @@
     <orderEntry type="library" name="play-services-gass-11.8.0" level="project" />
     <orderEntry type="library" name="firebase-common-license-11.8.0" level="project" />
     <orderEntry type="library" name="play-services-ads-11.8.0" level="project" />
+    <orderEntry type="library" name="android-maps-utils-0.5" level="project" />
     <orderEntry type="library" name="support-compat-26.1.0" level="project" />
     <orderEntry type="library" name="support-annotations-26.1.0" level="project" />
     <orderEntry type="library" name="support-v4-26.1.0" level="project" />

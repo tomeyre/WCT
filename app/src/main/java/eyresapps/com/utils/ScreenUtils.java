@@ -41,11 +41,25 @@ public class ScreenUtils {
         return result;
     }
 
+    public static float getMeasuredHeight(ViewGroup view, float titleHeight, float adHeight){
+        float measuredHeight = 0;
+
+        for (int i = 0; i < view.getChildCount(); i++) {
+            if(view.getVisibility() == View.VISIBLE) {
+                measuredHeight += view.getChildAt(i).getHeight() + convertDpToPixel(10, view.getContext());
+            }
+        }
+
+        return measuredHeight + titleHeight + adHeight;
+    }
+
     public static float getMeasuredHeight(ViewGroup view){
         float measuredHeight = 0;
 
         for (int i = 0; i < view.getChildCount(); i++) {
-            measuredHeight = view.getChildAt(i).getHeight();
+            if(view.getVisibility() == View.VISIBLE) {
+                measuredHeight += view.getChildAt(i).getHeight() + convertDpToPixel(10, view.getContext());
+            }
         }
 
         return measuredHeight;

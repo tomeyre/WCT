@@ -7,6 +7,33 @@
     android:background="#FFFFFF"
     tools:context="eyresapps.com.wct.MainActivity">
 
+    <android.support.v7.widget.CardView
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        app:cardCornerRadius="25dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/heatMapBtn"
+        android:text="Do shit"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="#ffffff"
+        android:background="#ffffff">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ImageView
+            android:background="#ffffff"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/btnImage"
+            android:src="@drawable/maps"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
     <com.google.android.gms.ads.AdView
         android:background="@color/black"
         xmlns:ads="http://schemas.android.com/apk/res-auto"
@@ -20,6 +47,39 @@
         ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
     </com.google.android.gms.ads.AdView>
 
+    <android.support.v7.widget.CardView
+        android:id="@+id/searchLayout"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="0dp"
+        app:cardBackgroundColor="#e6ffffff"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/heatMapBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:background="#00ffffff"
+            android:id="@+id/bottomLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <view class="eyresapps.com.wct.MainActivity$ListenerEditText"
+                android:background="#00ffffff"
+                android:id="@+id/search"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_height="50dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/transparentBlack"
+                android:hint="Search here..."/>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/map"
@@ -484,6 +544,7 @@
                     </LinearLayout>
 
                     <Button
+                        android:id="@+id/additionalInformationBtn"
                         android:layout_centerHorizontal="true"
                         android:layout_margin="5dp"
                         android:layout_below="@+id/totalsByStreet"
@@ -491,13 +552,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
-                    <android.support.v7.widget.RecyclerView
-                        android:visibility="gone"
-                        android:id="@+id/crimesRv"
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_below="@+id/totalsByStreet"
-                        android:layout_marginBottom="10dp"></android.support.v7.widget.RecyclerView>
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
 
@@ -557,51 +611,10 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/eventsAndPrioritiesCardView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/aboutCardView"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                app:cardCornerRadius="0dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/streetLayout"
-                    android:background="#FFFFFF">
-
-                    <TextView
-                        android:id="@+id/additionalTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text="Any Events or Priorities"
-                        android:textColor="#000000"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/additional"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/additionalTitle"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:text="None"
-                        android:textColor="#000000"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-                </RelativeLayout>
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
                 android:id="@+id/socialMediaCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/eventsAndPrioritiesCardView"
+                android:layout_below="@+id/aboutCardView"
                 android:layout_margin="10dp"
                 app:cardCornerRadius="0dp">
 

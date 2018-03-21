@@ -60,33 +60,33 @@ public class DateUtil {
         return yearBehind;
     }
 
-    public String getShortMonthAsString(){
+    public String getMonthAsString(){
         String monthString;
 
         if(this.month == 0){
-            monthString = "JAN";
+            monthString = "January";
         }else if(this.month == 1){
-            monthString = "FEB";
+            monthString = "February";
         }else if(this.month == 2){
-            monthString = "MAR";
+            monthString = "March";
         }else if(this.month == 3){
-            monthString = "APR";
+            monthString = "April";
         }else if(this.month == 4){
-            monthString = "MAY";
+            monthString = "May";
         }else if(this.month == 5){
-            monthString = "JUN";
+            monthString = "June";
         }else if(this.month == 6){
-            monthString = "JUL";
+            monthString = "July";
         }else if(this.month == 7){
-            monthString = "AUG";
+            monthString = "August";
         }else if(this.month == 8){
-            monthString = "SEP";
+            monthString = "September";
         }else if(this.month == 9){
-            monthString = "OCT";
+            monthString = "October";
         }else if(this.month == 10){
-            monthString = "NOV";
+            monthString = "November";
         }else {
-            monthString = "DEC";
+            monthString = "December";
         }
 
         return monthString;

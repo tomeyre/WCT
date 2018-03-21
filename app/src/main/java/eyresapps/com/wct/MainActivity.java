@@ -1,9 +1,12 @@
 package eyresapps.com.wct;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
@@ -12,16 +15,22 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ActionMenuView;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.util.Linkify;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +49,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.maps.android.heatmaps.Gradient;
+import com.google.maps.android.heatmaps.HeatmapTileProvider;
+import com.google.maps.android.heatmaps.WeightedLatLng;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,10 +71,13 @@ import eyresapps.com.data.Counter;
 import eyresapps.com.data.CrimeCount;
 import eyresapps.com.data.Crimes;
 import eyresapps.com.utils.CrimeCountList;
+import eyresapps.com.utils.CapitalizeString;
 import eyresapps.com.utils.CurrentAddressUtil;
 import eyresapps.com.utils.DateUtil;
+import eyresapps.com.utils.FindSearchLocation;
 import eyresapps.com.utils.GPSTrackerUtil;
 import eyresapps.com.utils.LatitudeAndLongitudeUtil;
+import eyresapps.com.utils.ScreenUtils;
 
 import static android.text.util.Linkify.addLinks;
 import static android.view.View.GONE;
@@ -72,12 +89,30 @@ import static eyresapps.com.utils.ScreenUtils.getStatusBarHeight;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, NetworkStateReceiver.NetworkStateReceiverListener {
 
+    float topOfTitle;
+    float topOfBody;
+    float titleHeight;
+    float bodyMeasuredHeight;
+
+    private Geocoder geocoder;
+    private List<Address> addresses;
+    private ListenerEditText search;
+    private CardView searchLayout;
+
+    private CardView heatMapBtn;
+    private ImageView btnImage;
+    private ArrayList<Marker> markers;
+    private HeatmapTileProvider mProvider;
+    private TileOverlay mOverlay;
+
     private int isClickCount = 0;
-    private static int adViewHeight;
+    private float adViewHeight;
 
     private NetworkStateReceiver networkStateReceiver;
 
     CrimeCount crimeCount = CrimeCount.getInstance();
+
+    ArrayList<Crimes> markerCrimes = new ArrayList<>();
 
     //--------------------getting crimes ect dialog display
     private ProgressDialog dialog;
@@ -158,11 +193,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Handler timeHandler;
     private Locale locale;
 
-    //----------------used to generate the crimes and add them to the recycler view on screen
-    private RVAdapterCrimes rvAdapterCrimes;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
-
     //--------- cards to remove if no information inside them
     private CardView crimesCardView;
     private CardView aboutCardView;
@@ -171,10 +201,51 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private AdView mAdView;
     private AdRequest adRequest;
 
+    private Button additionalInformationBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_main);
+
+
+        adViewHeight = ScreenUtils.convertDpToPixel(50,this);
+
+        searchLayout = findViewById(R.id.searchLayout);
+        search = (ListenerEditText) findViewById(R.id.search);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search.setCursorVisible(true);
+            }
+        });
+
+        hideSoftKeyboard();
+        search.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER){
+                    if (!search.getText().toString().trim().equals("")) {
+                        new FindSearchLocation(MainActivity.this).execute(search.getText().toString());
+                    }
+                    search.setText("");
+                    search.clearFocus();
+                    hideSoftKeyboard();
+                    return true;
+                }
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_DEL) {
+                    if(search.getText().length() > 0){
+                        search.setText(search.getText().delete(search.getText().length() - 1,search.getText().length()));
+                        search.setSelection(search.getText().length());
+                    }
+                }
+
+                return true;
+            }
+        });
+
+
+        markers = new ArrayList<>();
 
         //-------network state receiver signals when a connection has changed allowing code
         //-----to be run when a user goes from offline to online using the NetworkStateReceiver class
@@ -196,11 +267,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         dialog = new ProgressDialog(this);
 
         //---------------find all views to be manipulated on the front end
+        heatMapBtn = findViewById(R.id.heatMapBtn);
+        btnImage = findViewById(R.id.btnImage);
+        additionalInformationBtn = findViewById(R.id.additionalInformationBtn);
         layoutBody = findViewById(R.id.informationLayout);
         layoutTitle = findViewById(R.id.informationCardView);
         informationLayout = findViewById(R.id.informationLayout);
         streetName = findViewById(R.id.streetName);
-        recyclerView = findViewById(R.id.crimesRv);
         crimesCardView = findViewById(R.id.crimesCardView);
         time = findViewById(R.id.time);
         about = findViewById(R.id.about);
@@ -244,6 +317,40 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         areaTotalsTitle = findViewById(R.id.areaTotalsTitle);
         crimesTitle = findViewById(R.id.crimesTitle);
 
+        //--------
+        additionalInformationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //mock data for testing
+
+                /*markerCrimes.add(new Crimes("TWAT","21/10/2017","10:10","arrest","balls",100,100,"nope","shit"));
+                markerCrimes.add(new Crimes("TWAT","21/10/2017","10:10","arrest","balls",100,100,"nope","shit"));
+                markerCrimes.add(new Crimes("TWAT","21/10/2017","10:10","arrest","balls",100,100,"nope","shit"));
+                markerCrimes.add(new Crimes("TWAT","21/10/2017","10:10","arrest","balls",100,100,"nope","shit"));*/
+
+                Intent intent = new Intent( MainActivity.this, AdditionalInformation.class);
+                intent.putExtra("crimes", markerCrimes);
+                startActivity(intent);
+            }
+        });
+
+        heatMapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(markers.isEmpty()){
+                    updateMap(crimeList);
+                }else {
+                    try {
+                        mMap.clear();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    markers.clear();
+                    mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+                }
+            }
+        });
+
         //--------------set up the custom scroll view and get the layout heights for the custom scroll view layouts
         layoutTitle.setY((getScreenHeight(this) / 10) * 6);
         layoutBody.setY(((getScreenHeight(this) / 10) * 6) - layoutTitle.getHeight());
@@ -271,16 +378,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         lm = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
         //---------------starts an animation after the splash screen to indicate that the information bar is collapasable
-        layoutTitle.animate()
-                .y(getScreenHeight(MainActivity.this))
-                .setDuration(250)
-                .setStartDelay(2000)
-                .start();
-        layoutBody.animate()
-                .y(getScreenHeight(MainActivity.this))
-                .setDuration(250)
-                .setStartDelay(2000)
-                .start();
+//        layoutTitle.animate()
+//                .y(getScreenHeight(MainActivity.this))
+//                .setDuration(250)
+//                .setStartDelay(2000)
+//                .start();
+//        layoutBody.animate()
+//                .y(getScreenHeight(MainActivity.this))
+//                .setDuration(250)
+//                .setStartDelay(2000)
+//                .start();
 
 
     }
@@ -289,30 +396,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         Log.i("Map", " Ready");
         mMap = googleMap;
+        showPosition();
+        mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng newLatLng) {
+                hideSoftKeyboard();
                 hidePopUpView();
-                dialog.setMessage("Getting crimes...");
-                dialog.show();
                 latLng.setLatLng(newLatLng);
-                findAddress();
-                callNewCrime();
+                showPosition();
             }
         });
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
                 hidePopUpView();
+                hideSoftKeyboard();
             }
         });
-    }
-
-    public void setCrimesOnMarkerClick(ArrayList<Crimes> crimeList) {
-        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        rvAdapterCrimes = new RVAdapterCrimes(crimeList, MainActivity.this);
-        recyclerView.setAdapter(rvAdapterCrimes);
     }
 
     public void hidePopUpView() {
@@ -326,6 +427,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .start();
         mAdView.destroy();
         mAdView.setVisibility(INVISIBLE);
+        searchLayout.setVisibility(VISIBLE);
+        hideSoftKeyboard();
     }
 
     public void showPopUpViewTitle() {
@@ -339,20 +442,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .start();
         mAdView.destroy();
         mAdView.setVisibility(INVISIBLE);
+        searchLayout.setVisibility(VISIBLE);
+        hideSoftKeyboard();
+
     }
 
     //------------------private methods
 
     private void findAddress() {
-        Geocoder geocoder;
-        List<Address> addresses;
+        try{
+            addresses.clear();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
-
         try {
             addresses = geocoder.getFromLocation(latLng.getLatLng().latitude, latLng.getLatLng().longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
 
             String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
             currentAddress.setAddress(address);
+            callNewCrime();
         } catch (Exception e) {
             e.printStackTrace();
             dialog.dismiss();
@@ -384,19 +493,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         dateUtil.setMaxMonth(dateUtil.getMonth());
         dateUtil.setMaxYear(dateUtil.getYear());
         new GetCurrentWeather(MainActivity.this, latLng.getLatLng()).execute();
+        cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.getLatLng().latitude, latLng.getLatLng().longitude), 15);
+        mMap.animateCamera(cameraUpdate);
     }
 
-    private void showPosition() {
+    public void showPosition() {
         if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) && new Network().isNetworkEnabled(MainActivity.this)) {
             dialog.setMessage("Getting crimes...");
             dialog.show();
             cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng.getLatLng(), 15);
             mMap.addMarker(new MarkerOptions().position(latLng.getLatLng()).title("You are here"));
             mMap.animateCamera(cameraUpdate);
-            dialog.setMessage("Getting Crimes");
-            dialog.show();
             findAddress();
-            callNewCrime();
         }else{
             Toast.makeText(getApplicationContext(), "Internet connection required.",
                     Toast.LENGTH_SHORT).show();
@@ -405,30 +513,27 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private Bitmap getMarkerBitmapFromView(int mapColour, View v) {
-
-        //RelativeLayout customMarkerView = (RelativeLayout)((LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_map_marker, null);
         CardView cardView = (CardView) v.findViewById(R.id.custom_marker_view);
         TextView textView = (TextView) v.findViewById(R.id.txtCrimeCount);
         textView.setText(Integer.toString(mapColour));
 
-
-        if (mapColour == 1) {
+        if (mapColour <= 2) {
             cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.color1));
-        } else if (mapColour == 2) {
+        } else if (mapColour > 2 && mapColour <= 4) {
             cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.color2));
-        } else if (mapColour == 3) {
+        } else if (mapColour > 4 && mapColour <= 6) {
             cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.color3));
-        } else if (mapColour == 4) {
+        } else if (mapColour > 6 && mapColour <= 8) {
             cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.color4));
-        } else if (mapColour == 5) {
+        } else if (mapColour > 8 && mapColour <= 10) {
             cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.color5));
-        } else if (mapColour == 6) {
+        } else if (mapColour > 12 && mapColour <= 14) {
             cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.color6));
-        } else if (mapColour == 7) {
+        } else if (mapColour > 14 && mapColour <= 16) {
             cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.color7));
-        } else if (mapColour == 8) {
+        } else if (mapColour > 16 && mapColour <= 18) {
             cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.color8));
-        } else if (mapColour == 9) {
+        } else if (mapColour > 18 && mapColour <= 20) {
             cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.color9));
         } else {
             cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.color10));
@@ -448,11 +553,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //------------public methods
 
-    public void dismissDialog() {
+    public void dismissDialog(final String text) {
         dialog.dismiss();
         this.runOnUiThread(new Runnable() {
             public void run() {
-                Toast.makeText(getApplicationContext(), "No crime Statistics for this date",
+                Toast.makeText(getApplicationContext(), text,
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -469,33 +574,68 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ArrayList<Marker> markers = new ArrayList<>();
+        try {
+            markers.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<WeightedLatLng> weightedLatLngs = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
             int mapColour = list.get(i).size();
-            String streetName = list.get(i).get(0).getStreetName().toString();
+            String streetName = new CapitalizeString().getString(list.get(i).get(0).getStreetName().toString());
 
             LayoutInflater inflater = (LayoutInflater) MainActivity.this
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View v = inflater.inflate(R.layout.custom_map_marker, null);
+            View bigV = inflater.inflate(R.layout.custom_map_marker_big, null);
 
-            markers.add(mMap.addMarker(new MarkerOptions()
-                    .title(streetName)
-                    .position(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()))
-                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mapColour, v)))));
-            mMap.setOnMarkerClickListener(this);
+            if(mapColour < 100) {
+                weightedLatLngs.add(new WeightedLatLng(new LatLng(list.get(i).get(0).getLatitude(),list.get(i).get(0).getLongitude()),list.get(i).size()));
+                markers.add(mMap.addMarker(new MarkerOptions()
+                        .title(streetName)
+                        .position(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()))
+                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mapColour, v)))));
+                mMap.setOnMarkerClickListener(this);
+            }else{
+                weightedLatLngs.add(new WeightedLatLng(new LatLng(list.get(i).get(0).getLatitude(),list.get(i).get(0).getLongitude()),100));
+                markers.add(mMap.addMarker(new MarkerOptions()
+                        .title(streetName)
+                        .position(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()))
+                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mapColour, bigV)))));
+                mMap.setOnMarkerClickListener(this);
+            }
         }
 
-
-        cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.getLatLng().latitude, latLng.getLatLng().longitude), 15);
-        mMap.animateCamera(cameraUpdate);
-        Toast.makeText(getApplicationContext(), "Crime statistics around " + currentAddress.getAddress() + " for " + dateUtil.getMonth() + "/" + dateUtil.getYear(),
+        Toast.makeText(getApplicationContext(), "Crime statistics for " + dateUtil.getMonthAsString() + " " + dateUtil.getYear(),
                 Toast.LENGTH_LONG).show();
+
+        // Create the gradient.
+        int[] colors = {
+                Color.rgb(102, 225, 0), // green
+                Color.rgb(255, 0, 0)    // red
+        };
+
+        float[] startPoints = {
+                0.2f, 1f
+        };
+
+        Gradient gradient = new Gradient(colors, startPoints);
+
+        // Create a heat map tile provider, passing it the latlngs of the police stations.
+        mProvider = new HeatmapTileProvider.Builder()
+                .weightedData(weightedLatLngs)
+                .gradient(gradient)
+                .radius(50)
+                .build();
+
     }
 
     //-----------------------------------------------------------code for marker selected
     @Override
     public boolean onMarkerClick(Marker marker) {
+        hideSoftKeyboard();
         crimeCount.resetStreetCount();
         if (layoutTitle.getY() == getScreenHeight(MainActivity.this)) {
             layoutTitle.animate()
@@ -511,13 +651,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
         String location = "";
-        ArrayList<Crimes> tempCrimes = new ArrayList<>();
+        markerCrimes = new ArrayList<>();
         ArrayList<Counter> counts = new ArrayList<>();
         for (int i = 0; i < crimeList.size(); i++) {
             if (crimeList.get(i).get(0).getLongitude() == marker.getPosition().longitude &&
                     crimeList.get(i).get(0).getLatitude() == marker.getPosition().latitude) {
-                location = crimeList.get(i).get(0).getStreetName();
+                location = new CapitalizeString().getString(crimeList.get(i).get(0).getStreetName());
                 for (int j = 0; j < crimeList.get(i).size(); j++) {
+
+                    markerCrimes.add(new Crimes(
+                            crimeList.get(i).get(j).getCrimeType(),
+                            crimeList.get(i).get(j).getDate(),
+                            crimeList.get(i).get(j).getTime(),
+                            crimeList.get(i).get(j).getOutcome(), location,
+                            crimeList.get(i).get(j).getLatitude(),
+                            crimeList.get(i).get(j).getLongitude(),
+                            crimeList.get(i).get(j).getWeapon(),
+                            crimeList.get(i).get(j).getDescription()));
 
                     if (counts.isEmpty()) {
                         counts.add(new Counter(crimeList.get(i).get(j).getCrimeType(), 1));
@@ -534,15 +684,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             break;
                         }
                     }
-
-                    tempCrimes.add(new Crimes(crimeList.get(i).get(j).getCrimeType(),
-                            crimeList.get(i).get(j).getDate(),
-                            crimeList.get(i).get(j).getTime(),
-                            crimeList.get(i).get(j).getOutcome(), location,
-                            crimeList.get(i).get(j).getLatitude(),
-                            crimeList.get(i).get(j).getLongitude(),
-                            crimeList.get(i).get(j).getWeapon(),
-                            crimeList.get(i).get(j).getDescription()));
                 }
                 break;
             }
@@ -551,7 +692,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         streetName.setText(location.trim());
         areaTotalsTitle.setText(location.trim());
-        setCrimesOnMarkerClick(tempCrimes);
         new CrimeCountList(this).sortCrimesCount(counts, false);
         return false;
     }
@@ -577,7 +717,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             String[] aresSplit = area.split(" ");
             String fullArea = "";
             for (String areas : aresSplit) {
-                areas = areas.substring(0, 1).toUpperCase() + areas.substring(1);
+                areas = areas.substring(0, 1).toUpperCase() + areas.substring(1).toLowerCase();
                 fullArea += areas + " ";
             }
 
@@ -589,6 +729,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             email.setText("Email: " + emailString);
             addLinks(email, Linkify.EMAIL_ADDRESSES);
             email.setLinkTextColor(ContextCompat.getColor(this, R.color.link));
+            email.setOnLongClickListener(new View.OnLongClickListener(){
+                public boolean onLongClick(View v) {
+                    return true;
+                }
+            });
         } else {
             email.setVisibility(GONE);
         }
@@ -597,6 +742,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             facebook.setText("Facebook: " + facebookString);
             addLinks(facebook, Linkify.WEB_URLS);
             facebook.setLinkTextColor(ContextCompat.getColor(this, R.color.link));
+            facebook.setOnLongClickListener(new View.OnLongClickListener(){
+                public boolean onLongClick(View v) {
+                    return true;
+                }
+            });
         } else {
             facebook.setVisibility(GONE);
         }
@@ -605,6 +755,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             twitter.setText("Twitter: " + twitterString);
             addLinks(twitter, Linkify.WEB_URLS);
             twitter.setLinkTextColor(ContextCompat.getColor(this, R.color.link));
+            twitter.setOnLongClickListener(new View.OnLongClickListener(){
+                public boolean onLongClick(View v) {
+                    return true;
+                }
+            });
         } else {
             twitter.setVisibility(GONE);
         }
@@ -613,6 +768,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             website.setText("Website: " + websiteString);
             addLinks(website, Linkify.WEB_URLS);
             website.setLinkTextColor(ContextCompat.getColor(this, R.color.link));
+            website.setOnLongClickListener(new View.OnLongClickListener(){
+                public boolean onLongClick(View v) {
+                    return true;
+                }
+            });
         } else {
             website.setVisibility(GONE);
         }
@@ -628,19 +788,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         ViewGroup.LayoutParams lp = layoutBody.getLayoutParams();
-        lp.height = layoutBody.getHeight() < getScreenHeight(this) ? getScreenHeight(this) : layoutBody.getHeight();
+        lp.height = (int) getMeasuredHeight(layoutBody) - statusBarHeight < getScreenHeight(this) ? getScreenHeight(this) : (int) getMeasuredHeight(layoutBody) - statusBarHeight;
         layoutBody.setLayoutParams(lp);
 
     }
 
     public void setWeather(String description, Double curentTemp) {
         char tmp = 0x00B0;
-        weather.setText(description + " " + curentTemp.intValue() + tmp);
+        weather.setText(new CapitalizeString().getString(description) + " " + curentTemp.intValue() + tmp);
     }
 
     @Override
     public void onBackPressed() {
-        if (layoutTitle.getY() == 0) {
+        if (layoutTitle.getY() == mAdView.getHeight()) {
             showPopUpViewTitle();
         } else if (layoutTitle.getY() == getScreenHeight(MainActivity.this) - layoutTitle.getHeight() - statusBarHeight) {
             hidePopUpView();
@@ -715,45 +875,100 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startingPosition = event.getRawY();
                 break;
             case MotionEvent.ACTION_UP:
+                topOfTitle = layoutTitle.getY();
+                topOfBody = layoutBody.getY();
+                titleHeight = layoutTitle.getHeight();
+                bodyMeasuredHeight = getMeasuredHeight(informationLayout, titleHeight, adViewHeight);
+                float movementAmmount = startingPosition - previousPosition;
                 System.out.println("click count = " + isClickCount);
-                if(isClickCount < 5){
-                    if(layoutTitle.getY() <= mAdView.getHeight() + 15 && layoutTitle.getY() >= mAdView.getHeight() - 15){
+
+                //on click
+                if (isClickCount < 5) {
+                    if (topOfTitle <= adViewHeight + 30 && topOfTitle >= adViewHeight - 30) {
                         showPopUpViewTitle();
-                    }else if(layoutTitle.getY() <= getScreenHeight(MainActivity.this) - layoutTitle.getHeight() - statusBarHeight + 15 &&
-                            layoutTitle.getY() >= getScreenHeight(MainActivity.this) - layoutTitle.getHeight() - statusBarHeight - 15){
+                    } else if (topOfTitle <= getScreenHeight(MainActivity.this) - titleHeight - statusBarHeight + 30 &&
+                            topOfTitle >= getScreenHeight(MainActivity.this) - titleHeight - statusBarHeight - 30) {
                         layoutTitle.animate()
-                                .y(mAdView.getHeight())
+                                .y(adViewHeight)
                                 .setDuration(250)
                                 .start();
                         layoutBody.animate()
-                                .y(mAdView.getHeight())
+                                .y(adViewHeight)
                                 .setDuration(250)
                                 .start();
                         mAdView.setVisibility(VISIBLE);
                         adRequest = new AdRequest.Builder().build();
                         mAdView.loadAd(adRequest);
+                        searchLayout.setVisibility(GONE);
                     }
                 }
-                if (startingPosition - previousPosition > 10
-                        && layoutTitle.getY() > getScreenHeight(MainActivity.this) / 4
-                        && layoutTitle.getY() != 0) {
-                    System.out.println("4 || " + layoutTitle.getY());
+                // on move
+                else if (movementAmmount > 200
+                        && topOfTitle > getScreenHeight(MainActivity.this) / 4
+                        && topOfTitle != 0) {
+                    System.out.println("1 = " + (movementAmmount));
                     layoutTitle.animate()
-                            .y(mAdView.getHeight())
+                            .y(adViewHeight)
                             .setDuration(250)
                             .start();
                     layoutBody.animate()
-                            .y(mAdView.getHeight())
+                            .y(adViewHeight)
                             .setDuration(250)
                             .start();
                     mAdView.setVisibility(VISIBLE);
                     adRequest = new AdRequest.Builder().build();
                     mAdView.loadAd(adRequest);
-                } else if (startingPosition - previousPosition < -10
-                        && layoutTitle.getY() < getScreenHeight(MainActivity.this) - getScreenHeight(MainActivity.this) / 3
-                        && layoutTitle.getY() != getScreenHeight(MainActivity.this) - layoutTitle.getHeight()
-                        && layoutBody.getY() >= 0) {
+                    searchLayout.setVisibility(GONE);
+                } else if (!(movementAmmount > 200) && movementAmmount > 0
+                        && topOfTitle > getScreenHeight(MainActivity.this) / 4
+                        && topOfTitle != 0) {
+                    System.out.println("2 = " + (movementAmmount));
                     showPopUpViewTitle();
+                }
+                //on move
+
+                else if (movementAmmount < -200
+                        && topOfTitle > getScreenHeight(MainActivity.this) / 5
+                        && topOfTitle != getScreenHeight(MainActivity.this) - titleHeight
+                        && topOfBody >= 0) {
+                    System.out.println("3 = " + (movementAmmount) + " / " + topOfTitle);
+                    showPopUpViewTitle();
+                }
+                else if (movementAmmount > -200 && movementAmmount < 0
+                        && topOfTitle < getScreenHeight(MainActivity.this) - getScreenHeight(MainActivity.this) / 4
+                        && topOfTitle != getScreenHeight(MainActivity.this) - titleHeight
+                        && topOfBody >= 0) {
+                    System.out.println("4 = " + (movementAmmount) + " / " + topOfTitle);
+                    layoutTitle.animate()
+                            .y(adViewHeight)
+                            .setDuration(250)
+                            .start();
+                    layoutBody.animate()
+                            .y(adViewHeight)
+                            .setDuration(250)
+                            .start();
+                    mAdView.setVisibility(VISIBLE);
+                    adRequest = new AdRequest.Builder().build();
+                    mAdView.loadAd(adRequest);
+                    searchLayout.setVisibility(GONE);
+                }
+                else if (movementAmmount < -200
+                        && topOfTitle < getScreenHeight(MainActivity.this) - getScreenHeight(MainActivity.this) / 4
+                        && topOfTitle != getScreenHeight(MainActivity.this) - titleHeight
+                        && topOfBody >= 0) {
+                    System.out.println("5 = " + (movementAmmount) + " / " + topOfTitle);
+                    layoutTitle.animate()
+                            .y(adViewHeight)
+                            .setDuration(250)
+                            .start();
+                    layoutBody.animate()
+                            .y(adViewHeight)
+                            .setDuration(250)
+                            .start();
+                    mAdView.setVisibility(VISIBLE);
+                    adRequest = new AdRequest.Builder().build();
+                    mAdView.loadAd(adRequest);
+                    searchLayout.setVisibility(GONE);
                 }
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -761,18 +976,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case MotionEvent.ACTION_POINTER_UP:
                 break;
             case MotionEvent.ACTION_MOVE:
-                float topOfTitle = layoutTitle.getY();
-                float topOfBody = layoutBody.getY();
-                float bodyMeasuredHeight = getMeasuredHeight(informationLayout);
-                float titleHeight = layoutTitle.getHeight();
-                adViewHeight = mAdView.getHeight();
+                topOfTitle = layoutTitle.getY();
+                topOfBody = layoutBody.getY();
+                titleHeight = layoutTitle.getHeight();
+                bodyMeasuredHeight = getMeasuredHeight(informationLayout, titleHeight, adViewHeight);
                 isClickCount++;
                 distanceMoved = previousPosition - event.getRawY();
                 //moving up
                 if (distanceMoved > 0) {
                     //if you have scrolled to the end of the line
-                    if (topOfBody + bodyMeasuredHeight - distanceMoved <= getScreenHeight(MainActivity.this)) {
-                        System.out.println("1");
+                    if (topOfTitle <= adViewHeight && topOfBody + bodyMeasuredHeight - distanceMoved <= getScreenHeight(MainActivity.this)) {
+                        System.out.println("have scrolled to the end of the line");
                         layoutTitle.animate()
                                 .y(adViewHeight)
                                 .setDuration(0)
@@ -782,9 +996,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 .setDuration(0)
                                 .start();
                     }
-                    //keep title still but move body
-                    else if (topOfBody + titleHeight + adViewHeight - statusBarHeight < titleHeight + adViewHeight) {
-                        System.out.println("2");
+                    //keep title still but move body up
+                    else if (topOfTitle <= adViewHeight && topOfBody + bodyMeasuredHeight - distanceMoved > getScreenHeight(MainActivity.this)) {
+                        System.out.println("keep title still but move body up");
                         layoutTitle.animate()
                                 .y(adViewHeight)
                                 .setDuration(0)
@@ -795,9 +1009,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 .start();
 
                     }
-                    //move both title and body simultaneously
+                    //move both title and body up
                     else {
-                        System.out.println("3");
+                        System.out.println("move both title and body up");
+                        layoutTitle.setY(layoutBody.getY());
                         layoutTitle.animate()
                                 .y(topOfTitle - distanceMoved)
                                 .setDuration(0)
@@ -810,43 +1025,40 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 //moving down
                 else {
-                    if (topOfBody + titleHeight - statusBarHeight < (titleHeight + adViewHeight) - statusBarHeight) {
-                        System.out.println("4");
+                    //move body keep title still
+                    if (topOfTitle <= adViewHeight && topOfBody - distanceMoved < topOfTitle) {
+                        System.out.println("move body keep title still");
                         layoutTitle.animate()
                                 .y(adViewHeight)
                                 .setDuration(0)
                                 .start();
-                    } else {
-                        System.out.println("5");
-                        if (topOfTitle != topOfBody) {
-                            layoutTitle.animate()
-                                    .y(topOfBody)
-                                    .setDuration(0)
-                                    .start();
-                        }
-                        if (topOfTitle >= getScreenHeight(MainActivity.this) - titleHeight - statusBarHeight) {
-                            layoutTitle.animate()
-                                    .y(getScreenHeight(MainActivity.this) - titleHeight - statusBarHeight)
-                                    .setDuration(0)
-                                    .start();
-                        } else {
-                            System.out.println("6");
-                            layoutTitle.animate()
-                                    .y(topOfTitle - distanceMoved)
-                                    .setDuration(0)
-                                    .start();
-                        }
-                    }
-                    if (topOfBody >= getScreenHeight(MainActivity.this) - titleHeight - statusBarHeight) {
-                        System.out.println("7");
                         layoutBody.animate()
+                                .y(topOfBody - distanceMoved)
+                                .setDuration(0)
+                                .start();
+                    }
+                    //move both down
+                    else if(topOfTitle - distanceMoved < getScreenHeight(MainActivity.this) - titleHeight - statusBarHeight){
+                        System.out.println("move both down");
+                        layoutTitle.setY(layoutBody.getY());
+                        layoutTitle.animate()
+                                .y(topOfTitle - distanceMoved)
+                                .setDuration(0)
+                                .start();
+                        layoutBody.animate()
+                                .y(topOfBody - distanceMoved)
+                                .setDuration(0)
+                                .start();
+                    }
+                    //at bottom
+                    else if(topOfTitle - distanceMoved >= getScreenHeight(MainActivity.this) - titleHeight - statusBarHeight){
+                        System.out.println("at bottom");
+                        layoutTitle.animate()
                                 .y(getScreenHeight(MainActivity.this) - titleHeight - statusBarHeight)
                                 .setDuration(0)
                                 .start();
-                    } else {
-                        System.out.println("8");
                         layoutBody.animate()
-                                .y(topOfBody - distanceMoved)
+                                .y(getScreenHeight(MainActivity.this) - titleHeight - statusBarHeight)
                                 .setDuration(0)
                                 .start();
                     }
@@ -857,157 +1069,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
         }
         return false;
-//            case MotionEvent.ACTION_DOWN:
-//                isClickCount = 0;
-//                previousPosition = event.getRawY();
-//                startingPosition = event.getRawY();
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                System.out.println("click count = " + isClickCount);
-//                if(isClickCount < 5){
-//                    if(layoutTitle.getY() <= mAdView.getHeight() + 15 && layoutTitle.getY() >= mAdView.getHeight() - 15){
-//                        showPopUpViewTitle();
-//                    }else if(layoutTitle.getY() <= getScreenHeight(MainActivity.this) - layoutTitle.getHeight() - statusBarHeight + 15 &&
-//                            layoutTitle.getY() >= getScreenHeight(MainActivity.this) - layoutTitle.getHeight() - statusBarHeight - 15){
-//                        layoutTitle.animate()
-//                                .y(mAdView.getHeight())
-//                                .setDuration(250)
-//                                .start();
-//                        layoutBody.animate()
-//                                .y(mAdView.getHeight())
-//                                .setDuration(250)
-//                                .start();
-//                        mAdView.setVisibility(VISIBLE);
-//                        adRequest = new AdRequest.Builder().build();
-//                        mAdView.loadAd(adRequest);
-//                    }
-//                }
-//                if (startingPosition - previousPosition > 10
-//                        && layoutTitle.getY() > getScreenHeight(MainActivity.this) / 4
-//                        && layoutTitle.getY() != 0) {
-//                    System.out.println("4 || " + layoutTitle.getY());
-//                    layoutTitle.animate()
-//                            .y(mAdView.getHeight())
-//                            .setDuration(250)
-//                            .start();
-//                    layoutBody.animate()
-//                            .y(mAdView.getHeight())
-//                            .setDuration(250)
-//                            .start();
-//                    mAdView.setVisibility(VISIBLE);
-//                    adRequest = new AdRequest.Builder().build();
-//                    mAdView.loadAd(adRequest);
-//                } else if (startingPosition - previousPosition < -10
-//                        && layoutTitle.getY() < getScreenHeight(MainActivity.this) - getScreenHeight(MainActivity.this) / 3
-//                        && layoutTitle.getY() != getScreenHeight(MainActivity.this) - layoutTitle.getHeight()
-//                        && layoutBody.getY() >= 0) {
-//                    showPopUpViewTitle();
-//                }
-//                break;
-//            case MotionEvent.ACTION_POINTER_DOWN:
-//                break;
-//            case MotionEvent.ACTION_POINTER_UP:
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                isClickCount++;
-//                distanceMoved = previousPosition - event.getRawY();
-//                //moving up
-//                if (distanceMoved > 0) {
-//                    //if you have scrolled to the end of the line
-//                    if (layoutBody.getY() + layoutBody.getHeight() - distanceMoved <= getScreenHeight(MainActivity.this)) {
-//                        System.out.println("1");
-//                        layoutTitle.animate()
-//                                .y(mAdView.getHeight())
-//                                .setDuration(0)
-//                                .start();
-//                        layoutBody.animate()
-//                                .y(getScreenHeight(MainActivity.this) - layoutBody.getHeight())
-//                                .setDuration(0)
-//                                .start();
-//                    }
-//                    //keep title still but move body
-//                    else if (layoutBody.getY() + layoutTitle.getHeight() - statusBarHeight < layoutTitle.getHeight() + mAdView.getHeight()) {
-//                        System.out.println("2");
-//                        layoutTitle.animate()
-//                                .y(mAdView.getHeight())
-//                                .setDuration(0)
-//                                .start();
-//                        layoutBody.animate()
-//                                .y(layoutBody.getY() - distanceMoved)
-//                                .setDuration(0)
-//                                .start();
-//
-//                    }
-//                    //move both title and body simultaneously
-//                    else {
-//                        System.out.println("3");
-//                        layoutTitle.animate()
-//                                .y(layoutTitle.getY() - distanceMoved)
-//                                .setDuration(0)
-//                                .start();
-//                        layoutBody.animate()
-//                                .y(layoutBody.getY() - distanceMoved)
-//                                .setDuration(0)
-//                                .start();
-//                    }
-//                }
-//                //moving down
-//                else {
-//                    if (layoutBody.getY() + layoutTitle.getHeight() - statusBarHeight < (layoutTitle.getHeight() + mAdView.getHeight()) - statusBarHeight) {
-//                        System.out.println("4");
-//                        layoutTitle.animate()
-//                                .y(mAdView.getHeight())
-//                                .setDuration(0)
-//                                .start();
-//                    } else {
-//                        System.out.println("5");
-//                        if (layoutTitle.getY() != layoutBody.getY()) {
-//                            layoutTitle.animate()
-//                                    .y(layoutBody.getY())
-//                                    .setDuration(0)
-//                                    .start();
-//                        }
-//                        if (layoutTitle.getY() >= getScreenHeight(MainActivity.this) - layoutTitle.getHeight() - statusBarHeight) {
-//                            layoutTitle.animate()
-//                                    .y(getScreenHeight(MainActivity.this) - layoutTitle.getHeight() - statusBarHeight)
-//                                    .setDuration(0)
-//                                    .start();
-//                        } else {
-//                            System.out.println("6");
-//                            layoutTitle.animate()
-//                                    .y(layoutTitle.getY() - distanceMoved)
-//                                    .setDuration(0)
-//                                    .start();
-//                        }
-//                    }
-//                    if (layoutBody.getY() >= getScreenHeight(MainActivity.this) - layoutTitle.getHeight() - statusBarHeight) {
-//                        System.out.println("7");
-//                        layoutBody.animate()
-//                                .y(getScreenHeight(MainActivity.this) - layoutTitle.getHeight() - statusBarHeight)
-//                                .setDuration(0)
-//                                .start();
-//                    } else {
-//                        System.out.println("8");
-//                        layoutBody.animate()
-//                                .y(layoutBody.getY() - distanceMoved)
-//                                .setDuration(0)
-//                                .start();
-//                    }
-//
-//                }
-//                previousPosition = event.getRawY();
-//
-//                break;
-//        }
-//        return false;
-
     }
 
     @Override
     public void networkAvailable() {
-        if(latLng.getLatLng().latitude != 0.0d && latLng.getLatLng().longitude != 0.0d && new Network().isNetworkEnabled(MainActivity.this)){
-            showPosition();
-        }
+//        if(latLng.getLatLng().latitude != 0.0d && latLng.getLatLng().longitude != 0.0d && new Network().isNetworkEnabled(MainActivity.this)){
+//
+//        }
     }
 
     @Override
@@ -1044,5 +1112,40 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onResume();
         networkStateReceiver.addListener(this);
         this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    public static class ListenerEditText extends android.support.v7.widget.AppCompatEditText {
+
+        private KeyImeChange keyImeChangeListener;
+
+        public ListenerEditText(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public void setKeyImeChangeListener(KeyImeChange listener) {
+            keyImeChangeListener = listener;
+        }
+
+        public interface KeyImeChange {
+            public void onKeyIme(int keyCode, KeyEvent event);
+        }
+
+        @Override
+        public boolean onKeyPreIme(int keyCode, KeyEvent event) {
+            if (keyImeChangeListener != null) {
+                keyImeChangeListener.onKeyIme(keyCode, event);
+            }
+            return false;
+        }
+    }
+
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(search.getWindowToken(),
+                InputMethodManager.RESULT_UNCHANGED_SHOWN);
+        search.clearFocus();
+        search.setCursorVisible(false);
+
     }
 }

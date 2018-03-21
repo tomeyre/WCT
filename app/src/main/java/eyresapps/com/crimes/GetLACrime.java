@@ -3,6 +3,7 @@ package eyresapps.com.crimes;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 
@@ -43,6 +44,7 @@ public class GetLACrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
             if (crimeList != null || crimeList.size() > 0) {
                 crimeList.clear();
             }
+            Log.i("Get UK Crime URL : ","https://data.police.uk/api/crimes-street/all-crime?date=" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "&lat=" + latLng.getLatLng().latitude + "&lng=" + latLng.getLatLng().longitude);
 
             // create new instance of the httpConnect class
             HttpConnectUtil jParser = new HttpConnectUtil();
@@ -59,20 +61,20 @@ public class GetLACrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
                     //crime / date / time / outcome / streetname / lat /lng / weapon / description
 
                     crime = (new Crimes(jsonArray.getJSONObject(i).getString("crm_cd_desc"),
+                            jsonArray.getJSONObject(i).getString("date_occ"),
+                            jsonArray.getJSONObject(i).getString("date_occ"),
                             jsonArray.getJSONObject(i).getString("status_desc"),
                             jsonArray.getJSONObject(i).getString("location"),
-                            "",
-                            "",
                             jsonArray.getJSONObject(i).getJSONObject("location_1").getJSONArray("coordinates").getDouble(1),
                             jsonArray.getJSONObject(i).getJSONObject("location_1").getJSONArray("coordinates").getDouble(0),
                             jsonArray.getJSONObject(i).getString("weapon_desc"),
                             ""));
                 } else {
                     crime = (new Crimes(jsonArray.getJSONObject(i).getString("crm_cd_desc"),
+                            jsonArray.getJSONObject(i).getString("date_occ"),
+                            jsonArray.getJSONObject(i).getString("date_occ"),
                             jsonArray.getJSONObject(i).getString("status_desc"),
                             jsonArray.getJSONObject(i).getString("location"),
-                            "",
-                            "",
                             jsonArray.getJSONObject(i).getJSONObject("location_1").getJSONArray("coordinates").getDouble(1),
                             jsonArray.getJSONObject(i).getJSONObject("location_1").getJSONArray("coordinates").getDouble(0),
                             "",
@@ -137,7 +139,7 @@ public class GetLACrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
             ((MainActivity) context).updateMap(list);
 
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
-            ((MainActivity) context).dismissDialog();
+            ((MainActivity) context).dismissDialog("Gps unable to get location");
         } else if (!bespokeSearch && attempts < 4 && (list == null || list.isEmpty())) {
             int year = dateUtil.getYear();
             int month = dateUtil.getMonth();
@@ -152,7 +154,7 @@ public class GetLACrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
             attempts++;
             new GetLACrime(context, bespokeSearch, attempts).execute("https://data.lacity.org/resource/7fvc-faax.json?$where=within_circle(location_1, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date_occ between '" + dateUtil.getYearBehind() + "-" + dateUtil.getMonthBehind() + "-01T00:00:00' and '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00'");
         } else {
-            ((MainActivity) context).dismissDialog();
+            ((MainActivity) context).dismissDialog("No crime Statistics for this date");
         }
     }
 }

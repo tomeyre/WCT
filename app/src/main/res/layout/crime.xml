@@ -16,6 +16,7 @@
             android:textStyle="bold"
             android:textColor="#000"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:textSize="20sp"
             android:text="Crime Type"
@@ -24,7 +25,19 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:textColor="#000"
             android:layout_below="@+id/crime"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textSize="20sp"
+            android:text="weapon"
+            android:id="@+id/weapon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:layout_below="@+id/weapon"
             android:layout_marginLeft="10dp"
             android:textColor="#000"
             android:textSize="14sp"
@@ -34,25 +47,13 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:layout_below="@+id/crime"
+            android:layout_below="@+id/weapon"
             android:layout_toRightOf="@+id/date"
             android:textColor="#000"
             android:layout_marginLeft="10dp"
             android:textSize="14sp"
             android:text="10:00AM"
             android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:textStyle="bold"
-            android:textColor="#000"
-            android:layout_toRightOf="@+id/crime"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:textSize="20sp"
-            android:text="weapon"
-            android:id="@+id/weapon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -72,6 +73,7 @@
             android:textColor="#000"
             android:layout_marginTop="14dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="12dp"
             android:layout_marginBottom="10dp"
             android:textSize="14sp"
             android:text="has it been resolved "

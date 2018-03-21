@@ -136,7 +136,7 @@ public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
             ((MainActivity) context).updateMap(list);
 
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
-            ((MainActivity) context).dismissDialog();
+            ((MainActivity) context).dismissDialog("Gps unable ti get location");
         } else if (!bespokeSearch && attempts < 4 && (list == null || list.isEmpty())) {
             int year = dateUtil.getYear();
             int month = dateUtil.getMonth();
@@ -151,7 +151,7 @@ public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
             attempts++;
             new GetUKCrime(context, bespokeSearch, attempts).execute("https://data.police.uk/api/crimes-street/all-crime?date=" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "&lat=" + latLng.getLatLng().latitude + "&lng=" + (latLng.getLatLng().longitude));
         } else {
-            ((MainActivity) context).dismissDialog();
+            ((MainActivity) context).dismissDialog("No crime Statistics for this date");
         }
     }
 }

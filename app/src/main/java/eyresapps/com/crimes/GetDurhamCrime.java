@@ -5,6 +5,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,12 +46,11 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
         try {
             if (crimes != null || crimes.size() > 0) {
                 crimes.clear();
-            } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
-                ((MainActivity) context).dismissDialog();
             }
             if (crimeList != null || crimeList.size() > 0) {
                 crimeList.clear();
             }
+            Log.i("Get UK Crime URL : ","https://data.police.uk/api/crimes-street/all-crime?date=" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "&lat=" + latLng.getLatLng().latitude + "&lng=" + latLng.getLatLng().longitude);
 
             // create new instance of the httpConnect class
             HttpConnectUtil jParser = new HttpConnectUtil();
@@ -75,10 +75,11 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
                 //crime / date / time / outcome / streetname / lat /lng / weapon / description
 
                 crime = (new Crimes(jsonArray.getJSONObject(i).getJSONObject("fields").getString("reportedas"),
+                        jsonArray.getJSONObject(i).getJSONObject("fields").getString("strdate"),
+                        jsonArray.getJSONObject(i).getJSONObject("fields").getString("hour_fnd").substring(0,1) + ":" +
+                                jsonArray.getJSONObject(i).getJSONObject("fields").getString("hour_fnd").substring(2,3),
                         jsonArray.getJSONObject(i).getJSONObject("fields").getString("chrgdesc"),
                         addresses.get(0).getThoroughfare().toString(),
-                        "",
-                        "",
                         jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(0),
                                 jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(1),"",""));
 
@@ -138,7 +139,7 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
             ((MainActivity) context).updateMap(list);
 
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
-            ((MainActivity) context).dismissDialog();
+            ((MainActivity) context).dismissDialog("Gps unable to get location");
         } else if (!bespokeSearch && attempts < 4 && (list == null || list.isEmpty())) {
             int year = dateUtil.getYear();
             int month = dateUtil.getMonth();
@@ -153,7 +154,7 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
             attempts++;
             new GetDurhamCrime(context, bespokeSearch, attempts).execute("https://opendurham.nc.gov/api/records/1.0/search/?dataset=durham-police-crime-reports&rows=100&facet=date_rept&facet=dow1&facet=reportedas&facet=chrgdesc&facet=big_zone&refine.date_rept=" + dateUtil.getYear() + "%2F" + dateUtil.getMonth() + "&geofilter.distance=" + latLng.getLatLng().latitude + "%2C+" + latLng.getLatLng().longitude + "%2C+1000");
         } else {
-            ((MainActivity) context).dismissDialog();
+            ((MainActivity) context).dismissDialog("No crime Statistics for this date");
         }
     }
 }
