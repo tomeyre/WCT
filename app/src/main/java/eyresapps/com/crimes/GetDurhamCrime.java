@@ -136,7 +136,7 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
                 }
             }
             new CrimeCountList(context).sortCrimesCount(counts, true);
-            ((MainActivity) context).updateMap(list);
+            ((MainActivity) context).updateMap(list,false);
 
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
             ((MainActivity) context).dismissDialog("Gps unable to get location");

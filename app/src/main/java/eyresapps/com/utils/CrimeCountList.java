@@ -1,6 +1,7 @@
 package eyresapps.com.utils;
 
 import android.content.Context;
+import android.os.Handler;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -32,7 +33,7 @@ public class CrimeCountList {
     CrimeCount crimeCount = CrimeCount.getInstance();
 
     public void sortCrimesCount(ArrayList<Counter> counts, boolean total) {
-        ArrayList<Counter> temp = new ArrayList<>();
+        final ArrayList<Counter> temp = new ArrayList<>();
 
         for(int i = 0; i < counts.size(); i++) {
             if (temp.isEmpty()) {
@@ -54,6 +55,12 @@ public class CrimeCountList {
         if(total){
             crimeCount.setTotalCountList(temp);
             setCrimeCountList(crimeCount.getTotalCountList(), total);
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    ((MainActivity)context).setFilterViews(temp);
+                }
+            });
         }else {
             crimeCount.setStreetCountList(temp);
             setCrimeCountList(crimeCount.getStreetCountList(), total);

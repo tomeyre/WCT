@@ -1,41 +1,42 @@
 package eyresapps.com.wct;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.ActionMenuView;
-import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.CardView;
 import android.text.util.Linkify;
-import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.IntentFilter;
-
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -57,21 +58,23 @@ import com.google.maps.android.heatmaps.WeightedLatLng;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import eyresapps.com.adapter.RVAdapterCrimes;
+import eyresapps.com.api_calls.GenerateNeighbourhoodLocation;
 import eyresapps.com.api_calls.GetCurrentWeather;
 import eyresapps.com.broadcastRecievers.Network;
 import eyresapps.com.broadcastRecievers.NetworkStateReceiver;
 import eyresapps.com.crimeLocations.GenerateCrimeUrl;
-import eyresapps.com.api_calls.GenerateNeighbourhoodLocation;
 import eyresapps.com.data.Counter;
 import eyresapps.com.data.CrimeCount;
 import eyresapps.com.data.Crimes;
-import eyresapps.com.utils.CrimeCountList;
+import eyresapps.com.data.FilterItem;
+import eyresapps.com.utils.AnimateFilter;
 import eyresapps.com.utils.CapitalizeString;
+import eyresapps.com.utils.CrimeCountList;
 import eyresapps.com.utils.CurrentAddressUtil;
 import eyresapps.com.utils.DateUtil;
 import eyresapps.com.utils.FindSearchLocation;
@@ -83,11 +86,26 @@ import static android.text.util.Linkify.addLinks;
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import static eyresapps.com.utils.ScreenUtils.convertDpToPixel;
 import static eyresapps.com.utils.ScreenUtils.getMeasuredHeight;
 import static eyresapps.com.utils.ScreenUtils.getScreenHeight;
 import static eyresapps.com.utils.ScreenUtils.getStatusBarHeight;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, NetworkStateReceiver.NetworkStateReceiverListener {
+
+    boolean filter = false;
+    float filterHeight;
+
+    LinearLayout dateRow;
+
+    ArrayList<FilterItem> filterList;
+    ArrayList<ArrayList<Crimes>> filteredCrimes;
+    ImageView filterImage;
+    Button filterSearchBtn;
+
+    Spinner daySpinner;
+    Spinner monthSpinner;
+    Spinner yearSpinner;
 
     float topOfTitle;
     float topOfBody;
@@ -96,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private Geocoder geocoder;
     private List<Address> addresses;
-    private ListenerEditText search;
+    private EditText search;
     private CardView searchLayout;
 
     private CardView heatMapBtn;
@@ -104,6 +122,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ArrayList<Marker> markers;
     private HeatmapTileProvider mProvider;
     private TileOverlay mOverlay;
+
+    private CardView filterBtn;
 
     private int isClickCount = 0;
     private float adViewHeight;
@@ -177,6 +197,47 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private TextView areaTotalsTitle;
     private TextView crimesTitle;
 
+    private CardView filterOne;
+    private CardView filterTwo;
+    private CardView filterThree;
+    private CardView filterFour;
+    private CardView filterFive;
+    private CardView filterSix;
+    private CardView filterSeven;
+    private CardView filterEight;
+    private CardView filterNine;
+    private CardView filterTen;
+    private CardView filterEleven;
+    private CardView filterTwelve;
+    private CardView filterThirteen;
+    private CardView filterFourteen;
+    private CardView filterFifteen;
+    private CardView filterSixteen;
+    private CardView filterSeventeen;
+    private CardView filterEighteen;
+    private CardView filterNineteen;
+    private CardView filterTwenty;
+    private TextView filterOneTxt;
+    private TextView filterTwoTxt;
+    private TextView filterThreeTxt;
+    private TextView filterFourTxt;
+    private TextView filterFiveTxt;
+    private TextView filterSixTxt;
+    private TextView filterSevenTxt;
+    private TextView filterEightTxt;
+    private TextView filterNineTxt;
+    private TextView filterTenTxt;
+    private TextView filterElevenTxt;
+    private TextView filterTwelveTxt;
+    private TextView filterThirteenTxt;
+    private TextView filterFourteenTxt;
+    private TextView filterFifteenTxt;
+    private TextView filterSixteenTxt;
+    private TextView filterSeventeenTxt;
+    private TextView filterEighteenTxt;
+    private TextView filterNineteenTxt;
+    private TextView filterTwentyTxt;
+
     //-----------------objects used to get current latitude and longitude as a singleton
     private LatitudeAndLongitudeUtil latLng = LatitudeAndLongitudeUtil.getInstance();
     private GPSTrackerUtil gpsTracker;
@@ -209,11 +270,52 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_main);
 
+        dateRow = findViewById(R.id.dateRow);
+
+        daySpinner = findViewById(R.id.daySpinner);
+        monthSpinner = findViewById(R.id.monthSpinner);
+        yearSpinner = findViewById(R.id.yearSpinner);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.days, R.layout.spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item_layout);
+        daySpinner.setAdapter(adapter);
+        daySpinner.setSelection(1);
+        adapter = ArrayAdapter.createFromResource(this, R.array.months, R.layout.spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item_layout);
+        monthSpinner.setAdapter(adapter);
+        monthSpinner.setSelection(1);
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int year = cal.get(Calendar.YEAR);
+        ArrayList<Integer> years = new ArrayList<>();
+        for(int i = 0; i < 4; i++){
+            years.add(year--);
+        }
+        ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<>(this,
+                R.layout.spinner_item, years);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_item_layout);
+        yearSpinner.setAdapter(arrayAdapter);
+        yearSpinner.setSelection(1);
+
+
+
+        filterBtn = findViewById(R.id.filterBtn);
+        filterImage = findViewById(R.id.bntFilter);
+        filterSearchBtn = findViewById(R.id.filterSearchBtn);
+        filterSearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterCrimeList();
+                shrinkFilter(filterBtn);
+            }
+        });
+
 
         adViewHeight = ScreenUtils.convertDpToPixel(50,this);
 
         searchLayout = findViewById(R.id.searchLayout);
-        search = (ListenerEditText) findViewById(R.id.search);
+        search = findViewById(R.id.search);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -317,6 +419,72 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         areaTotalsTitle = findViewById(R.id.areaTotalsTitle);
         crimesTitle = findViewById(R.id.crimesTitle);
 
+        //-----------
+        filterOne = findViewById(R.id.filterOne);
+        filterTwo = findViewById(R.id.filterTwo);
+        filterThree = findViewById(R.id.filterThree);
+        filterFour = findViewById(R.id.filterFour);
+        filterFive = findViewById(R.id.filterFive);
+        filterSix = findViewById(R.id.filterSix);
+        filterSeven = findViewById(R.id.filterSeven);
+        filterEight = findViewById(R.id.filterEight);
+        filterNine = findViewById(R.id.filterNine);
+        filterTen = findViewById(R.id.filterTen);
+        filterEleven = findViewById(R.id.filterEleven);
+        filterTwelve = findViewById(R.id.filterTwelve);
+        filterThirteen = findViewById(R.id.filterThirteen);
+        filterFourteen = findViewById(R.id.filterFourteen);
+        filterFifteen = findViewById(R.id.filterFifteen);
+        filterSixteen = findViewById(R.id.filterSixteen);
+        filterSeventeen = findViewById(R.id.filterSeventeen);
+        filterEighteen = findViewById(R.id.filterEighteen);
+        filterNineteen = findViewById(R.id.filterNineteen);
+        filterTwenty = findViewById(R.id.filterTwenty);
+
+        filterOneTxt = findViewById(R.id.filterOneTxt);
+        filterTwoTxt = findViewById(R.id.filterTwoTxt);
+        filterThreeTxt = findViewById(R.id.filterThreeTxt);
+        filterFourTxt = findViewById(R.id.filterFourTxt);
+        filterFiveTxt = findViewById(R.id.filterFiveTxt);
+        filterSixTxt = findViewById(R.id.filterSixTxt);
+        filterSevenTxt = findViewById(R.id.filterSevenTxt);
+        filterEightTxt = findViewById(R.id.filterEightTxt);
+        filterNineTxt = findViewById(R.id.filterNineTxt);
+        filterTenTxt = findViewById(R.id.filterTenTxt);
+        filterElevenTxt = findViewById(R.id.filterElevenTxt);
+        filterTwelveTxt = findViewById(R.id.filterTwelveTxt);
+        filterThirteenTxt = findViewById(R.id.filterThirteenTxt);
+        filterFourteenTxt = findViewById(R.id.filterFourteenTxt);
+        filterFifteenTxt = findViewById(R.id.filterFifteenTxt);
+        filterSixteenTxt = findViewById(R.id.filterSixteenTxt);
+        filterSeventeenTxt = findViewById(R.id.filterSeventeenTxt);
+        filterEighteenTxt = findViewById(R.id.filterEighteenTxt);
+        filterNineteenTxt = findViewById(R.id.filterNineteenTxt);
+        filterTwentyTxt = findViewById(R.id.filterTwentyTxt);
+
+        filterList = new ArrayList<>();
+        filterList.add(new FilterItem(filterOne, filterOneTxt,"",true));
+        filterList.add(new FilterItem(filterTwo,filterTwoTxt,"", true));
+        filterList.add(new FilterItem(filterThree,filterThreeTxt,"", true));
+        filterList.add(new FilterItem(filterFour,filterFourTxt,"", true));
+        filterList.add(new FilterItem(filterFive,filterFiveTxt,"", true));
+        filterList.add(new FilterItem(filterSix,filterSixTxt,"", true));
+        filterList.add(new FilterItem(filterSeven,filterSevenTxt,"", true));
+        filterList.add(new FilterItem(filterEight,filterEightTxt,"", true));
+        filterList.add(new FilterItem(filterNine,filterNineTxt,"", true));
+        filterList.add(new FilterItem(filterTen,filterTenTxt,"", true));
+        filterList.add(new FilterItem(filterEleven,filterElevenTxt,"", true));
+        filterList.add(new FilterItem(filterTwelve,filterTwelveTxt,"", true));
+        filterList.add(new FilterItem(filterThirteen,filterThirteenTxt,"", true));
+        filterList.add(new FilterItem(filterFourteen,filterFourteenTxt,"", true));
+        filterList.add(new FilterItem(filterFifteen,filterFifteenTxt,"", true));
+        filterList.add(new FilterItem(filterSixteen,filterSixteenTxt,"", true));
+        filterList.add(new FilterItem(filterSeventeen,filterSeventeenTxt,"", true));
+        filterList.add(new FilterItem(filterEighteen,filterEighteenTxt,"", true));
+        filterList.add(new FilterItem(filterNineteen,filterNineteenTxt,"", true));
+        filterList.add(new FilterItem(filterTwenty,filterTwentyTxt,"", true));
+
+
         //--------
         additionalInformationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -338,7 +506,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View view) {
                 if(markers.isEmpty()){
-                    updateMap(crimeList);
+                    if(filter){
+                        updateMap(filteredCrimes, filter);
+                    }else {
+                        updateMap(crimeList, filter);
+                    }
                 }else {
                     try {
                         mMap.clear();
@@ -378,19 +550,79 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         lm = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
         //---------------starts an animation after the splash screen to indicate that the information bar is collapasable
-//        layoutTitle.animate()
-//                .y(getScreenHeight(MainActivity.this))
-//                .setDuration(250)
-//                .setStartDelay(2000)
-//                .start();
-//        layoutBody.animate()
-//                .y(getScreenHeight(MainActivity.this))
-//                .setDuration(250)
-//                .setStartDelay(2000)
-//                .start();
+        layoutTitle.animate()
+                .y(getScreenHeight(MainActivity.this))
+                .setDuration(250)
+                .setStartDelay(2000)
+                .start();
+        layoutBody.animate()
+                .y(getScreenHeight(MainActivity.this))
+                .setDuration(250)
+                .setStartDelay(2000)
+                .start();
 
+        filterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                expandFilter(filterBtn);
+            }
+        });
 
     }
+
+    private void filterCrimeList(){
+        filteredCrimes = new ArrayList<>();
+        ArrayList<Crimes> innerList;
+
+        for(int i = 0; i < crimeList.size(); i++){
+            innerList = new ArrayList<>();
+            for(int j = 0; j < crimeList.get(i).size(); j++){
+                for(int k = 0; k < filterList.size(); k++){
+                    if(crimeList.get(i).get(j).getCrimeType().equalsIgnoreCase(filterList.get(k).getNameString()) && filterList.get(k).getShow()){
+                        System.out.println("filter name  = " + filterList.get(k).getNameString() + " actual = " + crimeList.get(i).get(j).getCrimeType() + " / " + filterList.get(k).getShow());
+                        innerList.add(crimeList.get(i).get(j));
+                    }else if(crimeList.get(i).get(j).getCrimeType().equalsIgnoreCase(filterList.get(k).getName().getText().toString()) && !filterList.get(k).getShow()){
+                        System.out.println("filter name  = " + filterList.get(k).getNameString() + " actual = " + crimeList.get(i).get(j).getCrimeType() + " / " + filterList.get(k).getShow());
+                    }
+                }
+            }
+            if(!innerList.isEmpty()) {
+                filteredCrimes.add(innerList);
+            }
+        }
+        filter = true;
+        updateMap(filteredCrimes, filter);
+    }
+
+    public void expandFilter(CardView cv){
+        if(cv.getHeight() == convertDpToPixel(36,MainActivity.this)) {
+            filterImage.animate()
+                    .alpha(0)
+                    .setDuration(0)
+                    .setStartDelay(0)
+                    .start();
+            new AnimateFilter().expandHeight(cv, MainActivity.this, filterHeight);
+            new AnimateFilter().expandWidth(cv, MainActivity.this);
+            new AnimateFilter().showAll(filterList,dateRow);
+            new AnimateFilter().hideBackground();
+        }
+    }
+
+    public void shrinkFilter(CardView cv){
+        if(cv.getHeight() > convertDpToPixel(36,MainActivity.this)) {
+            new AnimateFilter().shrinkHeight(cv, MainActivity.this, filterHeight);
+            new AnimateFilter().shrinkWidth(cv, MainActivity.this);
+            new AnimateFilter().hideAll(filterList,dateRow);
+            new AnimateFilter().showBackground();
+            filterImage.animate()
+                    .alpha(1)
+                    .setDuration(0)
+                    .setStartDelay(750)
+                    .start();
+        }
+    }
+
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -405,6 +637,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 hidePopUpView();
                 latLng.setLatLng(newLatLng);
                 showPosition();
+                shrinkFilter(filterBtn);
+
             }
         });
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -412,6 +646,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onMapClick(LatLng latLng) {
                 hidePopUpView();
                 hideSoftKeyboard();
+                shrinkFilter(filterBtn);
             }
         });
     }
@@ -498,6 +733,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void showPosition() {
+        filter = false;
         if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) && new Network().isNetworkEnabled(MainActivity.this)) {
             dialog.setMessage("Getting crimes...");
             dialog.show();
@@ -561,14 +797,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Toast.LENGTH_SHORT).show();
             }
         });
+        try{
+            mMap.clear();
+        }catch (Exception e){e.printStackTrace();}
     }
 
     //-----------------------------------------------------------put all markers on map and associate crimes and outcomes with markers
-    public void updateMap(ArrayList<ArrayList<Crimes>> list) {
+    public void updateMap(final ArrayList<ArrayList<Crimes>> list, boolean filter) {
         if (dialog.isShowing()) {
             dialog.dismiss();
         }
-        crimeList = list;
+        if(!filter) {
+            crimeList = list;
+        }
         try {
             mMap.clear();
         } catch (Exception e) {
@@ -630,6 +871,54 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .radius(50)
                 .build();
 
+
+    }
+
+    public void setFilterViews(ArrayList<Counter> list){
+        int count = 0;
+        for (int i = 0; i < filterList.size(); i++) {
+            if (i < list.size()) {
+                count++;
+                filterList.get(i).getCardView().setVisibility(VISIBLE);
+                filterList.get(i).getName().setText(list.get(i).getName());
+                filterList.get(i).setNameString(list.get(i).getName());
+                filterList.get(i).getCardView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        filter((CardView) view);
+                    }
+                });
+            } else {
+                filterList.get(i).getName().setText("");
+                filterList.get(i).getCardView().setVisibility(GONE);
+            }
+        }
+
+        filterHeight = count / 4;
+        if(count % 4 > 0){
+            filterHeight++;
+        }
+        filterHeight = filterHeight * convertDpToPixel(70, MainActivity.this) + convertDpToPixel(55, MainActivity.this);;
+    }
+
+    public void filter(CardView view){
+        if(view.getAlpha() == 1){
+            view.setAlpha(0.5f);
+            for (FilterItem filterItem : filterList){
+                if(filterItem.getCardView() == view){
+                    filterItem.setShow(false);
+                }
+            }
+        }else{
+            view.setAlpha(1);
+            for (FilterItem filterItem : filterList){
+                if(filterItem.getCardView() == view){
+                    filterItem.setShow(true);
+                }
+            }
+        }
+
+
     }
 
     //-----------------------------------------------------------code for marker selected
@@ -651,36 +940,42 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
         String location = "";
+        ArrayList<ArrayList<Crimes>> temp;
+        if(filter){
+            temp = filteredCrimes;
+        }else{
+            temp = crimeList;
+        }
         markerCrimes = new ArrayList<>();
         ArrayList<Counter> counts = new ArrayList<>();
-        for (int i = 0; i < crimeList.size(); i++) {
-            if (crimeList.get(i).get(0).getLongitude() == marker.getPosition().longitude &&
-                    crimeList.get(i).get(0).getLatitude() == marker.getPosition().latitude) {
-                location = new CapitalizeString().getString(crimeList.get(i).get(0).getStreetName());
-                for (int j = 0; j < crimeList.get(i).size(); j++) {
+        for (int i = 0; i < temp.size(); i++) {
+            if (temp.get(i).get(0).getLongitude() == marker.getPosition().longitude &&
+                    temp.get(i).get(0).getLatitude() == marker.getPosition().latitude) {
+                location = new CapitalizeString().getString(temp.get(i).get(0).getStreetName());
+                for (int j = 0; j < temp.get(i).size(); j++) {
 
                     markerCrimes.add(new Crimes(
-                            crimeList.get(i).get(j).getCrimeType(),
-                            crimeList.get(i).get(j).getDate(),
-                            crimeList.get(i).get(j).getTime(),
-                            crimeList.get(i).get(j).getOutcome(), location,
-                            crimeList.get(i).get(j).getLatitude(),
-                            crimeList.get(i).get(j).getLongitude(),
-                            crimeList.get(i).get(j).getWeapon(),
-                            crimeList.get(i).get(j).getDescription()));
+                            temp.get(i).get(j).getCrimeType(),
+                            temp.get(i).get(j).getDate(),
+                            temp.get(i).get(j).getTime(),
+                            temp.get(i).get(j).getOutcome(), location,
+                            temp.get(i).get(j).getLatitude(),
+                            temp.get(i).get(j).getLongitude(),
+                            temp.get(i).get(j).getWeapon(),
+                            temp.get(i).get(j).getDescription()));
 
                     if (counts.isEmpty()) {
-                        counts.add(new Counter(crimeList.get(i).get(j).getCrimeType(), 1));
+                        counts.add(new Counter(temp.get(i).get(j).getCrimeType(), 1));
                         continue;
                     }
                     for (int k = 0; k < counts.size(); k++) {
-                        if (counts.get(k).getName().equalsIgnoreCase(crimeList.get(i).get(j).getCrimeType())) {
-                            int temp = counts.get(k).getCount();
-                            counts.set(k, new Counter(crimeList.get(i).get(j).getCrimeType(), ++temp));
+                        if (counts.get(k).getName().equalsIgnoreCase(temp.get(i).get(j).getCrimeType())) {
+                            int tempCount = counts.get(k).getCount();
+                            counts.set(k, new Counter(temp.get(i).get(j).getCrimeType(), ++tempCount));
                             break;
                         }
                         if (k == counts.size() - 1) {
-                            counts.add(new Counter(crimeList.get(i).get(j).getCrimeType(), 1));
+                            counts.add(new Counter(temp.get(i).get(j).getCrimeType(), 1));
                             break;
                         }
                     }
@@ -800,12 +1095,40 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onBackPressed() {
-        if (layoutTitle.getY() == mAdView.getHeight()) {
+        if(filterBtn.getHeight() > convertDpToPixel(36,MainActivity.this)) {
+            new AnimateFilter().shrinkHeight(filterBtn, MainActivity.this, filterHeight);
+            new AnimateFilter().shrinkWidth(filterBtn, MainActivity.this);
+            new AnimateFilter().hideAll(filterList,dateRow);
+            new AnimateFilter().showBackground();
+            filterImage.animate()
+                    .alpha(1)
+                    .setDuration(0)
+                    .setStartDelay(750)
+                    .start();
+        } else if (layoutTitle.getY() == adViewHeight) {
             showPopUpViewTitle();
         } else if (layoutTitle.getY() == getScreenHeight(MainActivity.this) - layoutTitle.getHeight() - statusBarHeight) {
             hidePopUpView();
         } else {
             super.onBackPressed();
+        }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            onBackPressed();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -1113,7 +1436,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         networkStateReceiver.addListener(this);
         this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
     }
-
+/*
     public static class ListenerEditText extends android.support.v7.widget.AppCompatEditText {
 
         private KeyImeChange keyImeChangeListener;
@@ -1138,14 +1461,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             return false;
         }
     }
-
+*/
     private void hideSoftKeyboard()
     {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(search.getWindowToken(),
                 InputMethodManager.RESULT_UNCHANGED_SHOWN);
-        search.clearFocus();
         search.setCursorVisible(false);
+        search.clearFocus();
 
     }
 }
