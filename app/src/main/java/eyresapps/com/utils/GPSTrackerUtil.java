@@ -16,6 +16,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import eyresapps.com.wct.MainActivity;
+
 
 public class GPSTrackerUtil implements LocationListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -226,6 +228,7 @@ public class GPSTrackerUtil implements LocationListener, ActivityCompat.OnReques
                             if (location != null) {
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
+                                ((MainActivity)mContext).showPosition(false);
                             }
                         }
                     }

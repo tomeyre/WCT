@@ -3,9 +3,6 @@ package eyresapps.com.utils;
 import android.content.Context;
 import android.os.Handler;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.StyleSpan;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,6 +22,8 @@ public class CrimeCountList {
 
     private Context context;
     private ArrayList<TextView> textViews;
+
+    CrimeNumbers crimeNumbers = CrimeNumbers.getInstance();
 
     public CrimeCountList(Context context) {
         this.context = context;
@@ -70,7 +69,7 @@ public class CrimeCountList {
 
 
     public void setCrimeCountList(ArrayList<Counter> counter, boolean totals) {
-        textViews = ((MainActivity) context).getTextViews(totals);
+        textViews = crimeNumbers.getTextViews(totals);
 
         for (int i = 0; i < textViews.size(); i++) {
             if (i < counter.size()) {

@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:id="@+id/rowOne"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterOne"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterOneTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterTwo"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterTwoTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterThree"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterThreeTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterFour"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterFourTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/rowOne"
+        android:id="@+id/rowTwo"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterFive"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterFiveTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterSix"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterSixTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterSeven"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterSevenTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterEight"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterEightTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/rowTwo"
+        android:id="@+id/rowThree"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterNine"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterNineTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterTen"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterTenTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterEleven"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterElevenTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterTwelve"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterTwelveTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/rowThree"
+        android:id="@+id/rowFour"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterThirteen"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterThirteenTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterFourteen"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterFourteenTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterFifteen"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterFifteenTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterSixteen"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterSixteenTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/rowFour"
+        android:id="@+id/rowFive"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterSeventeen"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterSeventeenTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterEighteen"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterEighteenTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterNineteen"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterNineteenTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterTwenty"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterTwentyTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/rowFive"
+        android:id="@+id/rowSix"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterTwentyOne"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterTwentyOneTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterTwentyTwo"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterTwentyTwoTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterTwentyThree"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterTwentyThreeTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/filterTwentyFour"
+                android:alpha="0.0"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="2dp"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:id="@+id/filterTwentyFourTxt"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:text="one"
+                    android:autoSizeTextType="uniform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <!--android:layout_below="@+id/rowSix"-->
+
+    <LinearLayout
+        android:layout_above="@+id/btnRow"
+        android:id="@+id/dateRow"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:alpha="0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <Spinner
+                    android:backgroundTint="@color/black"
+                    android:id="@+id/monthSpinner"
+                    android:spinnerMode="dropdown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"></Spinner>
+                <Spinner
+                    android:backgroundTint="@color/black"
+                    android:layout_toRightOf="@+id/monthSpinner"
+                    android:id="@+id/yearSpinner"
+                    android:spinnerMode="dropdown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"></Spinner>
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:id="@+id/btnRow"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:alpha="0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/filterSearchBtn"
+                android:layout_centerHorizontal="true"
+                android:text="Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

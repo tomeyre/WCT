@@ -8,11 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
-import eyresapps.com.data.Crimes;
 import eyresapps.com.utils.HttpConnectUtil;
-import eyresapps.com.wct.MainActivity;
 
 /**
  * Created by thomaseyre on 18/02/2018.
@@ -57,7 +53,7 @@ public class GenerateNeighbourhoodLocation extends AsyncTask<String, String, Str
 
     @Override
     protected void onPostExecute(String strFromDoInBg) {
-        ((MainActivity)context).setNeighbourhoodDetails(force);
+       // ((MainActivity)context).setNeighbourhoodDetails(force);
         new GenerateNeighbourhoodDescriptionUrl(context, "https://data.police.uk/api/" + force + "/" + neighbourhood).execute();
     }
 }

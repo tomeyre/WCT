@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/crimesTitle"
+        android:orientation="horizontal"
+        android:weightSum="2">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/oneTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="one"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/threeTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/twoTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="three"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/fiveTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fourTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="five"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/sevenTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sixTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="seven"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/nineTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/eightTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="nine"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/elevenTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tenTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="eleven"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/thirteenTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/twelveTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="thirteen"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/fifteenTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/thirteenTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Fifteen"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/seventeenTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fifteenTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Seventeen"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/nineteenTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/seventeenTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="nineteen"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/twentyOneTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/nineteenTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="twenty one"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/twentyThreeTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/twentyOneTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="twenty three"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/twentyFiveTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/twentyTwoTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="twenty five"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/twentySevenTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/twentyFiveTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="twenty seven"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/twentyNineTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/twentySevenTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="twenty nine"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/twoTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/oneTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="two"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/fourTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/threeTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="four"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/sixTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fiveTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="six"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/eightTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sevenTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="eight"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tenTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/nineTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="ten"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/twelveTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/elevenTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="twelve"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/fourteenTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/thirteenTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="fourteen"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/sixteenTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fourteenTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="sixteen"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/eighteenTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sixteenTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="eighteen"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/twentyTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/eighteenTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="twenty"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/twentyTwoTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/twentyTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="twenty two"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/twentyFourTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/twentyTwoTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="twenty four"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/twentySixTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/twentyFourTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="twenty six"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/twentyEightTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/twentySixTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="twenty eight"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/thirtyTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/twentySixTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="thirty"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+    </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

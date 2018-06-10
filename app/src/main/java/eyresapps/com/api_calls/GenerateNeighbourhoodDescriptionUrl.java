@@ -4,14 +4,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
-import eyresapps.com.data.Crimes;
 import eyresapps.com.utils.HttpConnectUtil;
-import eyresapps.com.wct.MainActivity;
 
 public class GenerateNeighbourhoodDescriptionUrl extends AsyncTask<String, String, String> {
 
@@ -75,7 +70,7 @@ public class GenerateNeighbourhoodDescriptionUrl extends AsyncTask<String, Strin
 
     @Override
     protected void onPostExecute(String strFromDoInBg) {
-        ((MainActivity)context).setDescription(description);
-        ((MainActivity)context).setAboutArea(area, email, facebook, youtube, twitter, website);
+       // ((MainActivity)context).setDescription(description);
+        //((MainActivity)context).setAboutArea(area, email, facebook, youtube, twitter, website);
     }
 }

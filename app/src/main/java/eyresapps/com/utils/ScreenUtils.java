@@ -1,19 +1,12 @@
 package eyresapps.com.utils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-
-import java.util.ArrayList;
-
-import eyresapps.com.wct.LockableScrollView;
-import eyresapps.com.wct.MainActivity;
 
 /**
  * Created by thomaseyre on 04/01/2018.
@@ -46,7 +39,7 @@ public class ScreenUtils {
 
         for (int i = 0; i < view.getChildCount(); i++) {
             if(view.getVisibility() == View.VISIBLE) {
-                measuredHeight += view.getChildAt(i).getHeight() + convertDpToPixel(10, view.getContext());
+                measuredHeight += view.getChildAt(i).getHeight();// + convertDpToPixel(10, view.getContext());
             }
         }
 

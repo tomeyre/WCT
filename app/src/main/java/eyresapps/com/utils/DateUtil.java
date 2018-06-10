@@ -10,6 +10,8 @@ public class DateUtil {
 
     int year = Calendar.getInstance().get(Calendar.YEAR);
     int month = Calendar.getInstance().get(Calendar.MONTH);
+    int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+    int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
 
     int maxMonth;
     int maxYear;
@@ -122,5 +124,13 @@ public class DateUtil {
 
     public int getLAMinYearValue(){
         return 2010;
+    }
+
+    public int getCurrentYear() {
+        return currentYear;
+    }
+
+    public int getCurrentMonth() {
+        return currentMonth;
     }
 }

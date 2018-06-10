@@ -4,13 +4,20 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 
 import eyresapps.com.data.FilterItem;
 
 import static eyresapps.com.utils.ScreenUtils.convertDpToPixel;
+import static eyresapps.com.utils.ScreenUtils.getScreenHeight;
+import static eyresapps.com.utils.ScreenUtils.getScreenWidth;
 
 /**
  * Created by thomaseyre on 27/03/2018.
@@ -26,7 +33,39 @@ public class AnimateFilter {
 
     }
 
-    public void showAll(ArrayList<FilterItem> animateFilterList, LinearLayout dateRow){
+    public void expandFilter(CardView cv, ImageView filterImage, Context context, Float filterHeight, ArrayList<FilterItem> filterList, LinearLayout dateRow, LinearLayout btnRow,
+                             Spinner monthSpinner, Spinner yearSpinner, Button filterSearchBtn){
+        if(cv.getHeight() == convertDpToPixel(36,context)) {
+            filterImage.animate()
+                    .alpha(0)
+                    .setDuration(0)
+                    .setStartDelay(0)
+                    .start();
+            new AnimateFilter().expandHeight(cv, context, filterHeight);
+            new AnimateFilter().expandWidth(cv, context);
+            new AnimateFilter().showAll(filterList,dateRow,btnRow);
+            new AnimateFilter().hideBackground();
+            new AnimateFilter().enableButtons(monthSpinner,yearSpinner, filterSearchBtn);
+        }
+    }
+
+    public void shrinkFilter(CardView cv, ImageView filterImage, Context context,Float filterHeight, ArrayList<FilterItem> filterList, LinearLayout dateRow, LinearLayout btnRow,
+                             Spinner monthSpinner,Spinner yearSpinner, Button filterSearchBtn){
+        if(cv.getHeight() > convertDpToPixel(36,context)) {
+            new AnimateFilter().shrinkHeight(cv, context, filterHeight);
+            new AnimateFilter().shrinkWidth(cv, context);
+            new AnimateFilter().hideAll(filterList,dateRow,btnRow);
+            new AnimateFilter().showBackground();
+            new AnimateFilter().disableButtons(monthSpinner,yearSpinner, filterSearchBtn);
+            filterImage.animate()
+                    .alpha(1)
+                    .setDuration(0)
+                    .setStartDelay(750)
+                    .start();
+        }
+    }
+
+    public void showAll(ArrayList<FilterItem> animateFilterList, LinearLayout dateRow, LinearLayout btnRow){
         for(int i = 0; i < animateFilterList.size(); i++) {
             if(animateFilterList.get(i).getShow()) {
                 animateFilterList.get(i).getCardView().animate()
@@ -47,9 +86,14 @@ public class AnimateFilter {
                 .setDuration(250)
                 .setStartDelay(500)
                 .start();
+        btnRow.animate()
+                .alpha(1)
+                .setDuration(250)
+                .setStartDelay(500)
+                .start();
     }
 
-    public void hideAll(ArrayList<FilterItem> animateFilterList, LinearLayout dateRow){
+    public void hideAll(ArrayList<FilterItem> animateFilterList, LinearLayout dateRow, LinearLayout btnRow){
         for(int i = 0; i < animateFilterList.size(); i++) {
             animateFilterList.get(i).getCardView().animate()
                     .alpha(0)
@@ -62,13 +106,36 @@ public class AnimateFilter {
                 .setDuration(250)
                 .setStartDelay(0)
                 .start();
+        btnRow.animate()
+                .alpha(0)
+                .setDuration(250)
+                .setStartDelay(0)
+                .start();
+    }
+
+    public void disableButtons(Spinner two,Spinner three, Button filterSearchBtn){
+        two.setClickable(false);
+        two.setEnabled(false);
+        three.setClickable(false);
+        three.setEnabled(false);
+        filterSearchBtn.setClickable(false);
+        filterSearchBtn.setEnabled(false);
+    }
+
+    public void enableButtons(Spinner two,Spinner three, Button filterSearchBtn){
+        two.setClickable(true);
+        two.setEnabled(true);
+        three.setClickable(true);
+        three.setEnabled(true);
+        filterSearchBtn.setClickable(true);
+        filterSearchBtn.setEnabled(true);
     }
 
     public void expandHeight(final CardView cv, Context context, float height)
     {
         System.out.println("expand height = " + height);
         ValueAnimator anim = ValueAnimator.ofInt((int) convertDpToPixel(36, context),
-                (int) height);
+                getScreenHeight(context));
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -86,7 +153,7 @@ public class AnimateFilter {
     public void expandWidth(final CardView cv, Context context)
     {
         ValueAnimator anim = ValueAnimator.ofInt((int) convertDpToPixel(36, context),
-                ScreenUtils.getScreenWidth(context));
+                getScreenWidth(context));
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -104,7 +171,7 @@ public class AnimateFilter {
     public void shrinkHeight(final CardView cv, Context context, float height)
     {
         System.out.println("shrink height = " + height);
-        ValueAnimator anim = ValueAnimator.ofInt((int) height,
+        ValueAnimator anim = ValueAnimator.ofInt(getScreenHeight(context),
                 (int) convertDpToPixel(36, context));
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -123,7 +190,7 @@ public class AnimateFilter {
 
     public void shrinkWidth(final CardView cv, Context context)
     {
-        ValueAnimator anim = ValueAnimator.ofInt(ScreenUtils.getScreenWidth(context),
+        ValueAnimator anim = ValueAnimator.ofInt(getScreenWidth(context),
                 (int) convertDpToPixel(36, context));
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -138,5 +205,21 @@ public class AnimateFilter {
         anim.setDuration(500);
         anim.setStartDelay(250);
         anim.start();
+    }
+
+    public void hideAdView(AdView adView, Context context){
+        adView.animate()
+                .y(-convertDpToPixel(100,context))
+                .setDuration(250)
+                .setStartDelay(0)
+                .start();
+    }
+
+    public void showAdView(AdView adView){
+        adView.animate()
+                .y(0)
+                .setDuration(250)
+                .setStartDelay(0)
+                .start();
     }
 }
