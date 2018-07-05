@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -44,9 +42,9 @@ public class AdditionalInformation extends AppCompatActivity {
 
         if(null != crimeList && !crimeList.isEmpty()) {
             streetName = findViewById(R.id.streetName);
-            SpannableString content = new SpannableString(new CapitalizeString().getString(crimeList.get(0).getStreetName()));
-            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            streetName.setText(content);
+//            SpannableString content = new SpannableString(new CapitalizeString().getString(crimeList.get(0).getStreetName()));
+//            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            streetName.setText(new CapitalizeString().getString(crimeList.get(0).getStreetName()));
             recyclerView = findViewById(R.id.crimesRv);
             linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(linearLayoutManager);

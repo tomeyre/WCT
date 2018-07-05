@@ -2,7 +2,9 @@ package eyresapps.com.utils;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.CardView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -43,6 +45,14 @@ public class AnimateFilter {
                     .start();
             new AnimateFilter().expandHeight(cv, context, filterHeight);
             new AnimateFilter().expandWidth(cv, context);
+            final Handler handler = new Handler();
+            final LinearLayout dr = dateRow;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dr.setVisibility(View.VISIBLE);
+                }
+            }, 675);
             new AnimateFilter().showAll(filterList,dateRow,btnRow);
             new AnimateFilter().hideBackground();
             new AnimateFilter().enableButtons(monthSpinner,yearSpinner, filterSearchBtn);
@@ -55,6 +65,7 @@ public class AnimateFilter {
             new AnimateFilter().shrinkHeight(cv, context, filterHeight);
             new AnimateFilter().shrinkWidth(cv, context);
             new AnimateFilter().hideAll(filterList,dateRow,btnRow);
+            dateRow.setVisibility(View.GONE);
             new AnimateFilter().showBackground();
             new AnimateFilter().disableButtons(monthSpinner,yearSpinner, filterSearchBtn);
             filterImage.animate()
@@ -180,7 +191,7 @@ public class AnimateFilter {
                 ViewGroup.LayoutParams layoutParams = cv.getLayoutParams();
                 layoutParams.height = val;
                 cv.setLayoutParams(layoutParams);
-                cv.setCardElevation(8);
+                cv.setCardElevation(1);
             }
         });
         anim.setDuration(500);
@@ -199,7 +210,7 @@ public class AnimateFilter {
                 ViewGroup.LayoutParams layoutParams = cv.getLayoutParams();
                 layoutParams.width = val;
                 cv.setLayoutParams(layoutParams);
-                cv.setCardElevation(8);
+                cv.setCardElevation(1);
             }
         });
         anim.setDuration(500);

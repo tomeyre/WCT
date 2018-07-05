@@ -24,22 +24,20 @@
 
 
     <android.support.v7.widget.CardView
-        android:layout_marginTop="17dp"
-        android:layout_marginRight="10dp"
-        app:cardCornerRadius="18dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="13dp"
+        app:cardCornerRadius="2dp"
         android:layout_alignParentRight="true"
         android:id="@+id/heatMapBtn"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        app:cardElevation="1dp"
-        app:cardBackgroundColor="#ffffff"
-        android:background="#ffffff">
+        app:cardElevation="1dp">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/whiteFaded">
 
             <ImageView
-                android:background="#ffffff"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:id="@+id/btnImage"
@@ -63,7 +61,8 @@
         android:layout_height="36dp"
         app:cardElevation="1dp"
         app:cardBackgroundColor="#ffffff"
-        android:background="#ffffff">
+        android:background="#ffffff"
+        android:visibility="invisible">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -141,7 +140,7 @@
             android:id="@+id/streetLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#3D82F8">
+            android:background="@color/blue">
 
             <TextView
                 android:id="@+id/streetName"
@@ -154,11 +153,23 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/weather"
+                android:id="@+id/currently"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/streetName"
                 android:layout_marginLeft="10dp"
+                android:text="Currently :"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/streetName"
+                android:layout_toRightOf="@+id/currently"
+                android:layout_marginLeft="5dp"
                 android:text="clear with periodic clouds : 7°C"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"
@@ -260,12 +271,16 @@
 
                     <Button
                         android:id="@+id/additionalInformationBtn"
+                        android:background="@color/blue"
                         android:layout_centerHorizontal="true"
-                        android:layout_margin="5dp"
+                        android:padding="10dp"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:layout_below="@+id/streetTotalsFrag"
                         android:text="More Details"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="45dp" />
 
                 </RelativeLayout>
             </android.support.v7.widget.CardView>

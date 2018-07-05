@@ -97,8 +97,7 @@ import static eyresapps.com.utils.ScreenUtils.getStatusBarHeight;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, NetworkStateReceiver.NetworkStateReceiverListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
-    String[] currentSearches;
-    byte[] currentSearcheBytes;
+    private Integer animationTime = 350;
 
     private FilterList filterList = FilterList.getInstance();
 
@@ -370,6 +369,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                     search.setText("");
                     search.clearFocus();
+                    hidePopUpView();
                     hideSoftKeyboard();
                     return true;
                 }
@@ -492,13 +492,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         //---------------starts an animation after the splash screen to indicate that the information bar is collapasable
         layoutTitle.animate()
-                .y(getScreenHeight(MainActivity.this))
-                .setDuration(250)
+                .y(getScreenHeight(MainActivity.this) + convertDpToPixel(100, this))
+                .setDuration(animationTime)
                 .setStartDelay(2000)
                 .start();
         layoutBody.animate()
-                .y(getScreenHeight(MainActivity.this))
-                .setDuration(250)
+                .y(getScreenHeight(MainActivity.this) + convertDpToPixel(100, this))
+                .setDuration(animationTime)
                 .setStartDelay(2000)
                 .start();
 
@@ -510,6 +510,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                             monthSpinner, yearSpinner, filterSearchBtn);
                 } else {
                     hideSoftKeyboard();
+                    hidePopUpView();
                     new AnimateFilter().expandFilter(filterBtn, filterImage, MainActivity.this, filterHeight, filterList.getFilterList(), dateRow, btnRow,
                             monthSpinner, yearSpinner, filterSearchBtn);
                 }
@@ -594,6 +595,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         Log.i("Map", " Ready");
         mMap = googleMap;
+        mMap.setIndoorEnabled(false);
+        mMap.getUiSettings().setCompassEnabled(false);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
         filter = false;
         showPosition(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
@@ -621,16 +628,32 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         monthSpinner, yearSpinner, filterSearchBtn);
             }
         });
+        mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override
+            public boolean onMyLocationButtonClick() {
+                latLng.setLatlngChaned(true);
+                isMyLocation = true;
+                hideSoftKeyboard();
+                hidePopUpView();
+                gpsTracker.getLocation();
+                latLng.setLatLng(new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude()));
+                filter = false;
+                showPosition(false);
+                new AnimateFilter().shrinkFilter(filterBtn, filterImage, MainActivity.this, filterHeight, filterList.getFilterList(), dateRow, btnRow,
+                        monthSpinner, yearSpinner, filterSearchBtn);
+                return false;
+            }
+        });
     }
 
     public void hidePopUpView() {
         layoutTitle.animate()
-                .y(getScreenHeight(MainActivity.this))
-                .setDuration(250)
+                .y(getScreenHeight(MainActivity.this) + convertDpToPixel(100, MainActivity.this))
+                .setDuration(animationTime)
                 .start();
         layoutBody.animate()
-                .y(getScreenHeight(MainActivity.this))
-                .setDuration(250)
+                .y(getScreenHeight(MainActivity.this) + convertDpToPixel(100, MainActivity.this))
+                .setDuration(animationTime)
                 .start();
         mAdView.destroy();
         new AnimateFilter().hideAdView(mAdView, this);
@@ -641,11 +664,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void showPopUpViewTitle() {
         layoutTitle.animate()
                 .y(getScreenHeight(MainActivity.this) - layoutTitle.getHeight() - statusBarHeight)
-                .setDuration(250)
+                .setDuration(animationTime)
                 .start();
         layoutBody.animate()
                 .y(getScreenHeight(MainActivity.this) - layoutTitle.getHeight() - statusBarHeight)
-                .setDuration(250)
+                .setDuration(animationTime)
                 .start();
         mAdView.destroy();
         new AnimateFilter().hideAdView(mAdView, this);
@@ -794,7 +817,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //-----------------------------------------------------------put all markers on map and associate crimes and outcomes with markers
-    public void updateMap(final ArrayList<ArrayList<Crimes>> list, boolean filter) {
+    public void updateMap(final ArrayList<ArrayList<Crimes>> list, final boolean filter) {
         if (dialog.isShowing()) {
             dialog.dismiss();
         }
@@ -818,38 +841,42 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         ArrayList<WeightedLatLng> weightedLatLngs = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
-            int mapColour = list.get(i).size();
-            String streetName = new CapitalizeString().getString(list.get(i).get(0).getStreetName().toString());
+            try {
+                int mapColour = list.get(i).size();
+                String streetName = new CapitalizeString().getString(list.get(i).get(0).getStreetName().toString());
 
-            LayoutInflater inflater = (LayoutInflater) MainActivity.this
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View v = inflater.inflate(R.layout.custom_map_marker, null);
-            View bigV = inflater.inflate(R.layout.custom_map_marker_big, null);
+                LayoutInflater inflater = (LayoutInflater) MainActivity.this
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View v = inflater.inflate(R.layout.custom_map_marker, null);
+                View bigV = inflater.inflate(R.layout.custom_map_marker_big, null);
 
-            if (mapColour < 100) {
-                weightedLatLngs.add(new WeightedLatLng(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()), list.get(i).size()));
-                markers.add(mMap.addMarker(new MarkerOptions()
-                        .title(streetName)
-                        .position(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()))
-                        .icon(BitmapDescriptorFactory.fromBitmap(new BitmapGenerator().getMarkerBitmapFromView(mapColour, v, this)))));
-                mMap.setOnMarkerClickListener(this);
-            } else {
-                weightedLatLngs.add(new WeightedLatLng(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()), 100));
-                markers.add(mMap.addMarker(new MarkerOptions()
-                        .title(streetName)
-                        .position(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()))
-                        .icon(BitmapDescriptorFactory.fromBitmap(new BitmapGenerator().getMarkerBitmapFromView(mapColour, bigV, this)))));
-                mMap.setOnMarkerClickListener(this);
+                if (mapColour < 100) {
+                    weightedLatLngs.add(new WeightedLatLng(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()), list.get(i).size()));
+                    markers.add(mMap.addMarker(new MarkerOptions()
+                            .title(streetName)
+                            .position(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()))
+                            .icon(BitmapDescriptorFactory.fromBitmap(new BitmapGenerator().getMarkerBitmapFromView(mapColour, v, MainActivity.this)))));
+                    mMap.setOnMarkerClickListener(MainActivity.this);
+                } else {
+                    weightedLatLngs.add(new WeightedLatLng(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()), 100));
+                    markers.add(mMap.addMarker(new MarkerOptions()
+                            .title(streetName)
+                            .position(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()))
+                            .icon(BitmapDescriptorFactory.fromBitmap(new BitmapGenerator().getMarkerBitmapFromView(mapColour, bigV, MainActivity.this)))));
+                    mMap.setOnMarkerClickListener(MainActivity.this);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
 
-        if (isMyLocation) {
-            mMap.addMarker(new MarkerOptions().position(latLng.getLatLng())
-                    .title("Your Location"));
-        } else {
-            mMap.addMarker(new MarkerOptions().position(latLng.getLatLng())
-                    .title("Search Location"));
-        }
+//        if (isMyLocation) {
+//            mMap.addMarker(new MarkerOptions().position(latLng.getLatLng())
+//                    .title("Your Location"));
+//        } else {
+//            mMap.addMarker(new MarkerOptions().position(latLng.getLatLng())
+//                    .title("Search Location"));
+//        }
 
         if (!filter && !heatMapUsed) {
             Toast.makeText(getApplicationContext(), "Crime statistics for " + dateUtil.getMonthAsString() + " " + dateUtil.getYear(),
@@ -877,7 +904,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 .gradient(gradient)
                 .radius(50)
                 .build();
-
 
     }
 
@@ -949,15 +975,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             new AnimateFilter().shrinkFilter(filterBtn, filterImage, MainActivity.this, filterHeight, filterList.getFilterList(), dateRow, btnRow,
                     monthSpinner, yearSpinner, filterSearchBtn);
             crimeCount.resetStreetCount();
-            if (layoutTitle.getY() == getScreenHeight(MainActivity.this)) {
+            if (layoutTitle.getY() == getScreenHeight(MainActivity.this) + convertDpToPixel(100, MainActivity.this)) {
                 layoutTitle.animate()
                         .y(getScreenHeight(MainActivity.this) - layoutTitle.getHeight() - statusBarHeight)
-                        .setDuration(250)
+                        .setDuration(animationTime)
                         .setStartDelay(0)
                         .start();
                 layoutBody.animate()
                         .y(getScreenHeight(MainActivity.this) - layoutTitle.getHeight() - statusBarHeight)
-                        .setDuration(250)
+                        .setDuration(animationTime)
                         .setStartDelay(0)
                         .start();
 
@@ -1201,11 +1227,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                             topOfTitle >= getScreenHeight(MainActivity.this) - titleHeight - statusBarHeight - 30) {
                         layoutTitle.animate()
                                 .y(adViewHeight)
-                                .setDuration(250)
+                                .setDuration(animationTime)
                                 .start();
                         layoutBody.animate()
                                 .y(adViewHeight)
-                                .setDuration(250)
+                                .setDuration(animationTime)
                                 .start();
                         new AnimateFilter().showAdView(mAdView);
                         adRequest = new AdRequest.Builder().build();
@@ -1220,11 +1246,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     System.out.println("1 = " + (movementAmmount));
                     layoutTitle.animate()
                             .y(adViewHeight)
-                            .setDuration(250)
+                            .setDuration(animationTime)
                             .start();
                     layoutBody.animate()
                             .y(adViewHeight)
-                            .setDuration(250)
+                            .setDuration(animationTime)
                             .start();
                     new AnimateFilter().showAdView(mAdView);
                     adRequest = new AdRequest.Builder().build();
@@ -1251,11 +1277,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     System.out.println("4 = " + (movementAmmount) + " / " + topOfTitle);
                     layoutTitle.animate()
                             .y(adViewHeight)
-                            .setDuration(250)
+                            .setDuration(animationTime)
                             .start();
                     layoutBody.animate()
                             .y(adViewHeight)
-                            .setDuration(250)
+                            .setDuration(animationTime)
                             .start();
                     new AnimateFilter().showAdView(mAdView);
                     adRequest = new AdRequest.Builder().build();
@@ -1268,11 +1294,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     System.out.println("5 = " + (movementAmmount) + " / " + topOfTitle);
                     layoutTitle.animate()
                             .y(adViewHeight)
-                            .setDuration(250)
+                            .setDuration(animationTime)
                             .start();
                     layoutBody.animate()
                             .y(adViewHeight)
-                            .setDuration(250)
+                            .setDuration(animationTime)
                             .start();
                     new AnimateFilter().showAdView(mAdView);
                     adRequest = new AdRequest.Builder().build();

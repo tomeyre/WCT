@@ -23,6 +23,8 @@
     <color name="black">#000000</color>
     <color name="grey">#eeeeee</color>
     <color name="white">#ffffff</color>
+    <color name="whiteFaded">#f2ffffff</color>
+    <color name="blue">#3D82F8</color>
 
     <color name="link">#3DCFFF</color>
 </resources>
