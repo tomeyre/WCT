@@ -2,12 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@color/black"/>
+        android:drawable="@color/white"/>
     <application android:theme="@android:style/Theme.NoTitleBar"/>
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/maps"/>
+            android:src="@drawable/icon"/>
     </item>
 
 </layer-list>

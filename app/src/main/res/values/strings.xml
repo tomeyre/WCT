@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WCT</string>
+    <string name="app_name">Crime Tracker</string>
 
     <string-array name="days">
         <item>1</item>

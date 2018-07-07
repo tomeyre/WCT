@@ -24,7 +24,6 @@
         android:id="@+id/streetNameCV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         app:cardBackgroundColor="@color/blue">
 
         <TextView
@@ -41,11 +40,19 @@
 
     </android.support.v7.widget.CardView>
 
+    <fragment
+        android:name="com.google.android.gms.maps.StreetViewPanoramaFragment"
+        android:id="@+id/streetviewpanorama"
+        android:layout_below="@+id/streetNameCV"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="5dp"
+        android:layout_height="200dp"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/crimesRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/streetNameCV"
+        android:layout_below="@+id/streetviewpanorama"
         android:layout_marginBottom="10dp"></android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

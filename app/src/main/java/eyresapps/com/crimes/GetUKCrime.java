@@ -30,7 +30,7 @@ public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
     private int attempts;
     boolean finished = false;
     Integer finishedCounter = 0;
-    private Integer maxCrimesPerThread = 1000;
+    private Integer maxCrimesPerThread = 250;
 
 
     public GetUKCrime(Context context, boolean search, int attempts) {
@@ -60,7 +60,6 @@ public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
             final JSONArray jsonArray = new JSONArray(json);
 
             int maxThreads = 0;
-            int lastThreads = 0;
 
             if (null == jsonArray || jsonArray.length() == 0) {
                 return crimeList;
@@ -70,7 +69,10 @@ public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
                 maxThreads = 1;
             } else {
                 maxThreads = jsonArray.length() / maxCrimesPerThread;
-                lastThreads = jsonArray.length() % maxCrimesPerThread;
+                if(jsonArray.length() % maxCrimesPerThread > 0){
+                    maxThreads++;
+                }
+
             }
 
             for (int i = 0; i < maxThreads; i++) {
@@ -79,8 +81,12 @@ public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
                 Thread thread = new Thread() {
                     @Override
                     public void run() {
-                        if ((position + 1) == finalMaxThreads) {
-                            getCrimes(jsonArray, position * maxCrimesPerThread, jsonArray.length());
+                        if ((position + 1) == finalMaxThreads && finalMaxThreads == 1) {
+                            getCrimes(jsonArray, 0, jsonArray.length());
+                            finishedCounter++;
+                        }
+                        else if((position + 1) == finalMaxThreads){
+                            getCrimes(jsonArray, (position * maxCrimesPerThread) + 1, jsonArray.length());
                             finishedCounter++;
                         } else {
                             getCrimes(jsonArray, (position * maxCrimesPerThread) + 1, (position + 1) * maxCrimesPerThread);
@@ -133,7 +139,6 @@ public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
 
                     //crime / date / time / outcome / streetname / lat /lng / weapon / description
 
-
                     crime = (new Crimes(jsonArray.getJSONObject(i).getString("category"),
                             jsonArray.getJSONObject(i).getString("month"),
                             "",
@@ -150,33 +155,40 @@ public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
                             jsonArray.getJSONObject(i).getJSONObject("location").getDouble("latitude"),
                             jsonArray.getJSONObject(i).getJSONObject("location").getDouble("longitude"), "", ""));
                 }
-
-                if (crimeList.isEmpty()) {
-                    crimes.add(crime);
-                    crimeList.add(crimes);
-                } else {
-                    for (int j = 0; j < crimeList.size(); j++) {
-                        if (crimeList.get(j).get(0).getStreetName().equals(jsonArray.getJSONObject(i).getJSONObject("location")
-                                .getJSONObject("street").getString("name").replace("On or near", ""))) {
-                            crimes = new ArrayList<>();
-                            crimes = crimeList.get(j);
-                            crimes.add(crime);
-                            crimeList.set(j, crimes);
-                            firstOfItsKind = false;
-                            break;
-                        }
-                    }
-                    if (firstOfItsKind) {
-                        crimes = new ArrayList<>();
-                        crimes.add(crime);
-                        crimeList.add(crimeList.size(), crimes);
-                    }
-                    firstOfItsKind = true;
-                }
+                addToList(jsonArray, i, crime);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    private synchronized void addToList(JSONArray jsonArray, int position, final Crimes crime){
+        try {
+            if (crimeList.isEmpty()) {
+                crimes.add(crime);
+                crimeList.add(crimes);
+            } else {
+                for (int j = 0; j < crimeList.size(); j++) {
+                    if (crimeList.get(j).get(0).getLatitude() == jsonArray.getJSONObject(position).getJSONObject("location")
+                            .getDouble("latitude") && crimeList.get(j).get(0).getLongitude() == jsonArray.getJSONObject(position).getJSONObject("location")
+                            .getDouble("longitude"
+                    )) {
+                        crimes = new ArrayList<>();
+                        crimes = crimeList.get(j);
+                        crimes.add(crime);
+                        crimeList.set(j, crimes);
+                        firstOfItsKind = false;
+                        break;
+                    }
+                }
+                if (firstOfItsKind && jsonArray.getJSONObject(position).has("location")) {
+                    crimes = new ArrayList<>();
+                    crimes.add(crime);
+                    crimeList.add(crimeList.size(), crimes);
+                }
+                firstOfItsKind = true;
+            }
+        }catch (Exception e){e.printStackTrace();
+            Log.i("ERROR ", "caught " + e.getMessage() + " / " + position);}
     }
 
     @Override

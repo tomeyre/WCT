@@ -28,6 +28,8 @@ public class GetLACrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
     boolean bespokeSearch;
     private int attempts;
     ArrayList<Counter> counts = new ArrayList<>();
+    int nextMonth = dateUtil.getMonth();
+    int nextYear = dateUtil.getYear();
 
     public GetLACrime(Context context, boolean search, int attempts) {
         this.context = context;
@@ -44,7 +46,11 @@ public class GetLACrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
             if (crimeList != null || crimeList.size() > 0) {
                 crimeList.clear();
             }
-            Log.i("Get UK Crime URL : ","https://data.police.uk/api/crimes-street/all-crime?date=" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "&lat=" + latLng.getLatLng().latitude + "&lng=" + latLng.getLatLng().longitude);
+            if(nextMonth > 12){
+                nextMonth = 1;
+                nextYear = dateUtil.getYear() - 1;
+            }
+            Log.i("LA ","https://data.lacity.org/resource/7fvc-faax.json?$where=within_circle(location_1, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date_occ between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + nextYear + "-" + nextMonth + "-01T00:00:00'");
 
             // create new instance of the httpConnect class
             HttpConnectUtil jParser = new HttpConnectUtil();

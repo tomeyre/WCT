@@ -12,6 +12,7 @@ import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -47,6 +48,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
@@ -58,6 +60,7 @@ import com.google.maps.android.heatmaps.WeightedLatLng;
 import org.json.JSONArray;
 
 import java.math.RoundingMode;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,6 +68,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import eyresapps.com.api_calls.GetCurrentWeather;
 import eyresapps.com.broadcastRecievers.Network;
@@ -95,7 +99,10 @@ import static eyresapps.com.utils.ScreenUtils.getMeasuredHeight;
 import static eyresapps.com.utils.ScreenUtils.getScreenHeight;
 import static eyresapps.com.utils.ScreenUtils.getStatusBarHeight;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, NetworkStateReceiver.NetworkStateReceiverListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener,
+        NetworkStateReceiver.NetworkStateReceiverListener,
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
     private Integer animationTime = 350;
 
@@ -644,7 +651,61 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 return false;
             }
         });
+        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                try {
+                    Log.i("The camera has stopped moving.", "");
+                    final int subArrayMaxSize = 100;
+                    final int ammountOfSubArrays;
+                    ammountOfSubArrays = markers.size() / subArrayMaxSize == 0 ? 1 : markers.size() % subArrayMaxSize > 0 ? (markers.size() / subArrayMaxSize) + 1 : markers.size() / subArrayMaxSize;
+                    for (int j = 0; j < ammountOfSubArrays; j++) {
+                        final int position = j;
+                        Thread thread = new Thread() {
+                            @Override
+                            public void run() {
+                                if ((position + 1) == ammountOfSubArrays && ammountOfSubArrays == 1) {
+                                    checkMarkerVisibility(0, markers.size());
+                                } else if ((position + 1) == ammountOfSubArrays) {
+                                    checkMarkerVisibility((position * subArrayMaxSize) + 1, markers.size());
+                                } else {
+                                    checkMarkerVisibility((position * subArrayMaxSize) + 1, (position + 1) * subArrayMaxSize);
+                                }
+                            }
+                        };
+                        thread.start();
+                    }
+                }catch (Exception e){e.printStackTrace();}
+            }
+        });
     }
+
+    private void checkMarkerVisibility(final int startArray, final int endArray) {
+        // Get a handler that can be used to post to the main thread
+
+        try {
+            for (int i = startArray; i < endArray; i++) {
+                final int position = i;
+                Handler mainHandler = new Handler(Looper.getMainLooper());
+
+                Runnable myRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+                        if (bounds.contains(markers.get(position).getPosition())) {
+                            markers.get(position).setVisible(true);
+                        } else {
+                            markers.get(position).setVisible(false);
+                        }
+                    }
+                };
+                mainHandler.post(myRunnable);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void hidePopUpView() {
         layoutTitle.animate()
@@ -732,22 +793,36 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         Toast.LENGTH_SHORT).show();
             }
         }
-        if (null != currentAddress.getAddress() && currentAddress.getAddress().contains("UK")) {
+
+        final Date date = new Date();
+        final DateFormat df = new SimpleDateFormat("h:mm a");
+
+        if (null != currentAddress.getAddress() && currentAddress.getAddress().toLowerCase().contains("uk")) {
             locale = Locale.UK;
-        } else if (null != currentAddress.getAddress() && currentAddress.getAddress().contains("USA")) {
+            df.setTimeZone(TimeZone.getTimeZone("Europe/London"));
+        } else if (null != currentAddress.getAddress() && currentAddress.getAddress().toLowerCase().contains("los angeles")) {
             locale = Locale.US;
+            df.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+        } else if (null != currentAddress.getAddress() && currentAddress.getAddress().toLowerCase().contains("chicago")) {
+            locale = Locale.US;
+            df.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
+        } else if (null != currentAddress.getAddress() && currentAddress.getAddress().toLowerCase().contains("durham, nc")) {
+            locale = Locale.US;
+            df.setTimeZone(TimeZone.getTimeZone("America/New_York"));
         } else {
             locale = Locale.UK;
+            df.setTimeZone(TimeZone.getTimeZone("Europe/London"));
         }
+
         latLng.setLatlngChaned(false);
         timeHandler = new Handler(getMainLooper());
         timeHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                time.setText(new SimpleDateFormat("h:mm a", locale).format(new Date()));
+                time.setText(df.format(date));
                 timeHandler.postDelayed(this, 1000);
             }
-        }, 10);
+        }, 0);
     }
 
     private String creatJsonStringForAddress(JSONArray storedLocations, boolean nothingStored) {
@@ -818,9 +893,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     //-----------------------------------------------------------put all markers on map and associate crimes and outcomes with markers
     public void updateMap(final ArrayList<ArrayList<Crimes>> list, final boolean filter) {
-        if (dialog.isShowing()) {
-            dialog.dismiss();
-        }
         if (!filter) {
             crimeList = list;
         } else {
@@ -847,10 +919,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
                 LayoutInflater inflater = (LayoutInflater) MainActivity.this
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View v = inflater.inflate(R.layout.custom_map_marker, null);
-                View bigV = inflater.inflate(R.layout.custom_map_marker_big, null);
 
                 if (mapColour < 100) {
+                    View v = inflater.inflate(R.layout.custom_map_marker, null);
                     weightedLatLngs.add(new WeightedLatLng(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()), list.get(i).size()));
                     markers.add(mMap.addMarker(new MarkerOptions()
                             .title(streetName)
@@ -858,6 +929,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                             .icon(BitmapDescriptorFactory.fromBitmap(new BitmapGenerator().getMarkerBitmapFromView(mapColour, v, MainActivity.this)))));
                     mMap.setOnMarkerClickListener(MainActivity.this);
                 } else {
+                    View bigV = inflater.inflate(R.layout.custom_map_marker_big, null);
                     weightedLatLngs.add(new WeightedLatLng(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()), 100));
                     markers.add(mMap.addMarker(new MarkerOptions()
                             .title(streetName)
@@ -865,6 +937,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                             .icon(BitmapDescriptorFactory.fromBitmap(new BitmapGenerator().getMarkerBitmapFromView(mapColour, bigV, MainActivity.this)))));
                     mMap.setOnMarkerClickListener(MainActivity.this);
                 }
+                Log.i("MAP COLOR ","" + mapColour + " / MAP LOCATION " + list.get(i).get(0).getStreetName() + " / " + list.get(i).get(0).getLatitude() + list.get(i).get(0).getLongitude());
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -904,6 +977,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 .gradient(gradient)
                 .radius(50)
                 .build();
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
 
     }
 
@@ -1501,4 +1577,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
+
+
 }
