@@ -20,17 +20,12 @@ public class GenerateCrimeUrl {
     CrimeCount crimeCount = CrimeCount.getInstance();
 
     public GenerateCrimeUrl(Context context, boolean bespokeSearch) {
-        int nextMonth = dateUtil.getMonth();
-        int nextYear = dateUtil.getYear();
-        if(nextMonth > 12){
-            nextMonth = 1;
-            nextYear = dateUtil.getYear() - 1;
-        }
         crimeCount.resetTotalsCount();
+        System.out.println("ADDRESS : " + currentAddress.getAddress());
         if (currentAddress.getAddress().toLowerCase().contains("chicago")) {
-            new GetChicargoCrime(context, bespokeSearch, 0).execute("https://data.cityofchicago.org/resource/6zsd-86xi.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + nextYear + "-" + nextMonth + "-01T00:00:00'");
-        } else if (currentAddress.getAddress().toLowerCase().contains("los angeles")) {
-            new GetLACrime(context, bespokeSearch, 0).execute("https://data.lacity.org/resource/7fvc-faax.json?$where=within_circle(location_1, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date_occ between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + nextYear + "-" + nextMonth + "-01T00:00:00'");
+            new GetChicargoCrime(context, bespokeSearch, 0).execute("https://data.cityofchicago.org/resource/6zsd-86xi.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00'");
+        } else if (currentAddress.getAddress().contains("CA") && currentAddress.getAddress().contains("USA")) {
+            new GetLACrime(context, bespokeSearch, 0).execute("https://data.lacity.org/resource/7fvc-faax.json?$where=within_circle(location_1, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date_occ between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00'");
         } else if (currentAddress.getAddress().toLowerCase().contains("uk")) {
             new GetUKCrime(context, bespokeSearch, 0).execute("https://data.police.uk/api/crimes-street/all-crime?date=" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "&lat=" + latLng.getLatLng().latitude + "&lng=" + latLng.getLatLng().longitude);
         } else if (currentAddress.getAddress().toLowerCase().contains("durham, nc")) {

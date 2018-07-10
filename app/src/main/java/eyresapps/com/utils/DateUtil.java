@@ -21,6 +21,11 @@ public class DateUtil {
     }
 
     private DateUtil() {
+        if(month == 1){
+            month = 12;
+        }else{
+            month--;
+        }
     }
 
     public int getYear() {
@@ -42,24 +47,29 @@ public class DateUtil {
     public void resetDate(){
         this.year = Calendar.getInstance().get(Calendar.YEAR);
         this.month = Calendar.getInstance().get(Calendar.MONTH);
-    }
-
-    public int getMonthBehind(){
-        int monthBehind = this.month;
-        if(monthBehind == 0){
-            monthBehind = 12;
+        if(month == 1){
+            month = 12;
         }else{
-            monthBehind--;
+            month--;
         }
-        return monthBehind;
     }
 
-    public int getYearBehind(){
-        int yearBehind = this.year;
-        if(this.month == 0){
-            yearBehind--;
+    public int getMonthAhead(){
+        int monthAhead = this.month;
+        if(monthAhead == 12){
+            monthAhead = 1;
+        }else{
+            monthAhead++;
         }
-        return yearBehind;
+        return monthAhead;
+    }
+
+    public int getYearAhead(){
+        int yearAhead = this.year;
+        if(this.month == 12){
+            yearAhead++;
+        }
+        return yearAhead;
     }
 
     public String getMonthAsString(){

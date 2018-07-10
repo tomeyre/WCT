@@ -93,6 +93,7 @@ import eyresapps.com.utils.ReadWriteStuff;
 import eyresapps.com.utils.ScreenUtils;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static eyresapps.com.utils.ScreenUtils.convertDpToPixel;
 import static eyresapps.com.utils.ScreenUtils.getMeasuredHeight;
@@ -107,6 +108,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private Integer animationTime = 350;
 
     private FilterList filterList = FilterList.getInstance();
+
+    private TextView dateTxt;
 
     boolean heatMapUsed = false;
 
@@ -158,8 +161,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     ArrayList<Crimes> markerCrimes = new ArrayList<>();
 
-    //--------------------getting crimes ect dialog display
-    private ProgressDialog dialog;
+    //--------------------getting crimes ect gettingCrimesDialog display
+    private ProgressDialog updatingMapDialog;
 
     //-------------------these are the views used for the custom scrolling animation
     private RelativeLayout layoutBody;
@@ -208,6 +211,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     //------------ all used for getting local time to display below the street name like google does
     private DateUtil dateUtil = DateUtil.getInstance();
     private Handler timeHandler;
+    private Runnable timeRunner;
     private Locale locale;
 
     //--------- cards to remove if no information inside them
@@ -227,6 +231,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_main);
+
+        dateTxt  = findViewById(R.id.dateTxt);
 
         setViews();
 
@@ -411,9 +417,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         latLng.setLatLng(new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude()));
         latLng.setLatlngChaned(true);
 
-        //------- set up dialog message to show during async tasks
-        dialog = new ProgressDialog(this);
-
         //---------------find all views to be manipulated on the front end
 
 
@@ -434,6 +437,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+
+        updatingMapDialog = new ProgressDialog(MainActivity.this);
+        updatingMapDialog.setMessage("Updating map...");
+
         heatMapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -444,13 +451,29 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 if (markers.isEmpty()) {
                     if (filter) {
                         if (null != filteredCrimes && !filteredCrimes.isEmpty()) {
-                            updateMap(filteredCrimes, filter);
+                            System.out.println("show update map dialog 1");
+                            updatingMapDialog.show();
+                            Thread thread = new Thread() {
+                                @Override
+                                public void run() {
+                                    updateMap(filteredCrimes, filter, updatingMapDialog);
+                                }
+                            };
+                            thread.start();
                         } else {
                             Toast.makeText(getApplicationContext(), "All crimes filtered...",
                                     Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        updateMap(crimeList, filter);
+                        System.out.println("show update map dialog 2");
+                        updatingMapDialog.show();
+                        Thread thread = new Thread() {
+                            @Override
+                            public void run() {
+                                updateMap(crimeList, filter, updatingMapDialog);
+                            }
+                        };
+                        thread.start();
                     }
                 } else {
                     try {
@@ -584,7 +607,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private void filterCrimeListUpdate(boolean filterAnotherList) {
         filter = true;
         if (!filteredCrimes.isEmpty() && !filterAnotherList) {
-            updateMap(filteredCrimes, filter);
+            updatingMapDialog.show();
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    System.out.println("show update map dialog 3");
+                    updateMap(filteredCrimes, filter, updatingMapDialog);
+                }
+            };
+            thread.start();
         } else if (!filterAnotherList) {
             mMap.clear();
             Toast.makeText(getApplicationContext(), "All crimes filtered...",
@@ -667,9 +698,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                                 if ((position + 1) == ammountOfSubArrays && ammountOfSubArrays == 1) {
                                     checkMarkerVisibility(0, markers.size());
                                 } else if ((position + 1) == ammountOfSubArrays) {
-                                    checkMarkerVisibility((position * subArrayMaxSize) + 1, markers.size());
+                                    checkMarkerVisibility((position * subArrayMaxSize), markers.size());
                                 } else {
-                                    checkMarkerVisibility((position * subArrayMaxSize) + 1, (position + 1) * subArrayMaxSize);
+                                    checkMarkerVisibility((position * subArrayMaxSize), (position + 1) * subArrayMaxSize);
                                 }
                             }
                         };
@@ -719,6 +750,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mAdView.destroy();
         new AnimateFilter().hideAdView(mAdView, this);
         searchLayout.setVisibility(VISIBLE);
+        dateTxt.setVisibility(VISIBLE);
         hideSoftKeyboard();
     }
 
@@ -734,6 +766,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mAdView.destroy();
         new AnimateFilter().hideAdView(mAdView, this);
         searchLayout.setVisibility(VISIBLE);
+        dateTxt.setVisibility(VISIBLE);
         hideSoftKeyboard();
 
     }
@@ -788,7 +821,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 callNewCrime();
             } catch (Exception e) {
                 e.printStackTrace();
-                dialog.dismiss();
                 Toast.makeText(getApplicationContext(), "Error",
                         Toast.LENGTH_SHORT).show();
             }
@@ -815,14 +847,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         latLng.setLatlngChaned(false);
+        try{timeHandler.removeCallbacks(timeRunner);}catch (Exception e){e.printStackTrace();}
         timeHandler = new Handler(getMainLooper());
-        timeHandler.postDelayed(new Runnable() {
+        timeRunner = new Runnable() {
             @Override
             public void run() {
                 time.setText(df.format(date));
                 timeHandler.postDelayed(this, 1000);
             }
-        }, 0);
+        };
+        timeHandler.postDelayed(timeRunner, 10);
     }
 
     private String creatJsonStringForAddress(JSONArray storedLocations, boolean nothingStored) {
@@ -854,16 +888,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             dateUtil.setMaxYear(dateUtil.getYear());
         }
         new GetCurrentWeather(MainActivity.this, latLng.getLatLng()).execute();
-        cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.getLatLng().latitude, latLng.getLatLng().longitude), 15);
+        cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.getLatLng().latitude, latLng.getLatLng().longitude), 16);
         mMap.animateCamera(cameraUpdate);
     }
 
     public void showPosition(boolean alreadyHaveAdress) {
 
         if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) && new Network().isNetworkEnabled(MainActivity.this)) {
-            dialog.setMessage("Getting crimes...");
-            dialog.show();
-            cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng.getLatLng(), 15);
+            cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng.getLatLng(), 16);
             mMap.addMarker(new MarkerOptions().position(latLng.getLatLng()).title("You are here"));
             mMap.animateCamera(cameraUpdate);
             findAddress(alreadyHaveAdress);
@@ -877,71 +909,71 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     //------------public methods
 
     public void dismissDialog(final String text) {
-        dialog.dismiss();
         this.runOnUiThread(new Runnable() {
             public void run() {
-                Toast.makeText(getApplicationContext(), text,
-                        Toast.LENGTH_SHORT).show();
+                if(!text.equals("")) {
+                    Toast.makeText(getApplicationContext(), text,
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
-        try {
-            mMap.clear();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     //-----------------------------------------------------------put all markers on map and associate crimes and outcomes with markers
-    public void updateMap(final ArrayList<ArrayList<Crimes>> list, final boolean filter) {
-        if (!filter) {
-            crimeList = list;
-        } else {
-            filteredCrimes = new FilterCrimeList().filter(crimeList, filterList.getFilterList());
-            filterCrimeListUpdate(false);
-        }
-        try {
-            mMap.clear();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            markers.clear();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void updateMap(final ArrayList<ArrayList<Crimes>> list, final boolean filter, final ProgressDialog progressDialog) {
+        runOnUiThread(new Runnable() {
+            public void run() {
 
-        ArrayList<WeightedLatLng> weightedLatLngs = new ArrayList<>();
 
-        for (int i = 0; i < list.size(); i++) {
-            try {
-                int mapColour = list.get(i).size();
-                String streetName = new CapitalizeString().getString(list.get(i).get(0).getStreetName().toString());
-
-                LayoutInflater inflater = (LayoutInflater) MainActivity.this
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                if (mapColour < 100) {
-                    View v = inflater.inflate(R.layout.custom_map_marker, null);
-                    weightedLatLngs.add(new WeightedLatLng(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()), list.get(i).size()));
-                    markers.add(mMap.addMarker(new MarkerOptions()
-                            .title(streetName)
-                            .position(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()))
-                            .icon(BitmapDescriptorFactory.fromBitmap(new BitmapGenerator().getMarkerBitmapFromView(mapColour, v, MainActivity.this)))));
-                    mMap.setOnMarkerClickListener(MainActivity.this);
+                if (!filter) {
+                    crimeList = list;
                 } else {
-                    View bigV = inflater.inflate(R.layout.custom_map_marker_big, null);
-                    weightedLatLngs.add(new WeightedLatLng(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()), 100));
-                    markers.add(mMap.addMarker(new MarkerOptions()
-                            .title(streetName)
-                            .position(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()))
-                            .icon(BitmapDescriptorFactory.fromBitmap(new BitmapGenerator().getMarkerBitmapFromView(mapColour, bigV, MainActivity.this)))));
-                    mMap.setOnMarkerClickListener(MainActivity.this);
+                    filteredCrimes = new FilterCrimeList().filter(crimeList, filterList.getFilterList());
+                    filterCrimeListUpdate(false);
                 }
-                Log.i("MAP COLOR ","" + mapColour + " / MAP LOCATION " + list.get(i).get(0).getStreetName() + " / " + list.get(i).get(0).getLatitude() + list.get(i).get(0).getLongitude());
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
+                try {
+                    mMap.clear();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    markers.clear();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                ArrayList<WeightedLatLng> weightedLatLngs = new ArrayList<>();
+
+                for (int i = 0; i < list.size(); i++) {
+                    try {
+                        int mapColour = list.get(i).size();
+                        String streetName = new CapitalizeString().getString(list.get(i).get(0).getStreetName().toString());
+
+                        LayoutInflater inflater = (LayoutInflater) MainActivity.this
+                                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                        if (mapColour < 100) {
+                            View v = inflater.inflate(R.layout.custom_map_marker, null);
+                            weightedLatLngs.add(new WeightedLatLng(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()), list.get(i).size()));
+                            markers.add(mMap.addMarker(new MarkerOptions()
+                                    .title(streetName)
+                                    .position(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()))
+                                    .icon(BitmapDescriptorFactory.fromBitmap(new BitmapGenerator().getMarkerBitmapFromView(mapColour, v, MainActivity.this)))));
+                            mMap.setOnMarkerClickListener(MainActivity.this);
+                        } else {
+                            View bigV = inflater.inflate(R.layout.custom_map_marker_big, null);
+                            weightedLatLngs.add(new WeightedLatLng(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()), 100));
+                            markers.add(mMap.addMarker(new MarkerOptions()
+                                    .title(streetName)
+                                    .position(new LatLng(list.get(i).get(0).getLatitude(), list.get(i).get(0).getLongitude()))
+                                    .icon(BitmapDescriptorFactory.fromBitmap(new BitmapGenerator().getMarkerBitmapFromView(mapColour, bigV, MainActivity.this)))));
+                            mMap.setOnMarkerClickListener(MainActivity.this);
+                        }
+                        Log.i("MAP COLOR ", "" + mapColour + " / MAP LOCATION " + list.get(i).get(0).getStreetName() + " / " + list.get(i).get(0).getLatitude() + list.get(i).get(0).getLongitude());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
 
 //        if (isMyLocation) {
 //            mMap.addMarker(new MarkerOptions().position(latLng.getLatLng())
@@ -951,35 +983,45 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 //                    .title("Search Location"));
 //        }
 
-        if (!filter && !heatMapUsed) {
-            Toast.makeText(getApplicationContext(), "Crime statistics for " + dateUtil.getMonthAsString() + " " + dateUtil.getYear(),
-                    Toast.LENGTH_LONG).show();
-            crimesTitle.setText("Area Crime\n" + dateUtil.getMonthAsString() + "/" + dateUtil.getYear());
-        }
-        yearSpinner.setSelection(dateUtil.getMaxYear() - dateUtil.getYear());
-        monthSpinner.setSelection(dateUtil.getMonth());
+                if (!filter && !heatMapUsed) {
+                    Toast.makeText(getApplicationContext(), "Crime statistics for " + dateUtil.getMonthAsString() + " " + dateUtil.getYear(),
+                            Toast.LENGTH_LONG).show();
+                    crimesTitle.setText("Area Crime\n" + dateUtil.getMonthAsString() + "/" + dateUtil.getYear());
+                }
+                yearSpinner.setSelection(dateUtil.getMaxYear() - dateUtil.getYear());
+                monthSpinner.setSelection(dateUtil.getMonth());
 
-        // Create the gradient.
-        int[] colors = {
-                Color.rgb(102, 225, 0), // green
-                Color.rgb(255, 0, 0)    // red
-        };
+                // Create the gradient.
+                int[] colors = {
+                        Color.rgb(102, 225, 0), // green
+                        Color.rgb(255, 0, 0)    // red
+                };
 
-        float[] startPoints = {
-                0.2f, 1f
-        };
+                float[] startPoints = {
+                        0.2f, 1f
+                };
 
-        Gradient gradient = new Gradient(colors, startPoints);
+                Gradient gradient = new Gradient(colors, startPoints);
 
-        // Create a heat map tile provider, passing it the latlngs of the police stations.
-        mProvider = new HeatmapTileProvider.Builder()
-                .weightedData(weightedLatLngs)
-                .gradient(gradient)
-                .radius(50)
-                .build();
-        if (dialog.isShowing()) {
-            dialog.dismiss();
-        }
+                // Create a heat map tile provider, passing it the latlngs of the police stations.
+                mProvider = new HeatmapTileProvider.Builder()
+                        .weightedData(weightedLatLngs)
+                        .gradient(gradient)
+                        .radius(50)
+                        .build();
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+                if (null != updatingMapDialog && updatingMapDialog.isShowing()) {
+                    System.out.println("stop update map dialog");
+                    updatingMapDialog.dismiss();
+                }
+                if(dateTxt.getVisibility() == INVISIBLE){
+                    dateTxt.setVisibility(VISIBLE);
+                }
+                dateTxt.setText(dateUtil.getMonthAsString() + " " + dateUtil.getYear());
+            }
+        });
 
     }
 
@@ -1313,6 +1355,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         adRequest = new AdRequest.Builder().build();
                         mAdView.loadAd(adRequest);
                         searchLayout.setVisibility(GONE);
+                        dateTxt.setVisibility(GONE);
+
                     }
                 }
                 // on move
@@ -1332,6 +1376,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     adRequest = new AdRequest.Builder().build();
                     mAdView.loadAd(adRequest);
                     searchLayout.setVisibility(GONE);
+                    dateTxt.setVisibility(GONE);
                 } else if (!(movementAmmount > 200) && movementAmmount > 0
                         && topOfTitle > getScreenHeight(MainActivity.this) / 4
                         && topOfTitle != 0) {
@@ -1363,6 +1408,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     adRequest = new AdRequest.Builder().build();
                     mAdView.loadAd(adRequest);
                     searchLayout.setVisibility(GONE);
+                    dateTxt.setVisibility(GONE);
                 } else if (movementAmmount < -200
                         && topOfTitle < getScreenHeight(MainActivity.this) - getScreenHeight(MainActivity.this) / 4
                         && topOfTitle != getScreenHeight(MainActivity.this) - titleHeight
@@ -1380,6 +1426,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     adRequest = new AdRequest.Builder().build();
                     mAdView.loadAd(adRequest);
                     searchLayout.setVisibility(GONE);
+                    dateTxt.setVisibility(GONE);
                 }
                 System.out.println("Focus : " + search.isFocused());
                 break;

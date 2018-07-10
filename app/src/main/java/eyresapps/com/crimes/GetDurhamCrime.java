@@ -1,6 +1,7 @@
 package eyresapps.com.crimes;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
@@ -136,7 +137,7 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
                 }
             }
             new CrimeCountList(context).sortCrimesCount(counts, true);
-            ((MainActivity) context).updateMap(list,false);
+            ((MainActivity) context).updateMap(list,false, new ProgressDialog(context));
 
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
             ((MainActivity) context).dismissDialog("Gps unable to get location");

@@ -1,6 +1,7 @@
 package eyresapps.com.crimes;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -28,8 +29,6 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
     boolean bespokeSearch;
     private int attempts;
     ArrayList<Counter> counts = new ArrayList<>();
-    int nextMonth = dateUtil.getMonth();
-    int nextYear = dateUtil.getYear();
 
     public GetChicargoCrime(Context context, boolean search, int attempts) {
         this.context = context;
@@ -46,11 +45,7 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
             if (crimeList != null || crimeList.size() > 0) {
                 crimeList.clear();
             }
-            if(nextMonth > 12){
-                nextMonth = 1;
-                nextYear = dateUtil.getYear() - 1;
-            }
-            Log.i("GET CHICARGO Crime URL : ","https://data.cityofchicago.org/resource/6zsd-86xi.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + nextYear + "-" + nextMonth + "-01T00:00:00'");
+            Log.i("GET CHICARGO Crime URL : ","https://data.cityofchicago.org/resource/6zsd-86xi.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00'");
 
             // create new instance of the httpConnect class
             HttpConnectUtil jParser = new HttpConnectUtil();
@@ -127,7 +122,7 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
                 }
             }
             new CrimeCountList(context).sortCrimesCount(counts, true);
-            ((MainActivity) context).updateMap(list,false);
+            ((MainActivity) context).updateMap(list,false, new ProgressDialog(context));
 
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
             ((MainActivity) context).dismissDialog("Gps unable to get location");
@@ -143,7 +138,7 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
             dateUtil.setYear(year);
             dateUtil.setMonth(month);
             attempts++;
-            new GetChicargoCrime(context, bespokeSearch, attempts).execute("https://data.cityofchicago.org/resource/6zsd-86xi.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYearBehind() + "-" + dateUtil.getMonthBehind() + "-01T00:00:00' and '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00'");
+            new GetChicargoCrime(context, bespokeSearch, attempts).execute("https://data.cityofchicago.org/resource/6zsd-86xi.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00'");
         } else {
             ((MainActivity) context).dismissDialog("No crime Statistics for this date");
         }

@@ -1,5 +1,6 @@
 package eyresapps.com.crimes;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -16,8 +17,10 @@ import eyresapps.com.utils.HttpConnectUtil;
 import eyresapps.com.utils.LatitudeAndLongitudeUtil;
 import eyresapps.com.wct.MainActivity;
 
+import static com.google.android.gms.internal.zzahn.runOnUiThread;
 
-public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Crimes>>> {
+
+public class GetUKCrime extends AsyncTask<String, Integer, ArrayList<ArrayList<Crimes>>> {
     private ArrayList<Crimes> crimes = new ArrayList<>();
     private ArrayList<ArrayList<Crimes>> crimeList = new ArrayList<>();
     private Crimes crime;
@@ -31,16 +34,26 @@ public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
     boolean finished = false;
     Integer finishedCounter = 0;
     private Integer maxCrimesPerThread = 250;
+    private int totalCrimeCount = 0;
+    private ProgressDialog progressDialog;
 
 
     public GetUKCrime(Context context, boolean search, int attempts) {
         this.context = context;
         this.bespokeSearch = search;
         this.attempts = attempts;
+        progressDialog = new ProgressDialog(context);
     }
 
     @Override
     protected ArrayList<ArrayList<Crimes>> doInBackground(String... params) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                progressDialog.setMessage("Looking for crimes in " + dateUtil.getMonthAsString());
+                progressDialog.show();
+            }
+        });
+
         try {
             if (crimes != null || crimes.size() > 0) {
                 crimes.clear();
@@ -65,6 +78,8 @@ public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
                 return crimeList;
             }
 
+            System.out.println("JSON ARRAY LENGTH : " + jsonArray.length());
+
             if (jsonArray.length() < maxCrimesPerThread) {
                 maxThreads = 1;
             } else {
@@ -86,10 +101,10 @@ public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
                             finishedCounter++;
                         }
                         else if((position + 1) == finalMaxThreads){
-                            getCrimes(jsonArray, (position * maxCrimesPerThread) + 1, jsonArray.length());
+                            getCrimes(jsonArray, (position * maxCrimesPerThread), jsonArray.length());
                             finishedCounter++;
                         } else {
-                            getCrimes(jsonArray, (position * maxCrimesPerThread) + 1, (position + 1) * maxCrimesPerThread);
+                            getCrimes(jsonArray, (position * maxCrimesPerThread), (position + 1) * maxCrimesPerThread);
                             finishedCounter++;
                         }
                     }
@@ -124,10 +139,13 @@ public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
                     }
                 }
             }
+            ((MainActivity) context).dismissDialog("");
+
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+
         return crimeList;
     }
 
@@ -185,7 +203,19 @@ public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
                     crimes.add(crime);
                     crimeList.add(crimeList.size(), crimes);
                 }
+
+                totalCrimeCount++;
                 firstOfItsKind = true;
+                final int arraySize = jsonArray.length() - 1;
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        progressDialog.setMessage("loading " + totalCrimeCount * 100 / arraySize + "%");
+                        if((totalCrimeCount * 100 / arraySize) >= 98){
+                            progressDialog.setMessage("Updating map...");
+                        }
+                    }
+                });
+
             }
         }catch (Exception e){e.printStackTrace();
             Log.i("ERROR ", "caught " + e.getMessage() + " / " + position);}
@@ -195,11 +225,14 @@ public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
     protected void onPostExecute(ArrayList<ArrayList<Crimes>> list) {
         if (list != null && !list.isEmpty()) {
             new CrimeCountList(context).sortCrimesCount(counts, true);
-            ((MainActivity) context).updateMap(list,false);
+            ((MainActivity) context).updateMap(list,false, progressDialog);
+            System.out.println("TOTAL CRIMES IN AARAY : " + totalCrimeCount);
 
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
+            progressDialog.dismiss();
             ((MainActivity) context).dismissDialog("Gps unable to get location");
-        } else if (!bespokeSearch && attempts < 4 && (list == null || list.isEmpty())) {
+        } else if (!bespokeSearch && attempts < 3 && (list == null || list.isEmpty())) {
+            progressDialog.dismiss();
             int year = dateUtil.getYear();
             int month = dateUtil.getMonth();
             if (month == 1) {
@@ -213,6 +246,7 @@ public class GetUKCrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
             attempts++;
             new GetUKCrime(context, bespokeSearch, attempts).execute("https://data.police.uk/api/crimes-street/all-crime?date=" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "&lat=" + latLng.getLatLng().latitude + "&lng=" + (latLng.getLatLng().longitude));
         } else {
+            progressDialog.dismiss();
             ((MainActivity) context).dismissDialog("No crime Statistics for this date");
         }
     }

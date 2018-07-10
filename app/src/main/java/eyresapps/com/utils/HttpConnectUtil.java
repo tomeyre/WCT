@@ -27,8 +27,8 @@ public class HttpConnectUtil {
             restConnection.setRequestProperty("Content-length", "0");
             restConnection.setUseCaches(false);
             restConnection.setAllowUserInteraction(false);
-            restConnection.setConnectTimeout(10000);
-            restConnection.setReadTimeout(10000);
+            restConnection.setConnectTimeout(5000);
+            restConnection.setReadTimeout(20000);
             restConnection.connect();
             int status = restConnection.getResponseCode();
 
@@ -63,6 +63,7 @@ public class HttpConnectUtil {
             Log.e(TAG, "Malformed URL ");
         } catch (IOException ex) {
             Log.e(TAG, "IO Exception ");
+
         }
         return null;
     }
