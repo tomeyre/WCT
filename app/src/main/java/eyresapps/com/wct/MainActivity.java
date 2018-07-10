@@ -91,6 +91,7 @@ import eyresapps.com.utils.GPSTrackerUtil;
 import eyresapps.com.utils.LatitudeAndLongitudeUtil;
 import eyresapps.com.utils.ReadWriteStuff;
 import eyresapps.com.utils.ScreenUtils;
+import eyresapps.com.utils.UpdateMap;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -106,6 +107,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         ActivityCompat.OnRequestPermissionsResultCallback {
 
     private Integer animationTime = 350;
+    private boolean timeRunning = false;
 
     private FilterList filterList = FilterList.getInstance();
 
@@ -452,28 +454,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     if (filter) {
                         if (null != filteredCrimes && !filteredCrimes.isEmpty()) {
                             System.out.println("show update map dialog 1");
-                            updatingMapDialog.show();
-                            Thread thread = new Thread() {
-                                @Override
-                                public void run() {
-                                    updateMap(filteredCrimes, filter, updatingMapDialog);
-                                }
-                            };
-                            thread.start();
+                            new UpdateMap(MainActivity.this,filteredCrimes,filter).execute();
                         } else {
                             Toast.makeText(getApplicationContext(), "All crimes filtered...",
                                     Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         System.out.println("show update map dialog 2");
-                        updatingMapDialog.show();
-                        Thread thread = new Thread() {
-                            @Override
-                            public void run() {
-                                updateMap(crimeList, filter, updatingMapDialog);
-                            }
-                        };
-                        thread.start();
+                        new UpdateMap(MainActivity.this,crimeList,filter).execute();
                     }
                 } else {
                     try {
@@ -607,15 +595,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private void filterCrimeListUpdate(boolean filterAnotherList) {
         filter = true;
         if (!filteredCrimes.isEmpty() && !filterAnotherList) {
-            updatingMapDialog.show();
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    System.out.println("show update map dialog 3");
-                    updateMap(filteredCrimes, filter, updatingMapDialog);
-                }
-            };
-            thread.start();
+            new UpdateMap(this,filteredCrimes,filter).execute();
         } else if (!filterAnotherList) {
             mMap.clear();
             Toast.makeText(getApplicationContext(), "All crimes filtered...",
@@ -777,10 +757,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         boolean notSaved = true;
         boolean nothingStored = true;
         JSONArray storedLocations = new JSONArray();
-        try {
+        if(null != addresses && !addresses.isEmpty()){
             addresses.clear();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         if (!alreadyHaveAddress && latLng.isLatlngChaned()) {
             try {
@@ -816,8 +794,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
                 String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                 currentAddress.setAddress(address);
-                String json = creatJsonStringForAddress(storedLocations, nothingStored);
-                new ReadWriteStuff().writeToFile(json, MainActivity.this);
                 callNewCrime();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -847,33 +823,20 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         latLng.setLatlngChaned(false);
-        try{timeHandler.removeCallbacks(timeRunner);}catch (Exception e){e.printStackTrace();}
+        if(timeRunning){
+            timeHandler.removeCallbacks(timeRunner);
+            timeRunning = false;
+        }
         timeHandler = new Handler(getMainLooper());
         timeRunner = new Runnable() {
             @Override
             public void run() {
+                timeRunning = true;
                 time.setText(df.format(date));
                 timeHandler.postDelayed(this, 1000);
             }
         };
         timeHandler.postDelayed(timeRunner, 10);
-    }
-
-    private String creatJsonStringForAddress(JSONArray storedLocations, boolean nothingStored) {
-        StringBuilder json = new StringBuilder();
-        if (!nothingStored) {
-            json.append(storedLocations.toString());
-            json.deleteCharAt(0);
-            json.deleteCharAt(json.length() - 1);
-            json.append(",");
-        }
-        DecimalFormat df = new DecimalFormat("#.####");
-        df.setRoundingMode(RoundingMode.CEILING);
-        Double lat = latLng.getLatLng().latitude;
-        Double lon = latLng.getLatLng().longitude;
-        json.append("{ lat:" + df.format(lat) + ", long:" + df.format(lon) + ", location:\"" + currentAddress.getAddress() + "\", searchQuery:\"" + search.getText().toString().trim() + "\"}");
-
-        return json.toString();
     }
 
     private void callNewCrime() {
@@ -920,7 +883,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //-----------------------------------------------------------put all markers on map and associate crimes and outcomes with markers
-    public void updateMap(final ArrayList<ArrayList<Crimes>> list, final boolean filter, final ProgressDialog progressDialog) {
+    public void updateMap(final ArrayList<ArrayList<Crimes>> list, final boolean filter) {
         runOnUiThread(new Runnable() {
             public void run() {
 
@@ -1009,13 +972,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         .gradient(gradient)
                         .radius(50)
                         .build();
-                if (progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
-                if (null != updatingMapDialog && updatingMapDialog.isShowing()) {
-                    System.out.println("stop update map dialog");
-                    updatingMapDialog.dismiss();
-                }
                 if(dateTxt.getVisibility() == INVISIBLE){
                     dateTxt.setVisibility(VISIBLE);
                 }
@@ -1559,12 +1515,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onStop() {
         super.onStop();
-        try {
-            unregisterReceiver(networkStateReceiver);
-            networkStateReceiver.removeListener(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     //----on resuming the app add a listener to the previously made network state receiver and

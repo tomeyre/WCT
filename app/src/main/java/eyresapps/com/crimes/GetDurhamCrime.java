@@ -1,7 +1,6 @@
 package eyresapps.com.crimes;
 
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
@@ -21,6 +20,7 @@ import eyresapps.com.utils.CrimeCountList;
 import eyresapps.com.utils.DateUtil;
 import eyresapps.com.utils.HttpConnectUtil;
 import eyresapps.com.utils.LatitudeAndLongitudeUtil;
+import eyresapps.com.utils.UpdateMap;
 import eyresapps.com.wct.MainActivity;
 
 public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayList<Crimes>>> {
@@ -137,7 +137,7 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
                 }
             }
             new CrimeCountList(context).sortCrimesCount(counts, true);
-            ((MainActivity) context).updateMap(list,false, new ProgressDialog(context));
+            new UpdateMap(context,list,false).execute();
 
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
             ((MainActivity) context).dismissDialog("Gps unable to get location");

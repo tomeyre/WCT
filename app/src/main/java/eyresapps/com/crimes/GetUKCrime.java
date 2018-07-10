@@ -15,6 +15,7 @@ import eyresapps.com.utils.CrimeCountList;
 import eyresapps.com.utils.DateUtil;
 import eyresapps.com.utils.HttpConnectUtil;
 import eyresapps.com.utils.LatitudeAndLongitudeUtil;
+import eyresapps.com.utils.UpdateMap;
 import eyresapps.com.wct.MainActivity;
 
 import static com.google.android.gms.internal.zzahn.runOnUiThread;
@@ -210,9 +211,9 @@ public class GetUKCrime extends AsyncTask<String, Integer, ArrayList<ArrayList<C
                 runOnUiThread(new Runnable() {
                     public void run() {
                         progressDialog.setMessage("loading " + totalCrimeCount * 100 / arraySize + "%");
-                        if((totalCrimeCount * 100 / arraySize) >= 98){
-                            progressDialog.setMessage("Updating map...");
-                        }
+//                        if((totalCrimeCount * 100 / arraySize) >= 98){
+//                            progressDialog.setMessage("Updating map...");
+//                        }
                     }
                 });
 
@@ -224,8 +225,9 @@ public class GetUKCrime extends AsyncTask<String, Integer, ArrayList<ArrayList<C
     @Override
     protected void onPostExecute(ArrayList<ArrayList<Crimes>> list) {
         if (list != null && !list.isEmpty()) {
+            progressDialog.dismiss();
             new CrimeCountList(context).sortCrimesCount(counts, true);
-            ((MainActivity) context).updateMap(list,false, progressDialog);
+            new UpdateMap(context,list,false).execute();
             System.out.println("TOTAL CRIMES IN AARAY : " + totalCrimeCount);
 
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {

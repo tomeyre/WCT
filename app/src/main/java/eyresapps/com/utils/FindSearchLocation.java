@@ -38,26 +38,27 @@ public class FindSearchLocation extends AsyncTask<String, String, String> {
     protected String doInBackground(String... params) {
         boolean notSaved = true;
 
-//        try{
-//            String str =  new ReadWriteStuff().readFromFile(context);
-//            storedLocations = new JSONArray(str);
-//            if(storedLocations != null) {
-//                if (!searchLocations.isEmpty()) {
-//                    searchLocations.clear();
-//                }
-//                for(int i = 0; i < storedLocations.length(); i++) {
-//                    if(storedLocations.getJSONObject(i).getString("searchQuery").trim().equalsIgnoreCase(searchString.trim())) {
-//                        searchLocations.add(new SearchLocation(storedLocations.getJSONObject(i).getString("location"),
-//                                new LatLng(storedLocations.getJSONObject(i).getLong("lat"), storedLocations.getJSONObject(i).getLong("long"))));
-//                        notSaved = false;
-//                        break;
-//                    }
-//                }
-//                nothingStored = false;
-//            }
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
+        try{
+            String str =  new ReadWriteStuff().readFromFile(context);
+            storedLocations = new JSONArray(str);
+            if(storedLocations != null) {
+                if (!searchLocations.isEmpty()) {
+                    searchLocations.clear();
+                }
+                for(int i = 0; i < storedLocations.length(); i++) {
+                    if(storedLocations.getJSONObject(i).getString("searchQuery").trim().equalsIgnoreCase(searchString.trim())) {
+                        searchLocations.add(new SearchLocation(storedLocations.getJSONObject(i).getString("location"),
+                                new LatLng(storedLocations.getJSONObject(i).getDouble("lat"), storedLocations.getJSONObject(i).getDouble("long"))));
+                        latLng.setLatLng(new LatLng(storedLocations.getJSONObject(i).getDouble("lat"), storedLocations.getJSONObject(i).getDouble("long")));
+                        notSaved = false;
+                        break;
+                    }
+                }
+                nothingStored = false;
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         if(notSaved) {
             try {
@@ -82,8 +83,8 @@ public class FindSearchLocation extends AsyncTask<String, String, String> {
                                 new LatLng(jsonObject.getJSONArray("results").getJSONObject(i).getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
                                         jsonObject.getJSONArray("results").getJSONObject(i).getJSONObject("geometry").getJSONObject("location").getDouble("lng"))));
                         latLng.setLatLng(searchLocations.get(0).getFullLoc());
-//                        String newLocation = creatJsonStringForAddress(nothingStored);
-//                        new ReadWriteStuff().writeToFile(newLocation, context);
+                        String newLocation = creatJsonStringForAddress(nothingStored);
+                        new ReadWriteStuff().writeToFile(newLocation, context);
                     }
                 } else {
                     Toast.makeText(context, "Can't find  " + searchString,
