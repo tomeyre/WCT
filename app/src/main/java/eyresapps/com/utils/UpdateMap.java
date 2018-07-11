@@ -32,15 +32,19 @@ public class UpdateMap extends AsyncTask<Integer, Integer, Integer> {
 
     @Override
     protected Integer doInBackground(Integer... integers) {
-        try{
-        int count = 2;
-        while (count > 0){count--;}}catch (Exception e){e.printStackTrace();}
-        ((MainActivity)context).updateMap(list,filter);
+        try {
+            Thread.sleep(100l);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ((MainActivity) context).updateMap(list, filter);
+
         return null;
     }
 
     @Override
     protected void onPostExecute(Integer result) {
+        System.out.println("stop showing map updating dialog");
         updatingMapDialog.dismiss();
     }
 }

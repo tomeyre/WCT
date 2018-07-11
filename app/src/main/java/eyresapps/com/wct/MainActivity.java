@@ -453,14 +453,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 if (markers.isEmpty()) {
                     if (filter) {
                         if (null != filteredCrimes && !filteredCrimes.isEmpty()) {
-                            System.out.println("show update map dialog 1");
                             new UpdateMap(MainActivity.this,filteredCrimes,filter).execute();
                         } else {
                             Toast.makeText(getApplicationContext(), "All crimes filtered...",
                                     Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        System.out.println("show update map dialog 2");
                         new UpdateMap(MainActivity.this,crimeList,filter).execute();
                     }
                 } else {

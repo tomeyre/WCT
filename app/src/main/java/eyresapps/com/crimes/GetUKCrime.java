@@ -79,8 +79,6 @@ public class GetUKCrime extends AsyncTask<String, Integer, ArrayList<ArrayList<C
                 return crimeList;
             }
 
-            System.out.println("JSON ARRAY LENGTH : " + jsonArray.length());
-
             if (jsonArray.length() < maxCrimesPerThread) {
                 maxThreads = 1;
             } else {
@@ -141,7 +139,6 @@ public class GetUKCrime extends AsyncTask<String, Integer, ArrayList<ArrayList<C
                 }
             }
             ((MainActivity) context).dismissDialog("");
-
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -224,17 +221,14 @@ public class GetUKCrime extends AsyncTask<String, Integer, ArrayList<ArrayList<C
 
     @Override
     protected void onPostExecute(ArrayList<ArrayList<Crimes>> list) {
+        progressDialog.dismiss();
         if (list != null && !list.isEmpty()) {
-            progressDialog.dismiss();
             new CrimeCountList(context).sortCrimesCount(counts, true);
             new UpdateMap(context,list,false).execute();
-            System.out.println("TOTAL CRIMES IN AARAY : " + totalCrimeCount);
 
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
-            progressDialog.dismiss();
             ((MainActivity) context).dismissDialog("Gps unable to get location");
         } else if (!bespokeSearch && attempts < 3 && (list == null || list.isEmpty())) {
-            progressDialog.dismiss();
             int year = dateUtil.getYear();
             int month = dateUtil.getMonth();
             if (month == 1) {
@@ -248,7 +242,6 @@ public class GetUKCrime extends AsyncTask<String, Integer, ArrayList<ArrayList<C
             attempts++;
             new GetUKCrime(context, bespokeSearch, attempts).execute("https://data.police.uk/api/crimes-street/all-crime?date=" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "&lat=" + latLng.getLatLng().latitude + "&lng=" + (latLng.getLatLng().longitude));
         } else {
-            progressDialog.dismiss();
             ((MainActivity) context).dismissDialog("No crime Statistics for this date");
         }
     }

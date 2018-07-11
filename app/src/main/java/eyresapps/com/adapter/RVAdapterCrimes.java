@@ -9,13 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 import eyresapps.com.data.Crimes;
 import eyresapps.com.utils.CapitalizeString;
@@ -107,8 +103,25 @@ public class RVAdapterCrimes extends RecyclerView.Adapter<RVAdapterCrimes.CrimeV
         }
         if("" != crimes.get(i).getTime()){
             try {
-                Date date = new SimpleDateFormat("HH:mm").parse(crimes.get(i).getTime());
-                crimeViewHolder.time.setText(date.toString());
+                if(crimes.get(i).getTime().length() == 9){
+                    String[] splitTime = crimes.get(i).getTime().split(":");
+                    String occuredAmPm;
+                    String foundAmPm;
+                    if(Integer.parseInt(splitTime[0].substring(0,2)) >= 12){
+                        occuredAmPm = " PM";
+                    }else{
+                        occuredAmPm = " AM";
+                    }
+                    if(Integer.parseInt(splitTime[1].substring(0,2)) >= 12){
+                        foundAmPm = " PM";
+                    }else{
+                        foundAmPm = " AM";
+                    }
+                    crimeViewHolder.time.setText("Time Crime Occured: " + splitTime[0].substring(0,2) + ":" + splitTime[0].substring(2,4) + occuredAmPm + " \nTime Police Found: " + splitTime[1].substring(0,2) + ":" + splitTime[1].substring(2,4) + foundAmPm);
+                }else {
+                    Date date = new SimpleDateFormat("HH:mm").parse(crimes.get(i).getTime());
+                    crimeViewHolder.time.setText(date.toString());
+                }
             }catch (Exception e){e.printStackTrace();}
         }else{
             crimeViewHolder.time.setVisibility(View.GONE);

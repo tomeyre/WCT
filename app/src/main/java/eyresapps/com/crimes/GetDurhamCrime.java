@@ -1,9 +1,9 @@
 package eyresapps.com.crimes;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.location.Address;
-import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -12,7 +12,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import eyresapps.com.data.Counter;
 import eyresapps.com.data.Crimes;
@@ -22,6 +21,8 @@ import eyresapps.com.utils.HttpConnectUtil;
 import eyresapps.com.utils.LatitudeAndLongitudeUtil;
 import eyresapps.com.utils.UpdateMap;
 import eyresapps.com.wct.MainActivity;
+
+import static com.google.android.gms.internal.zzahn.runOnUiThread;
 
 public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayList<Crimes>>> {
     ArrayList<Crimes> crimes = new ArrayList<>();
@@ -34,16 +35,28 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
     boolean bespokeSearch;
     private int attempts;
     ArrayList<Counter> counts = new ArrayList<>();
+    boolean finished = false;
+    Integer finishedCounter = 0;
+    private Integer maxCrimesPerThread = 250;
+    private int totalCrimeCount = 0;
+    private ProgressDialog progressDialog;
 
     public GetDurhamCrime(Context context, boolean search, int attempts) {
         this.context = context;
         this.bespokeSearch = search;
         this.attempts = attempts;
+        progressDialog = new ProgressDialog(context);
     }
 
 
     @Override
     protected ArrayList<ArrayList<Crimes>> doInBackground(String... params) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                progressDialog.setMessage("Looking for crimes in " + dateUtil.getMonthAsString());
+                progressDialog.show();
+            }
+        });
         try {
             if (crimes != null || crimes.size() > 0) {
                 crimes.clear();
@@ -61,87 +74,173 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
 
             // Get JSON object contains an object and an array
             JSONObject jsonObject = new JSONObject(json);
-            JSONArray jsonArray = jsonObject.getJSONArray("records");
+            final JSONArray jsonArray = jsonObject.getJSONArray("records");
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                Geocoder geocoder;
-                List<Address> addresses = null;
-                geocoder = new Geocoder(context, Locale.getDefault());
+            int maxThreads = 0;
 
-                try {
-                    addresses = geocoder.getFromLocation(jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(0),
-                            jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(1), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                }catch (Exception e){e.printStackTrace();}
-
-                //crime / date / time / outcome / streetname / lat /lng / weapon / description
-
-                crime = (new Crimes(jsonArray.getJSONObject(i).getJSONObject("fields").getString("reportedas"),
-                        jsonArray.getJSONObject(i).getJSONObject("fields").getString("strdate"),
-                        jsonArray.getJSONObject(i).getJSONObject("fields").getString("hour_fnd").substring(0,1) + ":" +
-                                jsonArray.getJSONObject(i).getJSONObject("fields").getString("hour_fnd").substring(2,3),
-                        jsonArray.getJSONObject(i).getJSONObject("fields").getString("chrgdesc"),
-                        addresses.get(0).getThoroughfare().toString(),
-                        jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(0),
-                                jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(1),"",""));
-
-                if (crimeList.isEmpty()) {
-                    crimes.add(crime);
-                    crimeList.add(crimes);
-                } else {
-                    for (int j = 0; j < crimeList.size(); j++) {
-                        if (crimeList.get(j).get(0).getStreetName().toString().equals(addresses.get(0).getThoroughfare().toString().replace("On or near", ""))) {
-                            crimes = new ArrayList<>();
-                            crimes = crimeList.get(j);
-                            crimes.add(crime);
-                            crimeList.set(j, crimes);
-                            firstOfItsKind = false;
-                            break;
-                        }
-                    }
-                    if (firstOfItsKind) {
-                        crimes = new ArrayList<>();
-                        crimes.add(crime);
-                        crimeList.add(crimeList.size(), crimes);
-                    }
-                    firstOfItsKind = true;
-                }
+            if (null == jsonArray || jsonArray.length() == 0) {
+                return crimeList;
             }
 
+            if (jsonArray.length() < maxCrimesPerThread) {
+                maxThreads = 1;
+            } else {
+                maxThreads = jsonArray.length() / maxCrimesPerThread;
+                if(jsonArray.length() % maxCrimesPerThread > 0){
+                    maxThreads++;
+                }
+
+            }
+
+            for (int i = 0; i < maxThreads; i++) {
+                final int position = i;
+                final int finalMaxThreads = maxThreads;
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        if ((position + 1) == finalMaxThreads && finalMaxThreads == 1) {
+                            getCrimes(jsonArray, 0, jsonArray.length());
+                            finishedCounter++;
+                        }
+                        else if((position + 1) == finalMaxThreads){
+                            getCrimes(jsonArray, (position * maxCrimesPerThread), jsonArray.length());
+                            finishedCounter++;
+                        } else {
+                            getCrimes(jsonArray, (position * maxCrimesPerThread), (position + 1) * maxCrimesPerThread);
+                            finishedCounter++;
+                        }
+                    }
+                };
+                thread.start();
+            }
+
+            while (!finished) {
+                if (finishedCounter == maxThreads) {
+                    finished = true;
+                }
+            }
+            if (crimeList != null && !crimeList.isEmpty()) {
+                for (int i = 0; i < crimeList.size(); i++) {
+                    for (int j = 0; j < crimeList.get(i).size(); j++) {
+
+                        if (counts.isEmpty()) {
+                            counts.add(new Counter(crimeList.get(i).get(j).getCrimeType(), 1));
+                            continue;
+                        }
+                        for (int k = 0; k < counts.size(); k++) {
+                            if (counts.get(k).getName().equalsIgnoreCase(crimeList.get(i).get(j).getCrimeType())) {
+                                int temp = counts.get(k).getCount();
+                                counts.set(k, new Counter(crimeList.get(i).get(j).getCrimeType(), ++temp));
+                                break;
+                            }
+                            if (k == counts.size() - 1) {
+                                counts.add(new Counter(crimeList.get(i).get(j).getCrimeType(), 1));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            ((MainActivity) context).dismissDialog("");
         } catch (Exception e) {
             e.printStackTrace();
         }
         return crimeList;
     }
 
-    @Override
-    protected void onPostExecute(ArrayList<ArrayList<Crimes>> list) {
-        if (list != null && !list.isEmpty()) {
-            for (int i = 0; i < list.size(); i++) {
-                for (int j = 0; j < list.get(i).size(); j++) {
+    private void getCrimes(JSONArray jsonArray, int start, int end) {
+        try {
+            for (int i = start; i < end; i++) {
+                //Geocoder geocoder;
+                List<Address> addresses = null;
+                //geocoder = new Geocoder(context, Locale.getDefault());
 
-                    if (counts.isEmpty()) {
-                        counts.add(new Counter(list.get(i).get(j).getCrimeType(), 1));
-                        continue;
-                    }
-                    for (int k = 0; k < counts.size(); k++) {
-                        if (counts.get(k).getName().equalsIgnoreCase(list.get(i).get(j).getCrimeType())) {
-                            int temp = counts.get(k).getCount();
-                            counts.set(k, new Counter(list.get(i).get(j).getCrimeType(), ++temp));
-                            break;
-                        }
-                        if (k == counts.size() - 1) {
-                            counts.add(new Counter(list.get(i).get(j).getCrimeType(), 1));
-                            break;
-                        }
+                //try {
+                //addresses = geocoder.getFromLocation(jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(0),
+                //jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(1), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                //}catch (Exception e){e.printStackTrace();}
+
+                //crime / date / time / outcome / streetname / lat /lng / weapon / description
+                if(jsonArray.getJSONObject(i).getJSONObject("fields").has("reportedas")) {
+
+                    crime = (new Crimes(jsonArray.getJSONObject(i).getJSONObject("fields").getString("reportedas"),
+                            jsonArray.getJSONObject(i).getJSONObject("fields").getString("strdate"),
+                            jsonArray.getJSONObject(i).getJSONObject("fields").getString("hour_occu") + ":" +
+                                    jsonArray.getJSONObject(i).getJSONObject("fields").getString("hour_fnd"),
+                            jsonArray.getJSONObject(i).getJSONObject("fields").getString("chrgdesc"),
+                            "Street",
+                            jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(0),
+                            jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(1), "", ""));
+                }
+                else{
+                    crime = (new Crimes(jsonArray.getJSONObject(i).getJSONObject("fields").getString("chrgdesc"),
+                            jsonArray.getJSONObject(i).getJSONObject("fields").getString("strdate"),
+                            jsonArray.getJSONObject(i).getJSONObject("fields").getString("hour_occu") + ":" +
+                                    jsonArray.getJSONObject(i).getJSONObject("fields").getString("hour_fnd"),
+                            jsonArray.getJSONObject(i).getJSONObject("fields").getString("chrgdesc"),
+                            "Street",
+                            jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(0),
+                            jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(1), "", ""));
+
+                }
+                addToList(jsonArray, i, crime);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private synchronized void addToList(JSONArray jsonArray, int position, final Crimes crime){
+        try {
+            if (crimeList.isEmpty()) {
+                crimes.add(crime);
+                crimeList.add(crimes);
+            } else {
+                for (int j = 0; j < crimeList.size(); j++) {
+                    if (crimeList.get(j).get(0).getLatitude() == jsonArray.getJSONObject(position).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(0) &&
+                            crimeList.get(j).get(0).getLongitude() == jsonArray.getJSONObject(position).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(1)) {
+                        crimes = new ArrayList<>();
+                        crimes = crimeList.get(j);
+                        crimes.add(crime);
+                        crimeList.set(j, crimes);
+                        firstOfItsKind = false;
+                        break;
                     }
                 }
+                if (firstOfItsKind && jsonArray.getJSONObject(position).has("fields")) {
+                    crimes = new ArrayList<>();
+                    crimes.add(crime);
+                    crimeList.add(crimeList.size(), crimes);
+                }
+
+                totalCrimeCount++;
+                firstOfItsKind = true;
+                final int arraySize = jsonArray.length() - 1;
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        progressDialog.setMessage("loading " + totalCrimeCount * 100 / arraySize + "%");
+//                        if((totalCrimeCount * 100 / arraySize) >= 98){
+//                            progressDialog.setMessage("Updating map...");
+//                        }
+                    }
+                });
+
             }
+        }catch (Exception e){e.printStackTrace();
+            Log.i("ERROR ", "caught " + e.getMessage() + " / " + position);}
+    }
+
+    @Override
+    protected void onPostExecute(ArrayList<ArrayList<Crimes>> list) {
+        progressDialog.dismiss();
+        if (list != null && !list.isEmpty()) {
             new CrimeCountList(context).sortCrimesCount(counts, true);
             new UpdateMap(context,list,false).execute();
 
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
             ((MainActivity) context).dismissDialog("Gps unable to get location");
-        } else if (!bespokeSearch && attempts < 4 && (list == null || list.isEmpty())) {
+        } else if (!bespokeSearch && attempts < 3 && (list == null || list.isEmpty())) {
             int year = dateUtil.getYear();
             int month = dateUtil.getMonth();
             if (month == 1) {
