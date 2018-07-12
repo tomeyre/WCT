@@ -7,12 +7,7 @@ import android.location.Address;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import com.eyresapps.crimetracker.MainActivity;
 import com.eyresapps.data.Counter;
 import com.eyresapps.data.Crimes;
 import com.eyresapps.utils.CrimeCountList;
@@ -20,9 +15,12 @@ import com.eyresapps.utils.DateUtil;
 import com.eyresapps.utils.HttpConnectUtil;
 import com.eyresapps.utils.LatitudeAndLongitudeUtil;
 import com.eyresapps.utils.UpdateMap;
-import com.eyresapps.crimetracker.MainActivity;
 
-import static com.google.android.gms.internal.zzahn.runOnUiThread;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayList<Crimes>>> {
     ArrayList<Crimes> crimes = new ArrayList<>();
@@ -51,7 +49,7 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
 
     @Override
     protected ArrayList<ArrayList<Crimes>> doInBackground(String... params) {
-        runOnUiThread(new Runnable() {
+        ((MainActivity)context).runOnUiThread(new Runnable() {
             public void run() {
                 progressDialog.setMessage("Looking for crimes in " + dateUtil.getMonthAsString());
                 progressDialog.show();
@@ -217,7 +215,7 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
                 totalCrimeCount++;
                 firstOfItsKind = true;
                 final int arraySize = jsonArray.length() - 1;
-                runOnUiThread(new Runnable() {
+                ((MainActivity)context).runOnUiThread(new Runnable() {
                     public void run() {
                         progressDialog.setMessage("loading " + totalCrimeCount * 100 / arraySize + "%");
 //                        if((totalCrimeCount * 100 / arraySize) >= 98){

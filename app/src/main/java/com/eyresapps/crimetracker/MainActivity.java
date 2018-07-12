@@ -38,6 +38,28 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eyresapps.api_calls.GetCurrentWeather;
+import com.eyresapps.broadcastRecievers.Network;
+import com.eyresapps.broadcastRecievers.NetworkStateReceiver;
+import com.eyresapps.crimeLocations.GenerateCrimeUrl;
+import com.eyresapps.data.Counter;
+import com.eyresapps.data.CrimeCount;
+import com.eyresapps.data.Crimes;
+import com.eyresapps.data.FilterItem;
+import com.eyresapps.utils.AnimateFilter;
+import com.eyresapps.utils.BitmapGenerator;
+import com.eyresapps.utils.CapitalizeString;
+import com.eyresapps.utils.CrimeCountList;
+import com.eyresapps.utils.CurrentAddressUtil;
+import com.eyresapps.utils.DateUtil;
+import com.eyresapps.utils.FilterCrimeList;
+import com.eyresapps.utils.FilterList;
+import com.eyresapps.utils.FindSearchLocation;
+import com.eyresapps.utils.GPSTrackerUtil;
+import com.eyresapps.utils.LatitudeAndLongitudeUtil;
+import com.eyresapps.utils.ReadWriteStuff;
+import com.eyresapps.utils.ScreenUtils;
+import com.eyresapps.utils.UpdateMap;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -69,29 +91,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import com.eyresapps.api_calls.GetCurrentWeather;
-import com.eyresapps.broadcastRecievers.Network;
-import com.eyresapps.broadcastRecievers.NetworkStateReceiver;
-import com.eyresapps.crimeLocations.GenerateCrimeUrl;
-import com.eyresapps.data.Counter;
-import com.eyresapps.data.CrimeCount;
-import com.eyresapps.data.Crimes;
-import com.eyresapps.data.FilterItem;
-import com.eyresapps.utils.AnimateFilter;
-import com.eyresapps.utils.BitmapGenerator;
-import com.eyresapps.utils.CapitalizeString;
-import com.eyresapps.utils.CrimeCountList;
-import com.eyresapps.utils.CurrentAddressUtil;
-import com.eyresapps.utils.DateUtil;
-import com.eyresapps.utils.FilterCrimeList;
-import com.eyresapps.utils.FilterList;
-import com.eyresapps.utils.FindSearchLocation;
-import com.eyresapps.utils.GPSTrackerUtil;
-import com.eyresapps.utils.LatitudeAndLongitudeUtil;
-import com.eyresapps.utils.ReadWriteStuff;
-import com.eyresapps.utils.ScreenUtils;
-import com.eyresapps.utils.UpdateMap;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -406,7 +405,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         networkStateReceiver = new NetworkStateReceiver();
 
         MobileAds.initialize(getApplicationContext(),
-                "ca-app-pub-3940256099942544~3347511713");
+                "ca-app-pub-1860695869371590/5294741065"); //ca-app-pub-3940256099942544~3347511713
 
 
         adRequest = new AdRequest.Builder().build();

@@ -11,16 +11,13 @@ import com.eyresapps.data.Crimes;
 import com.eyresapps.utils.CapitalizeString;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
 import com.google.android.gms.maps.StreetViewPanorama;
 import com.google.android.gms.maps.StreetViewPanoramaFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-
-/**
- * Created by thomaseyre on 14/03/2018.
- */
 
 public class AdditionalInformation extends FragmentActivity
         implements OnStreetViewPanoramaReadyCallback {
@@ -42,6 +39,9 @@ public class AdditionalInformation extends FragmentActivity
         crimeList = (ArrayList<Crimes>) extras.getSerializable("crimes");
         setContentView(R.layout.additional_information_layout);
         //---- ad view
+
+        MobileAds.initialize(getApplicationContext(),
+                "ca-app-pub-1860695869371590/5294741065"); //ca-app-pub-3940256099942544~3347511713
         mAdView = findViewById(R.id.adView);
         adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
