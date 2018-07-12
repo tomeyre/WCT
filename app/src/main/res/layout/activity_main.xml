@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context="eyresapps.com.wct.MainActivity"
+    tools:context="com.eyresapps.crimetracker.MainActivity"
     android:focusable="true"
     android:focusableInTouchMode="true">
 
@@ -71,7 +71,7 @@
                 android:id="@+id/filterFrag"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:name="eyresapps.com.fragment.FilterFragment"/>
+                android:name="com.eyresapps.fragment.FilterFragment"/>
 
             <ImageView
                 android:background="#ffffff"
@@ -105,6 +105,7 @@
 
             <EditText
                 android:background="#00ffffff"
+                android:textCursorDrawable="@null"
                 android:id="@+id/search"
                 android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
@@ -194,7 +195,7 @@
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
-    <eyresapps.com.wct.LockableScrollView
+    <com.eyresapps.crimetracker.LockableScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -248,7 +249,7 @@
                             android:id="@+id/totalsFrag"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:name="eyresapps.com.fragment.TotalFragment"/>
+                            android:name="com.eyresapps.fragment.TotalFragment"/>
 
 
                     <TextView
@@ -271,7 +272,7 @@
                             android:id="@+id/streetTotalsFrag"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:name="eyresapps.com.fragment.StreetTotalFragment"/>
+                            android:name="com.eyresapps.fragment.StreetTotalFragment"/>
 
 
                     <Button
@@ -422,5 +423,5 @@
                 </RelativeLayout>
             </android.support.v7.widget.CardView>-->
         </RelativeLayout>
-    </eyresapps.com.wct.LockableScrollView>
+    </com.eyresapps.crimetracker.LockableScrollView>
 </RelativeLayout>
