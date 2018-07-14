@@ -27,37 +27,26 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:textColor="#000"
             android:layout_below="@+id/crime"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:textColor="#000"
+            android:layout_marginTop="5dp"
             android:textSize="14sp"
-            android:text="weapon"
-            android:id="@+id/weapon"
+            android:textStyle="bold"
+            android:text="Date Occured: "
+            android:id="@+id/occured"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-
         <TextView
-            android:layout_below="@+id/weapon"
-            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/crime"
+            android:layout_toRightOf="@+id/occured"
+            android:layout_marginLeft="5dp"
             android:textColor="#000"
             android:layout_marginTop="5dp"
             android:textSize="14sp"
             android:text="10/10/2018"
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_below="@+id/weapon"
-            android:layout_toRightOf="@+id/date"
-            android:textColor="#000"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:textSize="14sp"
-            android:text="10:00AM"
-            android:id="@+id/time"
+            android:id="@+id/dateOccur"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -68,7 +57,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:text="Outcome:"
-            android:layout_below="@+id/date"
+            android:layout_below="@+id/dateOccur"
             android:id="@+id/outcomeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -81,33 +70,9 @@
             android:layout_marginBottom="10dp"
             android:textSize="14sp"
             android:text="has it been resolved "
-            android:layout_below="@+id/date"
+            android:layout_below="@+id/dateOccur"
             android:layout_toRightOf="@+id/outcomeTitle"
             android:id="@+id/outcome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:textColor="#000"
-            android:layout_below="@+id/outcome"
-            android:textStyle="bold"
-            android:text="Description:"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:textSize="16sp"
-            android:id="@+id/descriptionTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:textColor="#000"
-            android:layout_below="@+id/descriptionTitle"
-            android:text="What happened if available"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="14sp"
-            android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

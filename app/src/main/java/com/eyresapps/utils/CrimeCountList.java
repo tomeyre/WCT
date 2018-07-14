@@ -5,11 +5,11 @@ import android.os.Handler;
 import android.text.Html;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
+import com.eyresapps.crimetracker.MainActivity;
 import com.eyresapps.data.Counter;
 import com.eyresapps.data.CrimeCount;
-import com.eyresapps.crimetracker.MainActivity;
+
+import java.util.ArrayList;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -75,7 +75,7 @@ public class CrimeCountList {
             if (i < counter.size()) {
                 textViews.get(i).setVisibility(VISIBLE);
                 String text = new CapitalizeString().getString(counter.get(i).getName()) + ": <b>" + counter.get(i).getCount()+ "</b>";
-                textViews.get(i).setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY));
+                textViews.get(i).setText(Html.fromHtml(text));
             } else {
                 textViews.get(i).setVisibility(GONE);
             }

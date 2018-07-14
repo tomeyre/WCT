@@ -150,7 +150,7 @@ public class GetUKCrime extends AsyncTask<String, Integer, ArrayList<ArrayList<C
             for (int i = start; i < end; i++) {
                 if (jsonArray.getJSONObject(i).isNull("outcome_status")) {
 
-                    //crime / date / time / outcome / streetname / lat /lng / weapon / description
+                    //crime / date / timeOccur / outcome / streetname / lat /lng / weapon / description
 
                     crime = (new Crimes(jsonArray.getJSONObject(i).getString("category"),
                             jsonArray.getJSONObject(i).getString("month"),
@@ -158,7 +158,7 @@ public class GetUKCrime extends AsyncTask<String, Integer, ArrayList<ArrayList<C
                             "No Outcome",
                             jsonArray.getJSONObject(i).getJSONObject("location").getJSONObject("street").getString("name"),
                             jsonArray.getJSONObject(i).getJSONObject("location").getDouble("latitude"),
-                            jsonArray.getJSONObject(i).getJSONObject("location").getDouble("longitude"), "", ""));
+                            jsonArray.getJSONObject(i).getJSONObject("location").getDouble("longitude"), "", "", "",""));
                 } else {
                     crime = (new Crimes(jsonArray.getJSONObject(i).getString("category"),
                             jsonArray.getJSONObject(i).getString("month"),
@@ -166,7 +166,7 @@ public class GetUKCrime extends AsyncTask<String, Integer, ArrayList<ArrayList<C
                             jsonArray.getJSONObject(i).getJSONObject("outcome_status").getString("category"),
                             jsonArray.getJSONObject(i).getJSONObject("location").getJSONObject("street").getString("name"),
                             jsonArray.getJSONObject(i).getJSONObject("location").getDouble("latitude"),
-                            jsonArray.getJSONObject(i).getJSONObject("location").getDouble("longitude"), "", ""));
+                            jsonArray.getJSONObject(i).getJSONObject("location").getDouble("longitude"), "", "", "",""));
                 }
                 addToList(jsonArray, i, crime);
             }

@@ -151,27 +151,29 @@ public class GetLACrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
             for (int i = start; i < end; i++) {
         if (!jsonArray.getJSONObject(i).isNull("weapon_desc")) {
 
-            //crime / date / time / outcome / streetname / lat /lng / weapon / description
+            //crime / date / timeOccur / outcome / streetname / lat /lng / weapon / description
 
             crime = (new Crimes(jsonArray.getJSONObject(i).getString("crm_cd_desc"),
                     jsonArray.getJSONObject(i).getString("date_occ"),
-                    jsonArray.getJSONObject(i).getString("date_occ"),
+                    jsonArray.getJSONObject(i).getString("date_rptd"),
                     jsonArray.getJSONObject(i).getString("status_desc"),
                     jsonArray.getJSONObject(i).getString("location"),
                     jsonArray.getJSONObject(i).getJSONObject("location_1").getJSONArray("coordinates").getDouble(1),
                     jsonArray.getJSONObject(i).getJSONObject("location_1").getJSONArray("coordinates").getDouble(0),
                     jsonArray.getJSONObject(i).getString("weapon_desc"),
-                    ""));
+                    jsonArray.getJSONObject(i).getString("crm_cd_desc") + " \u002D " + jsonArray.getJSONObject(i).getString("premis_desc"),
+                    jsonArray.getJSONObject(i).getString("time_occ"),""));
         } else {
             crime = (new Crimes(jsonArray.getJSONObject(i).getString("crm_cd_desc"),
                     jsonArray.getJSONObject(i).getString("date_occ"),
-                    jsonArray.getJSONObject(i).getString("date_occ"),
+                    jsonArray.getJSONObject(i).getString("date_rptd"),
                     jsonArray.getJSONObject(i).getString("status_desc"),
                     jsonArray.getJSONObject(i).getString("location"),
                     jsonArray.getJSONObject(i).getJSONObject("location_1").getJSONArray("coordinates").getDouble(1),
                     jsonArray.getJSONObject(i).getJSONObject("location_1").getJSONArray("coordinates").getDouble(0),
                     "",
-                    ""));
+                    jsonArray.getJSONObject(i).getString("crm_cd_desc") + " \u002D " + jsonArray.getJSONObject(i).getString("premis_desc"),
+                    jsonArray.getJSONObject(i).getString("time_occ"),""));
         }
                 addToList(jsonArray, i, crime);
             }

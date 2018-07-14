@@ -41,7 +41,7 @@ public class AdditionalInformation extends FragmentActivity
         //---- ad view
 
         MobileAds.initialize(getApplicationContext(),
-                "ca-app-pub-1860695869371590/5294741065"); //ca-app-pub-3940256099942544~3347511713
+                getResources().getString(R.string.test));
         mAdView = findViewById(R.id.adView);
         adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);

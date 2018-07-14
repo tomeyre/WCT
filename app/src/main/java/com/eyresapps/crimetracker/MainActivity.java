@@ -45,6 +45,7 @@ import com.eyresapps.crimeLocations.GenerateCrimeUrl;
 import com.eyresapps.data.Counter;
 import com.eyresapps.data.CrimeCount;
 import com.eyresapps.data.Crimes;
+import com.eyresapps.data.CurrentLocale;
 import com.eyresapps.data.FilterItem;
 import com.eyresapps.utils.AnimateFilter;
 import com.eyresapps.utils.BitmapGenerator;
@@ -209,11 +210,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     //--------- get current address as a string
     private CurrentAddressUtil currentAddress = CurrentAddressUtil.getInstance();
 
-    //------------ all used for getting local time to display below the street name like google does
+    //------------ all used for getting local timeOccur to display below the street name like google does
     private DateUtil dateUtil = DateUtil.getInstance();
     private Handler timeHandler;
     private Runnable timeRunner;
-    private Locale locale;
+    private CurrentLocale locale = CurrentLocale.getInstance();
 
     //--------- cards to remove if no information inside them
     private CardView crimesCardView;
@@ -405,9 +406,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         networkStateReceiver = new NetworkStateReceiver();
 
         MobileAds.initialize(getApplicationContext(),
-                "ca-app-pub-1860695869371590/5294741065"); //ca-app-pub-3940256099942544~3347511713
-
-
+                getResources().getString(R.string.test));
         adRequest = new AdRequest.Builder().build();
         new AnimateFilter().hideAdView(mAdView, this);
 
@@ -662,7 +661,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onCameraIdle() {
                 try {
-                    Log.i("The camera has stopped moving.", "");
                     final int subArrayMaxSize = 100;
                     final int ammountOfSubArrays;
                     ammountOfSubArrays = markers.size() / subArrayMaxSize == 0 ? 1 : markers.size() % subArrayMaxSize > 0 ? (markers.size() / subArrayMaxSize) + 1 : markers.size() / subArrayMaxSize;
@@ -726,7 +724,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mAdView.destroy();
         new AnimateFilter().hideAdView(mAdView, this);
         searchLayout.setVisibility(VISIBLE);
-        dateTxt.setVisibility(VISIBLE);
+        if(null != crimeList && !crimeList.isEmpty()) {
+            dateTxt.setVisibility(VISIBLE);
+        }
         hideSoftKeyboard();
     }
 
@@ -742,7 +742,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mAdView.destroy();
         new AnimateFilter().hideAdView(mAdView, this);
         searchLayout.setVisibility(VISIBLE);
-        dateTxt.setVisibility(VISIBLE);
+        if(null != crimeList && !crimeList.isEmpty()) {
+            dateTxt.setVisibility(VISIBLE);
+        }
         hideSoftKeyboard();
 
     }
@@ -787,13 +789,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
             try {
                 addresses = geocoder.getFromLocation(latLng.getLatLng().latitude, latLng.getLatLng().longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-
                 String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                 currentAddress.setAddress(address);
                 callNewCrime();
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Error",
+                Toast.makeText(getApplicationContext(), "Oh no I can't find you!",
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -802,19 +803,22 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         final DateFormat df = new SimpleDateFormat("h:mm a");
 
         if (null != currentAddress.getAddress() && currentAddress.getAddress().toLowerCase().contains("uk")) {
-            locale = Locale.UK;
+            locale.setLocale(Locale.UK);
             df.setTimeZone(TimeZone.getTimeZone("Europe/London"));
         } else if (null != currentAddress.getAddress() && currentAddress.getAddress().toLowerCase().contains("los angeles")) {
-            locale = Locale.US;
+            locale.setLocale(Locale.US);
             df.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
         } else if (null != currentAddress.getAddress() && currentAddress.getAddress().toLowerCase().contains("chicago")) {
-            locale = Locale.US;
+            locale.setLocale(Locale.US);
             df.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
         } else if (null != currentAddress.getAddress() && currentAddress.getAddress().toLowerCase().contains("durham, nc")) {
-            locale = Locale.US;
+            locale.setLocale(Locale.US);
             df.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+        } else if (null != currentAddress.getAddress() && currentAddress.getAddress().toLowerCase().contains("new orleans")) {
+            locale.setLocale(Locale.US);
+            df.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
         } else {
-            locale = Locale.UK;
+            locale.setLocale(Locale.UK);
             df.setTimeZone(TimeZone.getTimeZone("Europe/London"));
         }
 
@@ -882,7 +886,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void updateMap(final ArrayList<ArrayList<Crimes>> list, final boolean filter) {
         runOnUiThread(new Runnable() {
             public void run() {
-
 
                 if (!filter) {
                     crimeList = list;
@@ -962,16 +965,20 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
                 Gradient gradient = new Gradient(colors, startPoints);
 
-                // Create a heat map tile provider, passing it the latlngs of the police stations.
-                mProvider = new HeatmapTileProvider.Builder()
-                        .weightedData(weightedLatLngs)
-                        .gradient(gradient)
-                        .radius(50)
-                        .build();
-                if(dateTxt.getVisibility() == INVISIBLE){
+                if(null != weightedLatLngs && !weightedLatLngs.isEmpty()) {
+                    // Create a heat map tile provider, passing it the latlngs of the police stations.
+                    mProvider = new HeatmapTileProvider.Builder()
+                            .weightedData(weightedLatLngs)
+                            .gradient(gradient)
+                            .radius(50)
+                            .build();
+                }
+                if(dateTxt.getVisibility() == INVISIBLE) {
                     dateTxt.setVisibility(VISIBLE);
                 }
-                dateTxt.setText(dateUtil.getMonthAsString() + " " + dateUtil.getYear());
+                if(null != crimeList && !crimeList.isEmpty()){
+                    dateTxt.setText(dateUtil.getMonthAsString() + " " + dateUtil.getYear());
+                }
             }
         });
 
@@ -1075,13 +1082,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
                         markerCrimes.add(new Crimes(
                                 temp.get(i).get(j).getCrimeType(),
-                                temp.get(i).get(j).getDate(),
-                                temp.get(i).get(j).getTime(),
+                                temp.get(i).get(j).getDateOccur(),
+                                temp.get(i).get(j).getDateReport(),
                                 temp.get(i).get(j).getOutcome(), location,
                                 temp.get(i).get(j).getLatitude(),
                                 temp.get(i).get(j).getLongitude(),
                                 temp.get(i).get(j).getWeapon(),
-                                temp.get(i).get(j).getDescription()));
+                                temp.get(i).get(j).getDescription(),
+                                temp.get(i).get(j).getTimeOccur(),
+                                temp.get(i).get(j).getTimeReport()));
 
                         if (counts.isEmpty()) {
                             counts.add(new Counter(temp.get(i).get(j).getCrimeType(), 1));

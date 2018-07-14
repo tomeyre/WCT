@@ -51,4 +51,7 @@
         <item>December</item>
 
     </string-array>
+
+    <string name="test">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="release">ca-app-pub-1860695869371590/5294741065</string>
 </resources>

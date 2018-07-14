@@ -6,19 +6,23 @@ public class Crimes implements Serializable{
 
     private String crimeType;
     private String weapon;
-    private String date;
-    private String time;
+    private String dateOccur;
+    private String dateReport;
+    private String timeOccur;
+    private String timeReport;
     private String outcome;
     private String streetName;
     private double latitude;
     private double longitude;
     private String description;
 
-    public Crimes(String crime, String date, String time, String outcome, String streetName, double latitude, double longitude, String weapon, String description) {
+    public Crimes(String crime, String date, String dateReport, String outcome, String streetName, double latitude, double longitude, String weapon, String description, String time, String timeReport) {
         this.crimeType = crime;
         this.weapon = weapon;
-        this.date = date;
-        this.time = time;
+        this.dateOccur = date;
+        this.dateReport = dateReport;
+        this.timeOccur = time;
+        this.timeReport = timeReport;
         this.outcome = outcome;
         this.streetName = streetName.replace("On or near","");
         this.latitude = latitude;
@@ -30,8 +34,10 @@ public class Crimes implements Serializable{
         return streetName;
     }
     public String getWeapon() { return weapon; }
-    public String getDate() { return date; }
-    public String getTime() { return time; }
+    public String getDateOccur() { return dateOccur; }
+    public String getDateReport() { return dateReport; }
+    public String getTimeOccur() { return timeOccur; }
+    public String getTimeReport() { return timeReport; }
     public double getLatitude() {
         return latitude;
     }
@@ -45,10 +51,5 @@ public class Crimes implements Serializable{
         return outcome;
     }
     public String getDescription(){ return description; }
-
-//    @Override
-//    public String toString() {
-//        return "Crime= " + crimeType + "\nStreetName= " + streetName + "\nOutcome= " + outcome;
-//    }
 
 }

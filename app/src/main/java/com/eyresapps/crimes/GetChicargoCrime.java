@@ -59,7 +59,7 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
             if (crimeList != null || crimeList.size() > 0) {
                 crimeList.clear();
             }
-            Log.i("GET CHICARGO Crime URL : ", "https://data.cityofchicago.org/resource/6zsd-86xi.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00'");
+            Log.i("GET CHICARGO Crime URL ", "https://data.cityofchicago.org/resource/6zsd-86xi.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00'");
 
             // create new instance of the httpConnect class
             HttpConnectUtil jParser = new HttpConnectUtil();
@@ -146,16 +146,19 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
         try {
             for (int i = start; i < end; i++) {
 
-                //crime / date / time / outcome / streetname / lat /lng / weapon / description
+                //crime / date / timeOccur / outcome / streetname / lat /lng / weapon / description
 
                 crime = (new Crimes(jsonArray.getJSONObject(i).getString("primary_type"),
                         jsonArray.getJSONObject(i).getString("date"),
                         jsonArray.getJSONObject(i).getString("date"),
-                        "Arrest made : " + jsonArray.getJSONObject(i).getString("arrest"),
+                        jsonArray.getJSONObject(i).getString("arrest"),
                         jsonArray.getJSONObject(i).getString("block"),
                         jsonArray.getJSONObject(i).getDouble("latitude"),
                         jsonArray.getJSONObject(i).getDouble("longitude"), "",
-                        jsonArray.getJSONObject(i).getString("description")));
+                        jsonArray.getJSONObject(i).getString("primary_type") + " \u002D " +
+                                jsonArray.getJSONObject(i).getString("description") + " \u002D " +
+                                jsonArray.getJSONObject(i).getString("location_description"),
+                        "",""));
 
                 addToList(jsonArray, i, crime);
             }

@@ -21,11 +21,6 @@ public class DateUtil {
     }
 
     private DateUtil() {
-        if(month == 1){
-            month = 12;
-        }else{
-            month--;
-        }
     }
 
     public int getYear() {
@@ -47,11 +42,6 @@ public class DateUtil {
     public void resetDate(){
         this.year = Calendar.getInstance().get(Calendar.YEAR);
         this.month = Calendar.getInstance().get(Calendar.MONTH);
-        if(month == 1){
-            month = 12;
-        }else{
-            month--;
-        }
     }
 
     public int getMonthAhead(){
@@ -75,27 +65,27 @@ public class DateUtil {
     public String getMonthAsString(){
         String monthString;
 
-        if(this.month == 0){
+        if(this.month == 1){
             monthString = "January";
-        }else if(this.month == 1){
-            monthString = "February";
         }else if(this.month == 2){
-            monthString = "March";
+            monthString = "February";
         }else if(this.month == 3){
-            monthString = "April";
+            monthString = "March";
         }else if(this.month == 4){
-            monthString = "May";
+            monthString = "April";
         }else if(this.month == 5){
-            monthString = "June";
+            monthString = "May";
         }else if(this.month == 6){
-            monthString = "July";
+            monthString = "June";
         }else if(this.month == 7){
-            monthString = "August";
+            monthString = "July";
         }else if(this.month == 8){
-            monthString = "September";
+            monthString = "August";
         }else if(this.month == 9){
-            monthString = "October";
+            monthString = "September";
         }else if(this.month == 10){
+            monthString = "October";
+        }else if(this.month == 11){
             monthString = "November";
         }else {
             monthString = "December";

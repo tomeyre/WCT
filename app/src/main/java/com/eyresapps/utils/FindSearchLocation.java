@@ -4,15 +4,14 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.eyresapps.crimetracker.MainActivity;
+import com.eyresapps.data.SearchLocation;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import com.eyresapps.data.SearchLocation;
-import com.eyresapps.crimetracker.MainActivity;
 
 //------------------------------------------finds a lat long from the address entered in search using a google api
 public class FindSearchLocation extends AsyncTask<String, String, String> {
@@ -69,7 +68,7 @@ public class FindSearchLocation extends AsyncTask<String, String, String> {
                 HttpConnectUtil jParser = new HttpConnectUtil();
 
                 // get json string from service url
-                String json = jParser.getJSONFromUrl("https://maps.googleapis.com/maps/api/geocode/json?address=" + searchString.trim().replaceAll(" ", "+") + "+UK&key=AIzaSyDEVB46xX2jKw43znXsEwMxeamw-iOPyKo");
+                String json = jParser.getJSONFromUrl("https://maps.googleapis.com/maps/api/geocode/json?address=" + searchString.trim().replaceAll(" ", "+") + "+UK&key=AIzaSyALw26lr35iw-VOVjQ8Ip8EyaaZlh4tSDA");
 
                 // Get JSON object contains an object and an array
                 JSONObject jsonObject = new JSONObject(json);

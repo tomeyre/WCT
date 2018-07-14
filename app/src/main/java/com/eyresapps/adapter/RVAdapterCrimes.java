@@ -1,59 +1,32 @@
 package com.eyresapps.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
-import com.eyresapps.data.Crimes;
-import com.eyresapps.utils.CapitalizeString;
-import com.eyresapps.utils.DateParserUtil;
+import com.eyresapps.bindviewholders.BindViewHolder;
+import com.eyresapps.bindviewholders.BindViewHolderChicargo;
+import com.eyresapps.bindviewholders.BindViewHolderDurham;
+import com.eyresapps.bindviewholders.BindViewHolderLa;
+import com.eyresapps.bindviewholders.BindViewHolderNewOrleans;
 import com.eyresapps.crimetracker.R;
+import com.eyresapps.data.Crimes;
+import com.eyresapps.data.viewholders.CrimeViewHolder;
+import com.eyresapps.data.viewholders.CrimeViewHolderDurham;
+import com.eyresapps.data.viewholders.CrimeViewHolderLa;
+import com.eyresapps.data.viewholders.CrimeViewHolderNewOrleans;
+import com.eyresapps.utils.CurrentAddressUtil;
 
-public class RVAdapterCrimes extends RecyclerView.Adapter<RVAdapterCrimes.CrimeViewHolder> {
+import java.util.ArrayList;
 
-    public static class CrimeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        public CardView mCardView;
-        TextView crime;
-        TextView outcome;
-        TextView weapon;
-        TextView descriptionTitle;
-        TextView description;
-        TextView date;
-        TextView time;
-
-
-        CrimeViewHolder(View itemView) {
-            super(itemView);
-            crime = itemView.findViewById(R.id.crime);
-            outcome = itemView.findViewById(R.id.outcome);
-            weapon = itemView.findViewById(R.id.weapon);
-            description = itemView.findViewById(R.id.description);
-            descriptionTitle = itemView.findViewById(R.id.descriptionTitle);
-            mCardView = itemView.findViewById(R.id.cardViewCrime);
-            descriptionTitle = itemView.findViewById(R.id.descriptionTitle);
-            date = itemView.findViewById(R.id.date);
-            time = itemView.findViewById(R.id.time);
-            mCardView.setOnClickListener(this);
-        }
-
-        public void onClick(View v) {
-
-        }
-    }
-
+public class RVAdapterCrimes extends RecyclerView.Adapter<CrimeViewHolder> {
 
     ArrayList<Crimes> crimes;
     Context context;
+    CurrentAddressUtil currentAddressUtil = CurrentAddressUtil.getInstance();
+    String address = currentAddressUtil.getAddress().toLowerCase();
 
     public RVAdapterCrimes(ArrayList<Crimes> crimes, Context context)
     {
@@ -68,65 +41,48 @@ public class RVAdapterCrimes extends RecyclerView.Adapter<RVAdapterCrimes.CrimeV
 
     @Override
     public CrimeViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.crime, viewGroup, false);
+        View v;
+        if(address.contains("uk")){
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.crime, viewGroup, false);
+            return new CrimeViewHolder(v);
+        }
+        else if(address.contains("chicago")){
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.crime_chicago, viewGroup, false);
+            return new CrimeViewHolder(v);
+        }
+        else if(address.toUpperCase().contains("CA") && address.toUpperCase().contains("USA")){
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.crime_la, viewGroup, false);
+            return new CrimeViewHolderLa(v);
+        }
+        else if (address.toLowerCase().contains("durham, nc")) {
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.crime_durham, viewGroup, false);
+            return new CrimeViewHolderDurham(v);
+        }
+        else if (address.toLowerCase().contains("new orleans")) {
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.crime_new_orleans, viewGroup, false);
+            return new CrimeViewHolderNewOrleans(v);
+        }
+        v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.crime, viewGroup, false);
         return new CrimeViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(CrimeViewHolder crimeViewHolder, int i) {
-        crimeViewHolder.crime.setText(new CapitalizeString().getString(crimes.get(i).getCrimeType()));
-
-        String outcomeText = crimes.get(i).getOutcome();
-        if(outcomeText.contains(";")){outcomeText = outcomeText.replace(";","");}
-        crimeViewHolder.outcome.setText(new CapitalizeString().getString(outcomeText.toLowerCase()));
-
-        if(crimes.get(i).getWeapon().equals("")){
-            crimeViewHolder.weapon.setVisibility(View.GONE);
-        }else {
-            crimeViewHolder.weapon.setText(Html.fromHtml("<b>Weapon: </b>" + new CapitalizeString().getString(crimes.get(i).getWeapon()), Html.FROM_HTML_MODE_LEGACY));
+        if(address.contains("uk")){
+            new BindViewHolder().bind(crimeViewHolder, i, crimes, context);
         }
-        if(crimes.get(i).getDescription().equals("")){
-            crimeViewHolder.description.setVisibility(View.GONE);
-            crimeViewHolder.descriptionTitle.setVisibility(View.GONE);
-        }else {
-            crimeViewHolder.description.setText(crimes.get(i).getDescription().replaceAll("\\<.*?\\>", ""));
-            crimeViewHolder.descriptionTitle.setVisibility(View.VISIBLE);
+        else if(address.contains("chicago")){
+            new BindViewHolderChicargo().bind(crimeViewHolder, i, crimes, context);
         }
-        if("" != crimes.get(i).getDate()){
-            try {
-               Date date = new DateParserUtil().getParser().parse(crimes.get(i).getDate());
-                String formattedDate = new DateParserUtil().getFormat().format(date);
-                crimeViewHolder.date.setText(formattedDate);
-            }catch (Exception e){e.printStackTrace();}
-        }else{
-            crimeViewHolder.date.setVisibility(View.GONE);
+        else if(address.toUpperCase().contains("CA") && address.toUpperCase().contains("USA")){
+            new BindViewHolderLa().bind((CrimeViewHolderLa) crimeViewHolder, i, crimes, context);
         }
-        if("" != crimes.get(i).getTime()){
-            try {
-                if(crimes.get(i).getTime().length() == 9){
-                    String[] splitTime = crimes.get(i).getTime().split(":");
-                    String occuredAmPm;
-                    String foundAmPm;
-                    if(Integer.parseInt(splitTime[0].substring(0,2)) >= 12){
-                        occuredAmPm = " PM";
-                    }else{
-                        occuredAmPm = " AM";
-                    }
-                    if(Integer.parseInt(splitTime[1].substring(0,2)) >= 12){
-                        foundAmPm = " PM";
-                    }else{
-                        foundAmPm = " AM";
-                    }
-                    crimeViewHolder.time.setText("Time Crime Occured: " + splitTime[0].substring(0,2) + ":" + splitTime[0].substring(2,4) + occuredAmPm + " \nTime Police Found: " + splitTime[1].substring(0,2) + ":" + splitTime[1].substring(2,4) + foundAmPm);
-                }else {
-                    Date date = new SimpleDateFormat("HH:mm").parse(crimes.get(i).getTime());
-                    crimeViewHolder.time.setText(date.toString());
-                }
-            }catch (Exception e){e.printStackTrace();}
-        }else{
-            crimeViewHolder.time.setVisibility(View.GONE);
+        else if (address.toLowerCase().contains("durham, nc")) {
+            new BindViewHolderDurham().bind((CrimeViewHolderDurham) crimeViewHolder, i, crimes, context);
         }
-        crimeViewHolder.mCardView.setTag(i);
+        else if (address.toLowerCase().contains("new orleans")) {
+            new BindViewHolderNewOrleans().bind((CrimeViewHolderNewOrleans) crimeViewHolder, i, crimes, context);
+        }
     }
 
     @Override
