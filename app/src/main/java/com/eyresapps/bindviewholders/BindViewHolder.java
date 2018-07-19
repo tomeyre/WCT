@@ -16,7 +16,11 @@ import java.util.Date;
 
 public class BindViewHolder {
     public void bind(CrimeViewHolder crimeViewHolder, int i, ArrayList<Crimes> crimes, Context context) {
-        crimeViewHolder.crime.setText(new CapitalizeString().getString(crimes.get(i).getCrimeType()));
+        if(null != crimes.get(i).getCrimeType() && !crimes.get(i).getCrimeType().equals("")) {
+            crimeViewHolder.crime.setText(new CapitalizeString().getString(crimes.get(i).getCrimeType()));
+        }else{
+            crimeViewHolder.crime.setText("Un-named Location");
+        }
         String outcomeText = crimes.get(i).getOutcome();
         if (outcomeText.contains(";")) {
             outcomeText = outcomeText.replace(";", "");

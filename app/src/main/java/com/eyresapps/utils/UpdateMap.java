@@ -4,10 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import java.util.ArrayList;
-
-import com.eyresapps.data.Crimes;
 import com.eyresapps.crimetracker.MainActivity;
+import com.eyresapps.data.Crimes;
+
+import java.util.ArrayList;
 
 public class UpdateMap extends AsyncTask<Integer, Integer, Integer> {
 
@@ -16,7 +16,7 @@ public class UpdateMap extends AsyncTask<Integer, Integer, Integer> {
     ArrayList<ArrayList<Crimes>> list;
     boolean filter;
 
-    public UpdateMap(Context context, ArrayList<ArrayList<Crimes>> list, boolean filter){
+    public UpdateMap(Context context, ArrayList<ArrayList<Crimes>> list){
         this.context = context;
         this.list = list;
         this.filter = filter;
@@ -37,7 +37,7 @@ public class UpdateMap extends AsyncTask<Integer, Integer, Integer> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ((MainActivity) context).updateMap(list, filter);
+        ((MainActivity) context).updateMap(list, context);
 
         return null;
     }

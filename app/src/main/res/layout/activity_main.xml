@@ -22,22 +22,53 @@
         ads:adUnitId="@string/test">
     </com.google.android.gms.ads.AdView>
 
+    <android.support.v7.widget.CardView
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="13dp"
+        app:cardCornerRadius="2dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/locateMe"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/whiteFaded"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true">
+        <RelativeLayout
+            android:background="@color/whiteFaded"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:background="@color/whiteFaded"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:id="@+id/btnLocate"
+                android:src="@drawable/locate"
+                android:layout_width="28dp"
+                android:layout_height="28dp" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="56dp"
         android:layout_marginRight="13dp"
         app:cardCornerRadius="2dp"
         android:layout_alignParentRight="true"
         android:id="@+id/heatMapBtn"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        app:cardElevation="1dp">
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/whiteFaded"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true">
         <RelativeLayout
+            android:background="@color/whiteFaded"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/whiteFaded">
+            android:layout_height="match_parent">
 
             <ImageView
+                android:background="@color/whiteFaded"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:id="@+id/btnImage"
@@ -49,21 +80,23 @@
 
 <!-- 36dp -->
     <android.support.v7.widget.CardView
-        android:layout_marginTop="17dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="13dp"
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="10dp"
-        app:cardCornerRadius="18dp"
+        app:cardCornerRadius="2dp"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/heatMapBtn"
         android:id="@+id/filterBtn"
         android:layout_width="36dp"
         android:layout_height="36dp"
         app:cardElevation="1dp"
-        app:cardBackgroundColor="#ffffff"
-        android:background="#ffffff"
-        android:visibility='invisible'>
+        app:cardBackgroundColor="@color/whiteFaded"
+        android:visibility='invisible'
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true">
         <RelativeLayout
+            android:background="@color/whiteFaded"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -74,7 +107,7 @@
                 android:name="com.eyresapps.fragment.FilterFragment"/>
 
             <ImageView
-                android:background="#ffffff"
+                android:background="@color/whiteFaded"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:id="@+id/bntFilter"

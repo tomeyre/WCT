@@ -1,9 +1,9 @@
 package com.eyresapps.utils;
 
-import java.util.ArrayList;
-
 import com.eyresapps.data.Crimes;
 import com.eyresapps.data.FilterItem;
+
+import java.util.ArrayList;
 
 public class FilterCrimeList {
 
@@ -15,15 +15,17 @@ public class FilterCrimeList {
             innerList = new ArrayList<>();
             for(int j = 0; j < crimeList.get(i).size(); j++){
                 for(int k = 0; k < filterList.size(); k++){
-                    if(crimeList.get(i).get(j).getCrimeType().equalsIgnoreCase(filterList.get(k).getNameString()) && filterList.get(k).getShow()){
-                        System.out.println("add crime");
-                        System.out.println("filter name string  = " + filterList.get(k).getNameString() + " actual = " + crimeList.get(i).get(j).getCrimeType() + " / " + filterList.get(k).getShow());
+                    if((crimeList.get(i).get(j).getCrimeType().equalsIgnoreCase(filterList.get(k).getNameString()) ||
+                            crimeList.get(i).get(j).getCrimeType().equalsIgnoreCase(filterList.get(k).getName().getText().toString())) &&
+                            filterList.get(k).getShow()){
+                        System.out.println("dont filter  = " + filterList.get(k).getNameString() + " actual = " + crimeList.get(i).get(j).getCrimeType() + " / " + filterList.get(k).getShow());
                         innerList.add(crimeList.get(i).get(j));
-                    }else if(crimeList.get(i).get(j).getCrimeType().equalsIgnoreCase(filterList.get(k).getName().getText().toString()) && !filterList.get(k).getShow()){
-                        System.out.println("filter name  = " + filterList.get(k).getNameString() + " actual = " + crimeList.get(i).get(j).getCrimeType() + " / " + filterList.get(k).getShow());
-                    }else{
-                        System.out.println("add crime");
-                        innerList.add(crimeList.get(i).get(j));
+                        break;
+                    }else  if((crimeList.get(i).get(j).getCrimeType().equalsIgnoreCase(filterList.get(k).getNameString()) ||
+                            crimeList.get(i).get(j).getCrimeType().equalsIgnoreCase(filterList.get(k).getName().getText().toString())) &&
+                            !filterList.get(k).getShow()){
+                        System.out.println("do filter  = " + filterList.get(k).getNameString() + " actual = " + crimeList.get(i).get(j).getCrimeType() + " / " + filterList.get(k).getShow());
+                        break;
                     }
                 }
             }

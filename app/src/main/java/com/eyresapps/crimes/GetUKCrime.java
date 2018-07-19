@@ -6,10 +6,10 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.eyresapps.crimetracker.MainActivity;
-import com.eyresapps.data.Counter;
 import com.eyresapps.data.Crimes;
 import com.eyresapps.utils.CrimeCountList;
 import com.eyresapps.utils.DateUtil;
+import com.eyresapps.utils.FilterList;
 import com.eyresapps.utils.HttpConnectUtil;
 import com.eyresapps.utils.LatitudeAndLongitudeUtil;
 import com.eyresapps.utils.UpdateMap;
@@ -26,19 +26,20 @@ public class GetUKCrime extends AsyncTask<String, Integer, ArrayList<ArrayList<C
     private Context context;
     private DateUtil dateUtil = DateUtil.getInstance();
     private LatitudeAndLongitudeUtil latLng = LatitudeAndLongitudeUtil.getInstance();
-    private boolean bespokeSearch;
-    ArrayList<Counter> counts = new ArrayList<>();
+    private boolean filterByCrime;
     private int attempts;
     boolean finished = false;
     Integer finishedCounter = 0;
     private Integer maxCrimesPerThread = 250;
     private int totalCrimeCount = 0;
     private ProgressDialog progressDialog;
+    private boolean filterByMonth = false;
+    private FilterList filterList = FilterList.getInstance();
 
-
-    public GetUKCrime(Context context, boolean search, int attempts) {
+    public GetUKCrime(Context context, boolean filterByCrime, boolean filterByMonth, int attempts) {
         this.context = context;
-        this.bespokeSearch = search;
+        this.filterByCrime = filterByCrime;
+        this.filterByMonth = filterByMonth;
         this.attempts = attempts;
         progressDialog = new ProgressDialog(context);
     }
@@ -111,28 +112,6 @@ public class GetUKCrime extends AsyncTask<String, Integer, ArrayList<ArrayList<C
             while (!finished) {
                 if (finishedCounter == maxThreads) {
                     finished = true;
-                }
-            }
-            if (crimeList != null && !crimeList.isEmpty()) {
-                for (int i = 0; i < crimeList.size(); i++) {
-                    for (int j = 0; j < crimeList.get(i).size(); j++) {
-
-                        if (counts.isEmpty()) {
-                            counts.add(new Counter(crimeList.get(i).get(j).getCrimeType(), 1));
-                            continue;
-                        }
-                        for (int k = 0; k < counts.size(); k++) {
-                            if (counts.get(k).getName().equalsIgnoreCase(crimeList.get(i).get(j).getCrimeType())) {
-                                int temp = counts.get(k).getCount();
-                                counts.set(k, new Counter(crimeList.get(i).get(j).getCrimeType(), ++temp));
-                                break;
-                            }
-                            if (k == counts.size() - 1) {
-                                counts.add(new Counter(crimeList.get(i).get(j).getCrimeType(), 1));
-                                break;
-                            }
-                        }
-                    }
                 }
             }
             ((MainActivity) context).dismissDialog("");
@@ -213,6 +192,7 @@ public class GetUKCrime extends AsyncTask<String, Integer, ArrayList<ArrayList<C
 
             }
         }catch (Exception e){e.printStackTrace();
+            progressDialog.dismiss();
             Log.i("ERROR ", "caught " + e.getMessage() + " / " + position);}
     }
 
@@ -220,12 +200,15 @@ public class GetUKCrime extends AsyncTask<String, Integer, ArrayList<ArrayList<C
     protected void onPostExecute(ArrayList<ArrayList<Crimes>> list) {
         progressDialog.dismiss();
         if (list != null && !list.isEmpty()) {
-            new CrimeCountList(context).sortCrimesCount(counts, true);
-            new UpdateMap(context,list,false).execute();
-
+            if(filterByCrime){
+                new UpdateMap(context, list).execute();
+            }else {
+                new CrimeCountList(context).sortCrimesCount(crimeList, true, false, context);
+                new UpdateMap(context, list).execute();
+            }
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
             ((MainActivity) context).dismissDialog("Gps unable to get location");
-        } else if (!bespokeSearch && attempts < 3 && (list == null || list.isEmpty())) {
+        } else if ((!filterByCrime && !filterByMonth) && attempts < 3 && (list == null || list.isEmpty())) {
             int year = dateUtil.getYear();
             int month = dateUtil.getMonth();
             if (month == 1) {
@@ -237,7 +220,7 @@ public class GetUKCrime extends AsyncTask<String, Integer, ArrayList<ArrayList<C
             dateUtil.setYear(year);
             dateUtil.setMonth(month);
             attempts++;
-            new GetUKCrime(context, bespokeSearch, attempts).execute("https://data.police.uk/api/crimes-street/all-crime?date=" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "&lat=" + latLng.getLatLng().latitude + "&lng=" + (latLng.getLatLng().longitude));
+            new GetUKCrime(context, filterByCrime, filterByMonth, attempts).execute("https://data.police.uk/api/crimes-street/all-crime?date=" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "&lat=" + latLng.getLatLng().latitude + "&lng=" + (latLng.getLatLng().longitude));
         } else {
             ((MainActivity) context).dismissDialog("No crime Statistics for this date");
         }

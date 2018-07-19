@@ -25,7 +25,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterOneTxt"
@@ -51,7 +52,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterTwoTxt"
@@ -76,7 +78,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
 
                 <TextView
                     android:layout_margin="4dp"
@@ -103,7 +106,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterFourTxt"
@@ -140,7 +144,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterFiveTxt"
@@ -165,7 +170,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterSixTxt"
@@ -190,7 +196,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterSevenTxt"
@@ -215,7 +222,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterEightTxt"
@@ -252,7 +260,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterNineTxt"
@@ -277,7 +286,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterTenTxt"
@@ -302,7 +312,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterElevenTxt"
@@ -327,7 +338,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterTwelveTxt"
@@ -364,7 +376,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterThirteenTxt"
@@ -389,7 +402,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterFourteenTxt"
@@ -414,7 +428,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterFifteenTxt"
@@ -439,7 +454,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterSixteenTxt"
@@ -476,7 +492,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterSeventeenTxt"
@@ -501,7 +518,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterEighteenTxt"
@@ -526,7 +544,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterNineteenTxt"
@@ -551,7 +570,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterTwentyTxt"
@@ -588,7 +608,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterTwentyOneTxt"
@@ -613,7 +634,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterTwentyTwoTxt"
@@ -638,7 +660,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterTwentyThreeTxt"
@@ -663,7 +686,8 @@
                 app:cardCornerRadius="2dp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/blue">
                 <TextView
                     android:layout_margin="4dp"
                     android:id="@+id/filterTwentyFourTxt"
@@ -684,6 +708,7 @@
         android:layout_above="@+id/btnRow"
         android:id="@+id/dateRow"
         android:orientation="horizontal"
+        android:layout_marginBottom="5dp"
         android:weightSum="1"
         android:alpha="0"
         android:visibility="gone"
@@ -697,15 +722,18 @@
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/white">
                 <Spinner
                     android:backgroundTint="@color/black"
+                    android:layout_margin="5dp"
                     android:id="@+id/monthSpinner"
                     android:spinnerMode="dropdown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"></Spinner>
                 <Spinner
                     android:backgroundTint="@color/black"
+                    android:layout_margin="5dp"
                     android:layout_toRightOf="@+id/monthSpinner"
                     android:id="@+id/yearSpinner"
                     android:spinnerMode="dropdown"
@@ -719,7 +747,7 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/btnRow"
         android:orientation="horizontal"
-        android:weightSum="1"
+        android:weightSum="3"
         android:alpha="0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -733,7 +761,41 @@
                 android:layout_centerHorizontal="true"
                 android:text="Filter"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="35dp"
+                android:background="@color/blue"
+                android:layout_margin="5dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/resetBtn"
+                android:layout_centerHorizontal="true"
+                android:text="Reset"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:background="@color/blue"
+                android:layout_margin="5dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/closeBtn"
+                android:layout_centerHorizontal="true"
+                android:text="Close"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:background="@color/blue"
+                android:layout_margin="5dp"/>
 
         </RelativeLayout>
 

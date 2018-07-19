@@ -108,6 +108,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private Integer animationTime = 350;
     private boolean timeRunning = false;
+    private boolean haveCheckedIdleness = false;
+    private int onLoad = 0;
+
+    private Button resetBtn;
+    private Button closeBtn;
+
+    private CardView locateMe;
 
     private FilterList filterList = FilterList.getInstance();
 
@@ -116,7 +123,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     boolean heatMapUsed = false;
 
     boolean isMyLocation = true;
-    boolean filter = false;
+
+    boolean filterByCrime = false;
+    boolean filterByMonth = false;
+
     float filterHeight;
     LinearLayout dateRow;
     LinearLayout btnRow;
@@ -236,6 +246,32 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         dateTxt  = findViewById(R.id.dateTxt);
 
+        closeBtn = findViewById(R.id.closeBtn);
+        resetBtn = findViewById(R.id.resetBtn);
+
+        locateMe = findViewById(R.id.locateMe);
+        locateMe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                locateMeNow();
+            }
+        });
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AnimateFilter().shrinkFilter(filterBtn, filterImage, MainActivity.this, filterHeight, filterList.getFilterList(), dateRow, btnRow,
+                        monthSpinner, yearSpinner, filterSearchBtn);
+            }
+        });
+
+        resetBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetFilter();
+            }
+        });
+
         setViews();
 
         //----rows i THINK these are used for filtering----------------------------------------------------------------------
@@ -268,7 +304,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 R.layout.spinner_item, months);
         adapterMonths.setDropDownViewResource(R.layout.spinner_item_layout);
         monthSpinner.setAdapter(adapterMonths);
-        monthSpinner.setSelection(0);
         final Date date = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -282,8 +317,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         arrayAdapter.setDropDownViewResource(R.layout.spinner_item_layout);
         yearSpinner.setAdapter(arrayAdapter);
         yearSpinner.setSelection(0);
-        yearSpinner.setEnabled(false);
-        yearSpinner.setClickable(false);
         yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -295,7 +328,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                             R.layout.spinner_item, months);
                     adapterMonths.setDropDownViewResource(R.layout.spinner_item_layout);
                     monthSpinner.setAdapter(adapterMonths);
-                    monthSpinner.setSelection(0);
                 } else if (monthSpinner.getChildCount() < 11 && position > 0) {
                     int currentPos = monthSpinner.getSelectedItemPosition();
                     months.clear();
@@ -326,28 +358,57 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         });
 
-        //filter button inside of the filter cardview------------------------------------------------------------
+        //filterByCrime button inside of the filterByCrime cardview------------------------------------------------------------
         filterSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (monthSpinner.getSelectedItemPosition() != dateUtil.getMonth() ||
+                filterByCrime = false;
+                for(FilterItem filterItem : filterList.getFilterList()){
+                    if(!filterItem.getShow()) {
+                        filterByCrime = true;
+                        break;
+                    }
+                }
+
+                if((monthSpinner.getSelectedItemPosition()+1) != dateUtil.getMonth() ||
                         Integer.parseInt(yearSpinner.getSelectedItem().toString()) !=
-                                (dateUtil.getYear())) {
+                                (dateUtil.getYear()) && filterByCrime){
+                    filterByMonth = true;
                     latLng.setLatlngChaned(false);
-                    dateUtil.setMonth(monthSpinner.getSelectedItemPosition());
+                    dateUtil.setMonth(monthSpinner.getSelectedItemPosition()+1);
                     dateUtil.setYear(Integer.parseInt(yearSpinner.getSelectedItem().toString()));
-                    filteredCrimes = new FilterCrimeList().filter(crimeList,
-                            filterList.getFilterList());
-                    filterCrimeListUpdate(true);
-                    filter = true;
                     showPosition(true);
                     new AnimateFilter().shrinkFilter(filterBtn, filterImage,
                             MainActivity.this, filterHeight, filterList.getFilterList(),
                             dateRow, btnRow, monthSpinner, yearSpinner, filterSearchBtn);
-                } else {
+                }
+                else if ((monthSpinner.getSelectedItemPosition()+1) != dateUtil.getMonth() ||
+                        Integer.parseInt(yearSpinner.getSelectedItem().toString()) !=
+                                (dateUtil.getYear())) {
+                    latLng.setLatlngChaned(false);
+                    dateUtil.setMonth(monthSpinner.getSelectedItemPosition()+1);
+                    dateUtil.setYear(Integer.parseInt(yearSpinner.getSelectedItem().toString()));
+                    filteredCrimes = new FilterCrimeList().filter(crimeList,
+                            filterList.getFilterList());
+                    filterByMonth = true;
+                    //filterCrimeListUpdate(true);
+                    showPosition(true);
+                    new AnimateFilter().shrinkFilter(filterBtn, filterImage,
+                            MainActivity.this, filterHeight, filterList.getFilterList(),
+                            dateRow, btnRow, monthSpinner, yearSpinner, filterSearchBtn);
+                } else if(filterByCrime){
+                    filterByMonth = false;
                     filteredCrimes = new FilterCrimeList().filter(crimeList, filterList.getFilterList());
-                    filterCrimeListUpdate(false);
+                    filterCrimeListUpdate();
+                    new AnimateFilter().shrinkFilter(filterBtn, filterImage,
+                            MainActivity.this, filterHeight, filterList.getFilterList(),
+                            dateRow, btnRow, monthSpinner, yearSpinner, filterSearchBtn);
+                }else{
+                    filterByCrime = true;
+                    filterByMonth = false;
+                    filteredCrimes = new FilterCrimeList().filter(crimeList, filterList.getFilterList());
+                    filterCrimeListUpdate();
                     new AnimateFilter().shrinkFilter(filterBtn, filterImage,
                             MainActivity.this, filterHeight, filterList.getFilterList(),
                             dateRow, btnRow, monthSpinner, yearSpinner, filterSearchBtn);
@@ -378,7 +439,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     if (!search.getText().toString().trim().equals("")) {
                         resetFilter();
                         isMyLocation = false;
-                        filter = false;
+                        filterByCrime = false;
                         new FindSearchLocation(MainActivity.this, search.getText().toString()).execute();
                     }
                     search.setText("");
@@ -448,15 +509,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 hideSoftKeyboard();
                 heatMapUsed = true;
                 if (markers.isEmpty()) {
-                    if (filter) {
+                    if (filterByCrime) {
                         if (null != filteredCrimes && !filteredCrimes.isEmpty()) {
-                            new UpdateMap(MainActivity.this,filteredCrimes,filter).execute();
+                            new UpdateMap(MainActivity.this,filteredCrimes).execute();
                         } else {
                             Toast.makeText(getApplicationContext(), "All crimes filtered...",
                                     Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        new UpdateMap(MainActivity.this,crimeList,filter).execute();
+                        new UpdateMap(MainActivity.this,crimeList).execute();
                     }
                 } else {
                     try {
@@ -465,9 +526,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         e.printStackTrace();
                     }
                     markers.clear();
-                    if (!filter) {
+                    if (!filterByCrime) {
                         mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
-                    } else if (filter && null != filteredCrimes && !filteredCrimes.isEmpty()) {
+                    } else if (filterByCrime && null != filteredCrimes && !filteredCrimes.isEmpty()) {
                         mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
                     } else {
                         Toast.makeText(getApplicationContext(), "All crimes filtered...",
@@ -519,13 +580,34 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 if (filterBtn.getHeight() > convertDpToPixel(36, MainActivity.this)) {
-                    new AnimateFilter().shrinkFilter(filterBtn, filterImage, MainActivity.this, filterHeight, filterList.getFilterList(), dateRow, btnRow,
-                            monthSpinner, yearSpinner, filterSearchBtn);
+//                    new AnimateFilter().shrinkFilter(filterBtn, filterImage, MainActivity.this, filterHeight, filterList.getFilterList(), dateRow, btnRow,
+//                            monthSpinner, yearSpinner, filterSearchBtn);
                 } else {
                     hideSoftKeyboard();
                     hidePopUpView();
                     new AnimateFilter().expandFilter(filterBtn, filterImage, MainActivity.this, filterHeight, filterList.getFilterList(), dateRow, btnRow,
                             monthSpinner, yearSpinner, filterSearchBtn);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(dateRow.getAlpha() != 1 || !monthSpinner.isEnabled() || !yearSpinner.isEnabled() || monthSpinner.getAdapter().isEmpty() || yearSpinner.getAdapter().isEmpty()){
+                                handler.postDelayed(this,100);
+                            }else {
+                                dateRow.setVisibility(View.VISIBLE);
+                                final Handler handler = new Handler();
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        yearSpinner.setSelection(dateUtil.getMaxYear() - dateUtil.getYear());
+                                        monthSpinner.setSelection(dateUtil.getMonth() - 1);
+                                    }
+                                });
+                            }
+
+                        }
+                    },100);
+
                 }
             }
         });
@@ -547,7 +629,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         monthSpinner = findViewById(R.id.monthSpinner);
         yearSpinner = findViewById(R.id.yearSpinner);
 
-        //------ filter button on main screen
+        //------ filterByCrime button on main screen
         filterBtn = findViewById(R.id.filterBtn);
         filterImage = findViewById(R.id.bntFilter);
         filterSearchBtn = findViewById(R.id.filterSearchBtn);
@@ -587,11 +669,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private void filterCrimeListUpdate(boolean filterAnotherList) {
-        filter = true;
-        if (!filteredCrimes.isEmpty() && !filterAnotherList) {
-            new UpdateMap(this,filteredCrimes,filter).execute();
-        } else if (!filterAnotherList) {
+    private void filterCrimeListUpdate() {
+        if (!filteredCrimes.isEmpty()) {
+            new UpdateMap(this,filteredCrimes).execute();
+        } else {
             mMap.clear();
             Toast.makeText(getApplicationContext(), "All crimes filtered...",
                     Toast.LENGTH_SHORT).show();
@@ -599,8 +680,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void resetFilter() {
+        if(null != filteredCrimes && !filteredCrimes.isEmpty()) {
+            filteredCrimes.clear();
+        }
         for (FilterItem filterItem : filterList.getFilterList()) {
             filterItem.setShow(true);
+            filterItem.getCardView().setAlpha(1);
         }
     }
 
@@ -614,9 +699,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         mMap.setMyLocationEnabled(true);
-        filter = false;
+        filterByCrime = false;
+        filterByMonth = false;
         showPosition(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng newLatLng) {
@@ -625,7 +712,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 hideSoftKeyboard();
                 hidePopUpView();
                 latLng.setLatLng(newLatLng);
-                filter = false;
+                filterByCrime = false;
+                filterByMonth = false;
                 showPosition(false);
                 new AnimateFilter().shrinkFilter(filterBtn, filterImage, MainActivity.this, filterHeight, filterList.getFilterList(), dateRow, btnRow,
                         monthSpinner, yearSpinner, filterSearchBtn);
@@ -641,44 +729,32 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         monthSpinner, yearSpinner, filterSearchBtn);
             }
         });
-        mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-            @Override
-            public boolean onMyLocationButtonClick() {
-                latLng.setLatlngChaned(true);
-                isMyLocation = true;
-                hideSoftKeyboard();
-                hidePopUpView();
-                gpsTracker.getLocation();
-                latLng.setLatLng(new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude()));
-                filter = false;
-                showPosition(false);
-                new AnimateFilter().shrinkFilter(filterBtn, filterImage, MainActivity.this, filterHeight, filterList.getFilterList(), dateRow, btnRow,
-                        monthSpinner, yearSpinner, filterSearchBtn);
-                return false;
-            }
-        });
+
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
                 try {
-                    final int subArrayMaxSize = 100;
-                    final int ammountOfSubArrays;
-                    ammountOfSubArrays = markers.size() / subArrayMaxSize == 0 ? 1 : markers.size() % subArrayMaxSize > 0 ? (markers.size() / subArrayMaxSize) + 1 : markers.size() / subArrayMaxSize;
-                    for (int j = 0; j < ammountOfSubArrays; j++) {
-                        final int position = j;
-                        Thread thread = new Thread() {
-                            @Override
-                            public void run() {
-                                if ((position + 1) == ammountOfSubArrays && ammountOfSubArrays == 1) {
-                                    checkMarkerVisibility(0, markers.size());
-                                } else if ((position + 1) == ammountOfSubArrays) {
-                                    checkMarkerVisibility((position * subArrayMaxSize), markers.size());
-                                } else {
-                                    checkMarkerVisibility((position * subArrayMaxSize), (position + 1) * subArrayMaxSize);
+                    if (!haveCheckedIdleness) {
+                        final int subArrayMaxSize = 100;
+                        final int ammountOfSubArrays;
+                        ammountOfSubArrays = markers.size() / subArrayMaxSize == 0 ? 1 : markers.size() % subArrayMaxSize > 0 ? (markers.size() / subArrayMaxSize) + 1 : markers.size() / subArrayMaxSize;
+                        for (int j = 0; j < ammountOfSubArrays; j++) {
+                            final int position = j;
+                            Thread thread = new Thread() {
+                                @Override
+                                public void run() {
+                                    if ((position + 1) == ammountOfSubArrays && ammountOfSubArrays == 1) {
+                                        checkMarkerVisibility(0, markers.size() - 1);
+                                    } else if ((position + 1) == ammountOfSubArrays) {
+                                        checkMarkerVisibility((position * subArrayMaxSize), markers.size() - 1);
+                                    } else {
+                                        checkMarkerVisibility((position * subArrayMaxSize), (position + 1) * subArrayMaxSize);
+                                    }
                                 }
-                            }
-                        };
-                        thread.start();
+                            };
+                            thread.start();
+
+                        }
                     }
                 }catch (Exception e){e.printStackTrace();}
             }
@@ -753,9 +829,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void findAddress(boolean alreadyHaveAddress) {
         boolean notSaved = true;
-        boolean nothingStored = true;
         JSONArray storedLocations = new JSONArray();
-        if(null != addresses && !addresses.isEmpty()){
+        if(null != addresses && !addresses.isEmpty() && !alreadyHaveAddress){
             addresses.clear();
         }
         if (!alreadyHaveAddress && latLng.isLatlngChaned()) {
@@ -775,11 +850,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                             break;
                         }
                     }
-                    nothingStored = false;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                nothingStored = true;
             }
         }
         if (alreadyHaveAddress) {
@@ -840,17 +913,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void callNewCrime() {
-        if (!filter) {
+        if (!filterByMonth && !filterByCrime) {
             dateUtil.resetDate();
         }
         heatMapUsed = false;
-        new GenerateCrimeUrl(MainActivity.this, false);
-        //new GenerateNeighbourhoodLocation(this, latLng.getLatLng()).execute();
+        new GenerateCrimeUrl(MainActivity.this, filterByCrime, filterByMonth);
         if (latLng.isLatlngChaned()) {
             dateUtil.setMaxMonth(dateUtil.getMonth());
             dateUtil.setMaxYear(dateUtil.getYear());
+            new GetCurrentWeather(MainActivity.this, latLng.getLatLng()).execute();
         }
-        new GetCurrentWeather(MainActivity.this, latLng.getLatLng()).execute();
         cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.getLatLng().latitude, latLng.getLatLng().longitude), 16);
         mMap.animateCamera(cameraUpdate);
     }
@@ -859,7 +931,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) && new Network().isNetworkEnabled(MainActivity.this)) {
             cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng.getLatLng(), 16);
-            mMap.addMarker(new MarkerOptions().position(latLng.getLatLng()).title("You are here"));
             mMap.animateCamera(cameraUpdate);
             findAddress(alreadyHaveAdress);
         } else {
@@ -883,16 +954,27 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //-----------------------------------------------------------put all markers on map and associate crimes and outcomes with markers
-    public void updateMap(final ArrayList<ArrayList<Crimes>> list, final boolean filter) {
+    public void updateMap(final ArrayList<ArrayList<Crimes>> inputList, Context context) {
+        System.out.println("filter crime : " + filterByCrime + " / filter month : " + filterByMonth);
+        ArrayList<ArrayList<Crimes>> temp;
+        if (!filterByCrime) {
+            crimeList = inputList;
+            temp = inputList;
+        } else if(filterByCrime && filterByMonth){
+            temp = new FilterCrimeList().filter(inputList, filterList.getFilterList());
+            filteredCrimes = temp;
+            crimeList = inputList;
+            new CrimeCountList(context).sortCrimesCount(temp,true, filterByCrime, context);
+        }
+        else {
+            temp = inputList;
+            new CrimeCountList(context).sortCrimesCount(temp,true, filterByCrime, context);
+        }
+        final ArrayList<ArrayList<Crimes>> list = temp;
         runOnUiThread(new Runnable() {
             public void run() {
 
-                if (!filter) {
-                    crimeList = list;
-                } else {
-                    filteredCrimes = new FilterCrimeList().filter(crimeList, filterList.getFilterList());
-                    filterCrimeListUpdate(false);
-                }
+
                 try {
                     mMap.clear();
                 } catch (Exception e) {
@@ -945,13 +1027,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 //                    .title("Search Location"));
 //        }
 
-                if (!filter && !heatMapUsed) {
+
+                if(list.isEmpty() && filterByCrime){
+                    Toast.makeText(getApplicationContext(), "No crimes found...",
+                            Toast.LENGTH_SHORT).show();
+                } else if ((!filterByCrime || filterByMonth) && !heatMapUsed) {
                     Toast.makeText(getApplicationContext(), "Crime statistics for " + dateUtil.getMonthAsString() + " " + dateUtil.getYear(),
                             Toast.LENGTH_LONG).show();
                     crimesTitle.setText("Area Crime\n" + dateUtil.getMonthAsString() + "/" + dateUtil.getYear());
                 }
-                yearSpinner.setSelection(dateUtil.getMaxYear() - dateUtil.getYear());
-                monthSpinner.setSelection(dateUtil.getMonth());
 
                 // Create the gradient.
                 int[] colors = {
@@ -979,15 +1063,35 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 if(null != crimeList && !crimeList.isEmpty()){
                     dateTxt.setText(dateUtil.getMonthAsString() + " " + dateUtil.getYear());
                 }
+                if(filterBtn.getVisibility() == INVISIBLE){
+                    filterBtn.setVisibility(VISIBLE);
+                }
             }
         });
 
     }
 
     public void setFilterViews(ArrayList<Counter> list) {
+        ArrayList<String> crimesToShow = new ArrayList<>();
+        if(filterByCrime) {
+            for (int i = 0; i < filterList.getFilterList().size(); i++) {
+                if (i < list.size() && filterList.getFilterList().get(i).getShow()) {
+                    crimesToShow.add(filterList.getFilterList().get(i).getNameString());
+                }
+            }
+        }
         int count = 0;
         for (int i = 0; i < filterList.getFilterList().size(); i++) {
             if (i < list.size()) {
+                if(null != crimesToShow && !crimesToShow.isEmpty()) {
+                    for (int j = 0; j < crimesToShow.size(); j++) {
+                        if(list.get(i).getName().equalsIgnoreCase(crimesToShow.get(j))){
+                            filterList.getFilterList().get(i).setShow(false);
+                            break;
+                        }
+                        filterList.getFilterList().get(i).setShow(true);
+                    }
+                }
                 count++;
                 filterList.getFilterList().get(i).getCardView().setVisibility(VISIBLE);
                 filterList.getFilterList().get(i).getName().setText(new CapitalizeString().getString(list.get(i).getName()));
@@ -1067,7 +1171,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
             String location = "";
             ArrayList<ArrayList<Crimes>> temp;
-            if (filter) {
+            if (filterByCrime) {
                 temp = filteredCrimes;
             } else {
                 temp = crimeList;
@@ -1115,108 +1219,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             streetName.setText(location.trim());
             areaTotalsTitle.setText(location.trim());
-            new CrimeCountList(this).sortCrimesCount(counts, false);
+            new CrimeCountList(this).sortCrimesCountStreet(counts, false, (filterByCrime || filterByMonth), MainActivity.this);
         }
         return false;
     }
-
-//    public void setDescription(String description) {
-//        if (null != description && !description.equals("")) {
-//            about.setText(description.replaceAll("\\<.*?\\>", ""));
-//        } else {
-//            aboutCardView.setVisibility(GONE);
-//        }
-//    }
-
-//    public void setNeighbourhoodDetails(String title) {
-//        if (null != title && !title.equals("")) {
-//            aboutCardView.setVisibility(VISIBLE);
-//            aboutTitle.setText(title.substring(0, 1).toUpperCase() + title.substring(1));
-//
-//        }
-//    }
-
-//    public void setAboutArea(String area, String emailString, String facebookString, String youtubeString, String twitterString, String websiteString) {
-//        if (null != area && !area.equals("")) {
-//            String[] aresSplit = area.split(" ");
-//            String fullArea = "";
-//            for (String areas : aresSplit) {
-//                areas = areas.substring(0, 1).toUpperCase() + areas.substring(1).toLowerCase();
-//                fullArea += areas + " ";
-//            }
-//
-//            areaTitle.setText(fullArea.trim());
-//            crimesTitle.setText(fullArea.trim());
-//        }
-//
-//        if (null != emailString && !emailString.equals("")) {
-//            email.setVisibility(VISIBLE);
-//            email.setText("Email: " + emailString);
-//            addLinks(email, Linkify.EMAIL_ADDRESSES);
-//            email.setLinkTextColor(ContextCompat.getColor(this, R.color.link));
-//            email.setOnLongClickListener(new View.OnLongClickListener(){
-//                public boolean onLongClick(View v) {
-//                    return true;
-//                }
-//            });
-//        } else {
-//            email.setVisibility(GONE);
-//        }
-//        if (null != facebookString && !facebookString.equals("")) {
-//            facebook.setVisibility(VISIBLE);
-//            facebook.setText("Facebook: " + facebookString);
-//            addLinks(facebook, Linkify.WEB_URLS);
-//            facebook.setLinkTextColor(ContextCompat.getColor(this, R.color.link));
-//            facebook.setOnLongClickListener(new View.OnLongClickListener(){
-//                public boolean onLongClick(View v) {
-//                    return true;
-//                }
-//            });
-//        } else {
-//            facebook.setVisibility(GONE);
-//        }
-//        if (null != twitterString && !twitterString.equals("")) {
-//            twitter.setVisibility(VISIBLE);
-//            twitter.setText("Twitter: " + twitterString);
-//            addLinks(twitter, Linkify.WEB_URLS);
-//            twitter.setLinkTextColor(ContextCompat.getColor(this, R.color.link));
-//            twitter.setOnLongClickListener(new View.OnLongClickListener(){
-//                public boolean onLongClick(View v) {
-//                    return true;
-//                }
-//            });
-//        } else {
-//            twitter.setVisibility(GONE);
-//        }
-//        if (null != websiteString && !websiteString.equals("")) {
-//            website.setVisibility(VISIBLE);
-//            website.setText("Website: " + websiteString);
-//            addLinks(website, Linkify.WEB_URLS);
-//            website.setLinkTextColor(ContextCompat.getColor(this, R.color.link));
-//            website.setOnLongClickListener(new View.OnLongClickListener(){
-//                public boolean onLongClick(View v) {
-//                    return true;
-//                }
-//            });
-//        } else {
-//            website.setVisibility(GONE);
-//        }
-//        if (null != youtubeString && !youtubeString.equals("")) {
-//        }
-//        if (null == emailString &&
-//                null == facebookString &&
-//                null == twitterString &&
-//                null == websiteString) {
-//            socialMediaCardView.setVisibility(GONE);
-//        } else {
-//            socialMediaCardView.setVisibility(VISIBLE);
-//        }
-//
-//        ViewGroup.LayoutParams lp = layoutBody.getLayoutParams();
-//        lp.height = (int) getMeasuredHeight(layoutBody) - statusBarHeight < getScreenHeight(this) ? getScreenHeight(this) : (int) getMeasuredHeight(layoutBody) - statusBarHeight;
-//        layoutBody.setLayoutParams(lp);
-//
-//    }
 
     public void setWeather(String description, Double curentTemp) {
         char tmp = 0x00B0;
@@ -1245,14 +1251,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
         System.out.println("Focus : " + search.isFocused());
     }
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            onBackPressed();
-//        }
-//        System.out.println("Focus : " + search.isFocused());
-//        return super.onKeyDown(keyCode, event);
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -1299,7 +1297,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 System.out.println("click count = " + isClickCount);
 
                 //on click
-                if (isClickCount < 5) {
+                if (isClickCount < 20 && movementAmmount < 30 && movementAmmount > -30) {
                     if (topOfTitle <= adViewHeight + 30 && topOfTitle >= adViewHeight - 30) {
                         showPopUpViewTitle();
                     } else if (topOfTitle <= getScreenHeight(MainActivity.this) - titleHeight - statusBarHeight + 30 &&
@@ -1493,25 +1491,44 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void networkAvailable() {
-//        if(latLng.getLatLng().latitude != 0.0d && latLng.getLatLng().longitude != 0.0d && new Network().isNetworkEnabled(MainActivity.this)){
-//
-//        }
+        if(onLoad > 1) {
+            Toast.makeText(getApplicationContext(), "Connected",
+                    Toast.LENGTH_SHORT).show();
+        }else {
+            onLoad++;
+        }
+    }
+
+    public void locateMeNow(){
+        latLng.setLatlngChaned(true);
+        isMyLocation = true;
+        hideSoftKeyboard();
+        hidePopUpView();
+        gpsTracker.getLocation();
+        latLng.setLatLng(new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude()));
+        filterByCrime = false;
+        filterByMonth = false;
+        showPosition(false);
+        new AnimateFilter().shrinkFilter(filterBtn, filterImage, MainActivity.this, filterHeight, filterList.getFilterList(), dateRow, btnRow,
+                monthSpinner, yearSpinner, filterSearchBtn);
     }
 
     @Override
     public void networkUnavailable() {
+        Toast.makeText(getApplicationContext(), "Disconnected",
+                Toast.LENGTH_SHORT).show();
     }
 
     //--------on activity paused unregister receiver and remove list if this isnt
     // -------done it can still be running in the background when app closes
     public void onPause() {
-        super.onPause();
         try {
             unregisterReceiver(networkStateReceiver);
             networkStateReceiver.removeListener(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        super.onPause();
     }
 
     //--------on activity stop unregister receiver and remove list if this isnt
@@ -1525,37 +1542,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     //----on resuming the app add a listener to the previously made network state receiver and
     // ---then register this to a broadcast receiver
     public void onResume() {
-        super.onResume();
+        onLoad = 0;
         networkStateReceiver.addListener(this);
         this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
     }
 
-    /*
-        public static class ListenerEditText extends android.support.v7.widget.AppCompatEditText {
 
-            private KeyImeChange keyImeChangeListener;
-
-            public ListenerEditText(Context context, AttributeSet attrs) {
-                super(context, attrs);
-            }
-
-            public void setKeyImeChangeListener(KeyImeChange listener) {
-                keyImeChangeListener = listener;
-            }
-
-            public interface KeyImeChange {
-                public void onKeyIme(int keyCode, KeyEvent event);
-            }
-
-            @Override
-            public boolean onKeyPreIme(int keyCode, KeyEvent event) {
-                if (keyImeChangeListener != null) {
-                    keyImeChangeListener.onKeyIme(keyCode, event);
-                }
-                return false;
-            }
-        }
-    */
     private void hideSoftKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(search.getWindowToken(),
@@ -1578,6 +1571,4 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
-
-
 }

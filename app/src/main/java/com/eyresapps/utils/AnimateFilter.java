@@ -11,11 +11,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.eyresapps.crimetracker.R;
+import com.eyresapps.data.FilterItem;
 import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
-
-import com.eyresapps.data.FilterItem;
 
 import static com.eyresapps.utils.ScreenUtils.convertDpToPixel;
 import static com.eyresapps.utils.ScreenUtils.getScreenHeight;
@@ -112,6 +112,7 @@ public class AnimateFilter {
                     .setStartDelay(0)
                     .start();
         }
+        dateRow.setVisibility(View.INVISIBLE);
         dateRow.animate()
                 .alpha(0)
                 .setDuration(250)
@@ -144,6 +145,7 @@ public class AnimateFilter {
 
     public void expandHeight(final CardView cv, Context context, float height)
     {
+        final Context innerContext = context;
         System.out.println("expand height = " + height);
         ValueAnimator anim = ValueAnimator.ofInt((int) convertDpToPixel(36, context),
                 getScreenHeight(context));
@@ -153,6 +155,7 @@ public class AnimateFilter {
                 int val = (Integer) valueAnimator.getAnimatedValue();
                 ViewGroup.LayoutParams layoutParams = cv.getLayoutParams();
                 layoutParams.height = val;
+                cv.setCardBackgroundColor(innerContext.getResources().getColor(R.color.white));
                 cv.setLayoutParams(layoutParams);
                 cv.setCardElevation(8);
             }
@@ -181,6 +184,7 @@ public class AnimateFilter {
 
     public void shrinkHeight(final CardView cv, Context context, float height)
     {
+        final Context innerContext = context;
         System.out.println("shrink height = " + height);
         ValueAnimator anim = ValueAnimator.ofInt(getScreenHeight(context),
                 (int) convertDpToPixel(36, context));
@@ -190,6 +194,7 @@ public class AnimateFilter {
                 int val = (Integer) valueAnimator.getAnimatedValue();
                 ViewGroup.LayoutParams layoutParams = cv.getLayoutParams();
                 layoutParams.height = val;
+                cv.setCardBackgroundColor(innerContext.getResources().getColor(R.color.whiteFaded));
                 cv.setLayoutParams(layoutParams);
                 cv.setCardElevation(1);
             }

@@ -7,10 +7,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.eyresapps.crimetracker.MainActivity;
-import com.eyresapps.data.Counter;
 import com.eyresapps.data.Crimes;
 import com.eyresapps.utils.CrimeCountList;
 import com.eyresapps.utils.DateUtil;
+import com.eyresapps.utils.FilterCrimeList;
+import com.eyresapps.utils.FilterList;
 import com.eyresapps.utils.HttpConnectUtil;
 import com.eyresapps.utils.LatitudeAndLongitudeUtil;
 import com.eyresapps.utils.UpdateMap;
@@ -28,18 +29,20 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
     Context context;
     DateUtil dateUtil = DateUtil.getInstance();
     LatitudeAndLongitudeUtil latLng = LatitudeAndLongitudeUtil.getInstance();
-    boolean bespokeSearch;
+    boolean filterByCrime;
     private int attempts;
-    ArrayList<Counter> counts = new ArrayList<>();
     boolean finished = false;
     Integer finishedCounter = 0;
     private Integer maxCrimesPerThread = 250;
     private int totalCrimeCount = 0;
     private ProgressDialog progressDialog;
+    private boolean filterByMonth = false;
+    private FilterList filterList = FilterList.getInstance();
 
-    public GetChicargoCrime(Context context, boolean search, int attempts) {
+    public GetChicargoCrime(Context context, boolean filterByCrime, boolean filterByMonth, int attempts) {
         this.context = context;
-        this.bespokeSearch = search;
+        this.filterByCrime = filterByCrime;
+        this.filterByMonth = filterByMonth;
         this.attempts = attempts;
         progressDialog = new ProgressDialog(context);
     }
@@ -110,28 +113,6 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
             while (!finished) {
                 if (finishedCounter == maxThreads) {
                     finished = true;
-                }
-            }
-            if (crimeList != null && !crimeList.isEmpty()) {
-                for (int i = 0; i < crimeList.size(); i++) {
-                    for (int j = 0; j < crimeList.get(i).size(); j++) {
-
-                        if (counts.isEmpty()) {
-                            counts.add(new Counter(crimeList.get(i).get(j).getCrimeType(), 1));
-                            continue;
-                        }
-                        for (int k = 0; k < counts.size(); k++) {
-                            if (counts.get(k).getName().equalsIgnoreCase(crimeList.get(i).get(j).getCrimeType())) {
-                                int temp = counts.get(k).getCount();
-                                counts.set(k, new Counter(crimeList.get(i).get(j).getCrimeType(), ++temp));
-                                break;
-                            }
-                            if (k == counts.size() - 1) {
-                                counts.add(new Counter(crimeList.get(i).get(j).getCrimeType(), 1));
-                                break;
-                            }
-                        }
-                    }
                 }
             }
             ((MainActivity) context).dismissDialog("");
@@ -211,12 +192,16 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
     protected void onPostExecute(ArrayList<ArrayList<Crimes>> list) {
         progressDialog.dismiss();
         if (list != null && !list.isEmpty()) {
-            new CrimeCountList(context).sortCrimesCount(counts, true);
-            new UpdateMap(context,list,false).execute();
-
+            if(filterByCrime){
+                ArrayList<ArrayList<Crimes>> filteredCrimes = new FilterCrimeList().filter(crimeList, filterList.getFilterList());
+                new UpdateMap(context, filteredCrimes).execute();
+            }else {
+                new CrimeCountList(context).sortCrimesCount(crimeList, true, false, context);
+                new UpdateMap(context, list).execute();
+            }
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
             ((MainActivity) context).dismissDialog("Gps unable to get location");
-        } else if (!bespokeSearch && attempts < 4 && (list == null || list.isEmpty())) {
+        } else if ((!filterByCrime && !filterByMonth) && attempts < 4 && (list == null || list.isEmpty())) {
             int year = dateUtil.getYear();
             int month = dateUtil.getMonth();
             if (month == 1) {
@@ -228,7 +213,7 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
             dateUtil.setYear(year);
             dateUtil.setMonth(month);
             attempts++;
-            new GetChicargoCrime(context, bespokeSearch, attempts).execute("https://data.cityofchicago.org/resource/6zsd-86xi.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00'");
+            new GetChicargoCrime(context, filterByCrime, filterByMonth, attempts).execute("https://data.cityofchicago.org/resource/6zsd-86xi.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00'");
         } else {
             ((MainActivity) context).dismissDialog("No crime Statistics for this date");
         }
