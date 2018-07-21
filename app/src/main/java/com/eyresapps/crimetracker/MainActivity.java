@@ -116,6 +116,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private CardView locateMe;
 
+    private Boolean firstLoad = true;
+
     private FilterList filterList = FilterList.getInstance();
 
     private TextView dateTxt;
@@ -226,15 +228,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private Runnable timeRunner;
     private CurrentLocale locale = CurrentLocale.getInstance();
 
-    //--------- cards to remove if no information inside them
-    private CardView crimesCardView;
-    private CardView aboutCardView;
-    private CardView socialMediaCardView;
-
     private AdView mAdView;
     private AdRequest adRequest;
 
     private Button additionalInformationBtn;
+    private Button yearStats;
 
     private ArrayList<String> months;
 
@@ -343,7 +341,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     months.add(getResources().getStringArray(R.array.months)[9]);
                     months.add(getResources().getStringArray(R.array.months)[10]);
                     months.add(getResources().getStringArray(R.array.months)[11]);
-                    ArrayAdapter<String> adapterMonths = new ArrayAdapter<String>(MainActivity.this,
+                    ArrayAdapter<String> adapterMonths = new ArrayAdapter<>(MainActivity.this,
                             R.layout.spinner_item, months);
                     adapterMonths.setDropDownViewResource(R.layout.spinner_item_layout);
                     monthSpinner.setAdapter(adapterMonths);
@@ -362,6 +360,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         filterSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                firstLoad = false;
 
                 filterByCrime = false;
                 for(FilterItem filterItem : filterList.getFilterList()){
@@ -440,6 +439,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         resetFilter();
                         isMyLocation = false;
                         filterByCrime = false;
+                        if(!filterByMonth) {
+                            firstLoad = true;
+                        }
                         new FindSearchLocation(MainActivity.this, search.getText().toString()).execute();
                     }
                     search.setText("");
@@ -484,15 +486,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         additionalInformationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //mock data for testing
-
-                /*markerCrimes.add(new Crimes("TWAT","21/10/2017","10:10","arrest","balls",100,100,"nope","shit"));
-                markerCrimes.add(new Crimes("TWAT","21/10/2017","10:10","arrest","balls",100,100,"nope","shit"));
-                markerCrimes.add(new Crimes("TWAT","21/10/2017","10:10","arrest","balls",100,100,"nope","shit"));
-                markerCrimes.add(new Crimes("TWAT","21/10/2017","10:10","arrest","balls",100,100,"nope","shit"));*/
 
                 Intent intent = new Intent(MainActivity.this, AdditionalInformation.class);
                 intent.putExtra("crimes", markerCrimes);
+                startActivity(intent);
+            }
+        });
+
+        yearStats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(MainActivity.this, YearStats.class);
+                intent.putExtra("id", markerCrimes.get(0).getId());
                 startActivity(intent);
             }
         });
@@ -647,6 +653,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         //------additional information button located on the pop up information
         additionalInformationBtn = findViewById(R.id.additionalInformationBtn);
+        yearStats = findViewById(R.id.yearStats);
 
         //------- pop up information title
         layoutTitle = findViewById(R.id.informationCardView);
@@ -657,7 +664,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //-----stuff not sure yet
         informationLayout = findViewById(R.id.informationLayout);
         streetName = findViewById(R.id.streetName);
-        crimesCardView = findViewById(R.id.crimesCardView);
         time = findViewById(R.id.time);
 
         //----- weather show in the pop up by area
@@ -917,7 +923,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             dateUtil.resetDate();
         }
         heatMapUsed = false;
-        new GenerateCrimeUrl(MainActivity.this, filterByCrime, filterByMonth);
+        new GenerateCrimeUrl(MainActivity.this, filterByCrime, filterByMonth, firstLoad);
         if (latLng.isLatlngChaned()) {
             dateUtil.setMaxMonth(dateUtil.getMonth());
             dateUtil.setMaxYear(dateUtil.getYear());
@@ -964,11 +970,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             temp = new FilterCrimeList().filter(inputList, filterList.getFilterList());
             filteredCrimes = temp;
             crimeList = inputList;
-            new CrimeCountList(context).sortCrimesCount(temp,true, filterByCrime, context);
+            new CrimeCountList(context).sortCrimesCount(temp,true, filterByCrime, context, true);
         }
         else {
             temp = inputList;
-            new CrimeCountList(context).sortCrimesCount(temp,true, filterByCrime, context);
+            new CrimeCountList(context).sortCrimesCount(temp,true, filterByCrime, context, true);
         }
         final ArrayList<ArrayList<Crimes>> list = temp;
         runOnUiThread(new Runnable() {
@@ -1194,7 +1200,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                                 temp.get(i).get(j).getWeapon(),
                                 temp.get(i).get(j).getDescription(),
                                 temp.get(i).get(j).getTimeOccur(),
-                                temp.get(i).get(j).getTimeReport()));
+                                temp.get(i).get(j).getTimeReport(),
+                                temp.get(i).get(j).getId()));
 
                         if (counts.isEmpty()) {
                             counts.add(new Counter(temp.get(i).get(j).getCrimeType(), 1));
@@ -1219,7 +1226,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             streetName.setText(location.trim());
             areaTotalsTitle.setText(location.trim());
-            new CrimeCountList(this).sortCrimesCountStreet(counts, false, (filterByCrime || filterByMonth), MainActivity.this);
+            new CrimeCountList(this).sortCrimesCountStreet(counts, false, (filterByCrime || filterByMonth), MainActivity.this, true);
         }
         return false;
     }

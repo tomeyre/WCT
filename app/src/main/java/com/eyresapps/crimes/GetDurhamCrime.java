@@ -40,12 +40,14 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
     private ProgressDialog progressDialog;
     private boolean filterByMonth = false;
     private FilterList filterList = FilterList.getInstance();
+    private Boolean firstLoad;
 
-    public GetDurhamCrime(Context context, boolean filterByCrime, boolean filterByMonth, int attempts) {
+    public GetDurhamCrime(Context context, boolean filterByCrime, boolean filterByMonth, boolean firstLoad, int attempts) {
         this.context = context;
         this.filterByCrime = filterByCrime;
         this.filterByMonth = filterByMonth;
         this.attempts = attempts;
+        this.firstLoad = firstLoad;
         progressDialog = new ProgressDialog(context);
     }
 
@@ -150,7 +152,7 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
                             jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(0),
                             jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(1), "", "",
                             jsonArray.getJSONObject(i).getJSONObject("fields").getString("hour_occu"),
-                            jsonArray.getJSONObject(i).getJSONObject("fields").getString("hour_fnd")));
+                            jsonArray.getJSONObject(i).getJSONObject("fields").getString("hour_fnd"),""));
                 }
                 else{
                     crime = (new Crimes(jsonArray.getJSONObject(i).getJSONObject("fields").getString("chrgdesc"),
@@ -161,7 +163,7 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
                             jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(0),
                             jsonArray.getJSONObject(i).getJSONObject("fields").getJSONArray("geo_point_2d").getDouble(1), "", "",
                             jsonArray.getJSONObject(i).getJSONObject("fields").getString("hour_occu"),
-                            jsonArray.getJSONObject(i).getJSONObject("fields").getString("hour_fnd")));
+                            jsonArray.getJSONObject(i).getJSONObject("fields").getString("hour_fnd"),""));
 
                 }
                 addToList(jsonArray, i, crime);
@@ -216,11 +218,15 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
     protected void onPostExecute(ArrayList<ArrayList<Crimes>> list) {
         progressDialog.dismiss();
         if (list != null && !list.isEmpty()) {
+            if(firstLoad){
+                dateUtil.setMonthStatsReset(dateUtil.getMonth());
+                dateUtil.setYearStatsReset(dateUtil.getYear());
+            }
             if(filterByCrime){
                 ArrayList<ArrayList<Crimes>> filteredCrimes = new FilterCrimeList().filter(crimeList, filterList.getFilterList());
                 new UpdateMap(context, filteredCrimes).execute();
             }else {
-                new CrimeCountList(context).sortCrimesCount(crimeList, true, false, context);
+                new CrimeCountList(context).sortCrimesCount(crimeList, true, false, context, true);
                 new UpdateMap(context, list).execute();
             }
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
@@ -237,7 +243,7 @@ public class GetDurhamCrime extends AsyncTask<String, String, ArrayList<ArrayLis
             dateUtil.setYear(year);
             dateUtil.setMonth(month);
             attempts++;
-            new GetDurhamCrime(context, filterByCrime, filterByMonth, attempts).execute("https://opendurham.nc.gov/api/records/1.0/search/?dataset=durham-police-crime-reports&rows=100&facet=date_rept&facet=dow1&facet=reportedas&facet=chrgdesc&facet=big_zone&refine.date_rept=" + dateUtil.getYear() + "%2F" + dateUtil.getMonth() + "&geofilter.distance=" + latLng.getLatLng().latitude + "%2C+" + latLng.getLatLng().longitude + "%2C+1000");
+            new GetDurhamCrime(context, filterByCrime, filterByMonth, firstLoad, attempts).execute("https://opendurham.nc.gov/api/records/1.0/search/?dataset=durham-police-crime-reports&rows=100&facet=date_rept&facet=dow1&facet=reportedas&facet=chrgdesc&facet=big_zone&refine.date_rept=" + dateUtil.getYear() + "%2F" + dateUtil.getMonth() + "&geofilter.distance=" + latLng.getLatLng().latitude + "%2C+" + latLng.getLatLng().longitude + "%2C+1000");
         } else {
             ((MainActivity) context).dismissDialog("No crime Statistics for this date");
         }

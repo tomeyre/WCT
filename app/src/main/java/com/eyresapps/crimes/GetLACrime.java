@@ -37,12 +37,14 @@ public class GetLACrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
     private ProgressDialog progressDialog;
     private boolean filterByMonth = false;
     private FilterList filterList = FilterList.getInstance();
+    private Boolean firstLoad;
 
-    public GetLACrime(Context context, boolean filterByCrime, boolean filterByMonth, int attempts) {
+    public GetLACrime(Context context, boolean filterByCrime, boolean filterByMonth, boolean firstLoad, int attempts) {
         this.context = context;
         this.filterByCrime = filterByCrime;
         this.filterByMonth = filterByMonth;
         this.attempts = attempts;
+        this.firstLoad = firstLoad;
         progressDialog = new ProgressDialog(context);
     }
 
@@ -142,7 +144,7 @@ public class GetLACrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
                     jsonArray.getJSONObject(i).getJSONObject("location_1").getJSONArray("coordinates").getDouble(0),
                     jsonArray.getJSONObject(i).getString("weapon_desc"),
                     jsonArray.getJSONObject(i).getString("crm_cd_desc") + " \u002D " + jsonArray.getJSONObject(i).getString("premis_desc"),
-                    jsonArray.getJSONObject(i).getString("time_occ"),""));
+                    jsonArray.getJSONObject(i).getString("time_occ"),"",""));
         } else {
             crime = (new Crimes(jsonArray.getJSONObject(i).getString("crm_cd_desc"),
                     jsonArray.getJSONObject(i).getString("date_occ"),
@@ -153,7 +155,7 @@ public class GetLACrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
                     jsonArray.getJSONObject(i).getJSONObject("location_1").getJSONArray("coordinates").getDouble(0),
                     "",
                     jsonArray.getJSONObject(i).getString("crm_cd_desc") + " \u002D " + jsonArray.getJSONObject(i).getString("premis_desc"),
-                    jsonArray.getJSONObject(i).getString("time_occ"),""));
+                    jsonArray.getJSONObject(i).getString("time_occ"),"",""));
         }
                 addToList(jsonArray, i, crime);
             }
@@ -208,11 +210,15 @@ public class GetLACrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
     protected void onPostExecute(ArrayList<ArrayList<Crimes>> list) {
         progressDialog.dismiss();
         if (list != null && !list.isEmpty()) {
+            if(firstLoad){
+                dateUtil.setMonthStatsReset(dateUtil.getMonth());
+                dateUtil.setYearStatsReset(dateUtil.getYear());
+            }
             if(filterByCrime){
                 ArrayList<ArrayList<Crimes>> filteredCrimes = new FilterCrimeList().filter(crimeList, filterList.getFilterList());
                 new UpdateMap(context, filteredCrimes).execute();
             }else {
-                new CrimeCountList(context).sortCrimesCount(crimeList, true, false, context);
+                new CrimeCountList(context).sortCrimesCount(crimeList, true, false, context, true);
                 new UpdateMap(context, list).execute();
             }
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
@@ -229,7 +235,7 @@ public class GetLACrime extends AsyncTask<String, String, ArrayList<ArrayList<Cr
             dateUtil.setYear(year);
             dateUtil.setMonth(month);
             attempts++;
-            new GetLACrime(context, filterByCrime,filterByMonth, attempts).execute("https://data.lacity.org/resource/7fvc-faax.json?$where=within_circle(location_1, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date_occ between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00'");
+            new GetLACrime(context, filterByCrime,filterByMonth, firstLoad, attempts).execute("https://data.lacity.org/resource/7fvc-faax.json?$where=within_circle(location_1, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date_occ between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00'");
         } else {
             ((MainActivity) context).dismissDialog("No crime Statistics for this date");
         }

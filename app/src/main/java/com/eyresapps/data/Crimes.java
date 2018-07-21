@@ -15,8 +15,11 @@ public class Crimes implements Serializable{
     private double latitude;
     private double longitude;
     private String description;
+    private String id;
 
-    public Crimes(String crime, String date, String dateReport, String outcome, String streetName, double latitude, double longitude, String weapon, String description, String time, String timeReport) {
+    public Crimes(String crime, String date, String dateReport, String outcome, String streetName,
+                  double latitude, double longitude, String weapon, String description, String time,
+                  String timeReport, String id) {
         this.crimeType = crime;
         this.weapon = weapon;
         this.dateOccur = date;
@@ -28,6 +31,7 @@ public class Crimes implements Serializable{
         this.latitude = latitude;
         this.longitude = longitude;
         this.description = description;
+        this.id = id;
     }
 
     public String getStreetName(){
@@ -51,5 +55,6 @@ public class Crimes implements Serializable{
         return outcome;
     }
     public String getDescription(){ return description; }
+    public String getId(){ return id; }
 
 }

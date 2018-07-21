@@ -2,10 +2,12 @@ package com.eyresapps.utils;
 
 import android.content.Context;
 import android.os.Handler;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.widget.TextView;
 
 import com.eyresapps.crimetracker.MainActivity;
+import com.eyresapps.crimetracker.YearStats;
 import com.eyresapps.data.Counter;
 import com.eyresapps.data.CrimeCount;
 import com.eyresapps.data.Crimes;
@@ -31,7 +33,7 @@ public class CrimeCountList {
 
     CrimeCount crimeCount = CrimeCount.getInstance();
 
-    public void sortCrimesCountStreet(ArrayList<Counter> counts, boolean total, boolean filtering, final Context context) {
+    public void sortCrimesCountStreet(ArrayList<Counter> counts, boolean total, boolean filtering, final Context context, boolean mainActivity) {
         final ArrayList<Counter> temp = new ArrayList<>();
 
         for(int i = 0; i < counts.size(); i++) {
@@ -53,7 +55,7 @@ public class CrimeCountList {
 
         if(total && !filtering){
             crimeCount.setTotalCountList(temp);
-            setCrimeCountList(crimeCount.getTotalCountList(), total, context);
+            setCrimeCountList(crimeCount.getTotalCountList(), total, context,mainActivity);
             new Handler().post(new Runnable() {
                 @Override
                 public void run() {
@@ -62,12 +64,12 @@ public class CrimeCountList {
             });
         }else {
             crimeCount.setStreetCountList(temp);
-            setCrimeCountList(crimeCount.getStreetCountList(), total, context);
+            setCrimeCountList(crimeCount.getStreetCountList(), total, context,mainActivity);
         }
 
     }
 
-    public void sortCrimesCount(ArrayList<ArrayList<Crimes>> crimeList, boolean total, boolean filtering, final Context context) {
+    public void sortCrimesCount(ArrayList<ArrayList<Crimes>> crimeList, boolean total, boolean filtering, final Context context, boolean mainActivity) {
         ArrayList<Counter> counts = new ArrayList<>();
         if (crimeList != null && !crimeList.isEmpty()) {
             for (int i = 0; i < crimeList.size(); i++) {
@@ -112,7 +114,7 @@ public class CrimeCountList {
 
         if(total && !filtering){
             crimeCount.setTotalCountList(temp);
-            setCrimeCountList(crimeCount.getTotalCountList(), total, context);
+            setCrimeCountList(crimeCount.getTotalCountList(), total, context,mainActivity);
             new Handler().post(new Runnable() {
                 @Override
                 public void run() {
@@ -121,30 +123,55 @@ public class CrimeCountList {
             });
         }else {
             crimeCount.setStreetCountList(temp);
-            setCrimeCountList(crimeCount.getStreetCountList(), total, context);
+            setCrimeCountList(crimeCount.getStreetCountList(), total, context,mainActivity);
         }
 
     }
 
 
-    public void setCrimeCountList(final ArrayList<Counter> counter, final boolean totals, Context context) {
-        ((MainActivity)context).runOnUiThread(new Runnable() {
+    public void setCrimeCountList(final ArrayList<Counter> counter, final boolean totals, final Context context, boolean mainActivity) {
+        if(mainActivity) {
+            ((MainActivity) context).runOnUiThread(new Runnable() {
 
-            @Override
-            public void run() {
-                textViews = crimeNumbers.getTextViews(totals);
+                @Override
+                public void run() {
+                    textViews = crimeNumbers.getTextViews(totals);
 
-                for (int i = 0; i < textViews.size(); i++) {
-                    if (i < counter.size()) {
-                        textViews.get(i).setVisibility(VISIBLE);
-                        String text = new CapitalizeString().getString(counter.get(i).getName()) + ": <b>" + counter.get(i).getCount() + "</b>";
-                        textViews.get(i).setText(Html.fromHtml(text));
-                    } else {
-                        textViews.get(i).setVisibility(GONE);
+                    for (int i = 0; i < textViews.size(); i++) {
+                        if (i < counter.size()) {
+                            textViews.get(i).setVisibility(VISIBLE);
+                            String text = new CapitalizeString().getString(counter.get(i).getName()) + ": <b>" + counter.get(i).getCount() + "</b>";
+                            textViews.get(i).setText(Html.fromHtml(text));
+                        } else {
+                            textViews.get(i).setVisibility(GONE);
+                        }
                     }
                 }
-            }
-        });
+            });
+        }else{
+            ((YearStats) context).runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    ArrayList<CardView> colorViews = crimeNumbers.getStreetColors();
+                    textViews = crimeNumbers.getTextViews(totals);
+                    Colors color = Colors.getInstance();
+                    ArrayList<Integer> colors = color.getColors(context);
+
+                    colorViews.get(0).setCardBackgroundColor(colors.get(0));
+
+                    for (int i = 0; i < textViews.size(); i++) {
+                        if (i < counter.size()) {
+                            textViews.get(i).setVisibility(VISIBLE);
+                            String text = new CapitalizeString().getString(counter.get(i).getName()) + ": <b>" + counter.get(i).getCount() + "</b>";
+                            textViews.get(i).setText(Html.fromHtml(text));
+                        } else {
+                            textViews.get(i).setVisibility(GONE);
+                        }
+                    }
+                }
+            });
+        }
     }
 
 }

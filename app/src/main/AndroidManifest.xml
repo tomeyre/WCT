@@ -33,6 +33,9 @@
         <activity android:name="com.eyresapps.crimetracker.AdditionalInformation"
             android:screenOrientation="portrait"/>
 
+        <activity android:name="com.eyresapps.crimetracker.YearStats"
+            android:screenOrientation="portrait"/>
+
 
         <meta-data
             android:name="com.google.android.gms.version"

@@ -10,6 +10,10 @@ public class DateUtil {
 
     int year = Calendar.getInstance().get(Calendar.YEAR);
     int month = Calendar.getInstance().get(Calendar.MONTH);
+    int yearStats = Calendar.getInstance().get(Calendar.YEAR);
+    int monthStats = Calendar.getInstance().get(Calendar.MONTH);
+    int yearStatsReset;
+    int monthStatsReset;
     int currentYear = Calendar.getInstance().get(Calendar.YEAR);
     int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
 
@@ -21,6 +25,30 @@ public class DateUtil {
     }
 
     private DateUtil() {
+    }
+
+    public void setYearStatsReset(int yearStatsReset) {
+        this.yearStatsReset = yearStatsReset;
+    }
+
+    public void setMonthStatsReset(int monthStatsReset) {
+        this.monthStatsReset = monthStatsReset;
+    }
+
+    public int getYearStats() {
+        return yearStats;
+    }
+
+    public void setYearStats(int yearStats) {
+        this.yearStats = yearStats;
+    }
+
+    public int getMonthStats() {
+        return monthStats;
+    }
+
+    public void setMonthStats(int monthStats) {
+        this.monthStats = monthStats;
     }
 
     public int getYear() {
@@ -42,6 +70,11 @@ public class DateUtil {
     public void resetDate(){
         this.year = Calendar.getInstance().get(Calendar.YEAR);
         this.month = Calendar.getInstance().get(Calendar.MONTH);
+    }
+
+    public void resetStatsDate(){
+        this.yearStats = yearStatsReset;
+        this.monthStats = monthStatsReset;
     }
 
     public int getMonthAhead(){

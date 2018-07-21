@@ -38,12 +38,14 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
     private ProgressDialog progressDialog;
     private boolean filterByMonth = false;
     private FilterList filterList = FilterList.getInstance();
+    private Boolean firstLoad;
 
-    public GetChicargoCrime(Context context, boolean filterByCrime, boolean filterByMonth, int attempts) {
+    public GetChicargoCrime(Context context, boolean filterByCrime, boolean filterByMonth, boolean firstLoad, int attempts) {
         this.context = context;
         this.filterByCrime = filterByCrime;
         this.filterByMonth = filterByMonth;
         this.attempts = attempts;
+        this.firstLoad = firstLoad;
         progressDialog = new ProgressDialog(context);
     }
 
@@ -139,7 +141,7 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
                         jsonArray.getJSONObject(i).getString("primary_type") + " \u002D " +
                                 jsonArray.getJSONObject(i).getString("description") + " \u002D " +
                                 jsonArray.getJSONObject(i).getString("location_description"),
-                        "",""));
+                        "","",""));
 
                 addToList(jsonArray, i, crime);
             }
@@ -192,11 +194,15 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
     protected void onPostExecute(ArrayList<ArrayList<Crimes>> list) {
         progressDialog.dismiss();
         if (list != null && !list.isEmpty()) {
+            if(firstLoad){
+                dateUtil.setMonthStatsReset(dateUtil.getMonth());
+                dateUtil.setYearStatsReset(dateUtil.getYear());
+            }
             if(filterByCrime){
                 ArrayList<ArrayList<Crimes>> filteredCrimes = new FilterCrimeList().filter(crimeList, filterList.getFilterList());
                 new UpdateMap(context, filteredCrimes).execute();
             }else {
-                new CrimeCountList(context).sortCrimesCount(crimeList, true, false, context);
+                new CrimeCountList(context).sortCrimesCount(crimeList, true, false, context, true);
                 new UpdateMap(context, list).execute();
             }
         } else if (latLng.getLatLng().latitude == 0 && latLng.getLatLng().longitude == 0) {
@@ -213,7 +219,7 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
             dateUtil.setYear(year);
             dateUtil.setMonth(month);
             attempts++;
-            new GetChicargoCrime(context, filterByCrime, filterByMonth, attempts).execute("https://data.cityofchicago.org/resource/6zsd-86xi.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00'");
+            new GetChicargoCrime(context, filterByCrime, filterByMonth, firstLoad, attempts).execute("https://data.cityofchicago.org/resource/6zsd-86xi.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00'");
         } else {
             ((MainActivity) context).dismissDialog("No crime Statistics for this date");
         }
