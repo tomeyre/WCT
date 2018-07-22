@@ -33,4 +33,32 @@ public class MonthCountList {
     public ArrayList<MonthCounter> getMonth(int month){
         return list.get(month);
     }
+
+    public void sortByMonth(){
+        boolean notAddedNonEmpty = true;
+        ArrayList<ArrayList<MonthCounter>> temp = new ArrayList<>();
+        for(ArrayList<MonthCounter> monthCountLists : list){
+            if(monthCountLists.isEmpty()){
+                temp.add(new ArrayList<MonthCounter>());
+            }else if(temp.isEmpty() || notAddedNonEmpty){
+                temp.add(monthCountLists);
+                notAddedNonEmpty = false;
+            }else {
+                for(int i = 0; i < temp.size(); i++){
+                    if(!temp.get(i).isEmpty() && monthCountLists.get(0).getYear() < temp.get(i).get(0).getYear()){
+                        temp.add(i,monthCountLists);
+                        break;
+                    } else if(!temp.get(i).isEmpty() && monthCountLists.get(0).getYear() <= temp.get(i).get(0).getYear() &&
+                            monthCountLists.get(0).getMonth() < temp.get(i).get(0).getMonth()){
+                        temp.add(i,monthCountLists);
+                        break;
+                    }else if(i == temp.size() - 1){
+                        temp.add(monthCountLists);
+                        break;
+                    }
+                }
+            }
+        }
+        list = temp;
+    }
 }

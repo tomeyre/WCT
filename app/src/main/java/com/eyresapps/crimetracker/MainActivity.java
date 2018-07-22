@@ -779,9 +779,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void run() {
                         LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
-                        if (bounds.contains(markers.get(position).getPosition())) {
+                        if (position < markers.size() && bounds.contains(markers.get(position).getPosition())) {
                             markers.get(position).setVisible(true);
-                        } else {
+                        } else if(position < markers.size()){
                             markers.get(position).setVisible(false);
                         }
                     }
@@ -1577,5 +1577,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         }
+    }
+
+    public void setYearStatsVisibility(Integer visibility){
+        yearStats.setVisibility(visibility);
     }
 }

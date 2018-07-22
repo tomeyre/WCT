@@ -9,34 +9,28 @@ public class MonthCounter {
     private String name;
     private Integer count;
     private Integer month;
+    private Integer year;
 
-    public MonthCounter (String name, Integer count, Integer month){
+    public MonthCounter (String name, Integer count, Integer month, Integer year){
         this.name = name;
         this.count = count;
         this.month = month;
+        this.year = year;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Integer getCount() {
         return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
     }
 
     public Integer getMonth() {
         return month;
     }
 
-    public void setMonth(Integer month) {
-        this.month = month;
+    public Integer getYear() {
+        return year;
     }
 }

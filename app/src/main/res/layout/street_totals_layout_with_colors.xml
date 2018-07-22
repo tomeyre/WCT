@@ -1,374 +1,1198 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/areaTotalsTitle"
         android:orientation="horizontal"
         android:weightSum="2">
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:orientation="horizontal">
-
-        <TextView
             android:layout_weight="1"
-            android:id="@+id/one"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="one"
-            android:textColor="#000000"
-            android:textSize="12sp" />
-            <RelativeLayout
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/colorOne"
-            app:cardCornerRadius="10dp"
-            android:layout_width="20dp"
-            android:layout_height="20dp"/>
-            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorOne"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/one"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="one"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorThree"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/three"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/two"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="three"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorFive"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/five"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/four"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="five"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorSeven"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/seven"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/six"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="seven"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorNine"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/nine"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/eight"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="nine"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorEleven"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/eleven"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ten"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="eleven"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorThirteen"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/thirteen"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/twelve"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="thirteen"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorFifteen"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/fifteen"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/thirteen"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="Fifteen"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorSeventeen"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/seventeen"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/fifteen"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="Seventeen"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorNineteen"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/nineteen"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/seventeen"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="nineteen"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorTwentyOne"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/twentyOne"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/nineteen"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="twenty one"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorTwentyThree"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/twentyThree"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/twentyOne"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="twenty three"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorTwentyFive"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/twentyFive"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/twentyTwo"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="twenty five"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorTwentySeven"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/twentySeven"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/twentyFive"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="twenty seven"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorTwentyNine"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/twentyNine"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/twentySeven"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="twenty nine"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/three"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/two"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="three"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/five"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/four"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="five"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/seven"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/six"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="seven"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
 
-        <TextView
-            android:id="@+id/nine"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/eight"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="nine"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorTwo"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
 
-        <TextView
-            android:id="@+id/eleven"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/ten"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="eleven"
-            android:textColor="#000000"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/thirteen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/twelve"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="thirteen"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/two"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/one"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="two"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
 
 
-        <TextView
-            android:id="@+id/fifteen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/thirteen"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="Fifteen"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/seventeen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/fifteen"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="Seventeen"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/nineteen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/seventeen"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="nineteen"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
 
-        <TextView
-            android:id="@+id/twentyOne"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/nineteen"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="twenty one"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorFour"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
 
-        <TextView
-            android:id="@+id/twentyThree"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/twentyOne"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="twenty three"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/four"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/three"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="four"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
 
-        <TextView
-            android:id="@+id/twentyFive"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/twentyTwo"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="twenty five"
-            android:textColor="#000000"
-            android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/twentySeven"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/twentyFive"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="twenty seven"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/twentyNine"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/twentySeven"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="twenty nine"
-            android:textColor="#000000"
-            android:textSize="12sp" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
 
-        <TextView
-            android:id="@+id/two"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/one"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="two"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorSix"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
 
-        <TextView
-            android:id="@+id/four"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/three"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="four"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/six"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/five"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="six"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
 
-        <TextView
-            android:id="@+id/six"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/five"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="six"
-            android:textColor="#000000"
-            android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/eight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/seven"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="eight"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/ten"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/nine"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="ten"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/twelve"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/eleven"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="twelve"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
 
-        <TextView
-            android:id="@+id/fourteen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/thirteen"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="fourteen"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorEight"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
 
-        <TextView
-            android:id="@+id/sixteen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/fourteen"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="sixteen"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/eight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/seven"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="eight"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
 
-        <TextView
-            android:id="@+id/eighteen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/sixteen"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="eighteen"
-            android:textColor="#000000"
-            android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/twenty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/eighteen"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="twenty"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/twentyTwo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/twenty"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="twenty two"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/twentyFour"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/twentyTwo"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="twenty four"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
 
-        <TextView
-            android:id="@+id/twentySix"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/twentyFour"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="twenty six"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorTen"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
 
-        <TextView
-            android:id="@+id/twentyEight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/twentySix"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="twenty eight"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/ten"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/nine"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="ten"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
 
-        <TextView
-            android:id="@+id/thirty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/twentySix"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:text="thirty"
-            android:textColor="#000000"
-            android:textSize="12sp" />
-    </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorTwelve"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/twelve"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/eleven"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="twelve"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorFourteen"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/fourteen"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/thirteen"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="fourteen"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorSixteen"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/sixteen"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/fourteen"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="sixteen"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorEighteen"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/eighteen"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/sixteen"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="eighteen"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorTwenty"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/twenty"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/eighteen"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="twenty"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorTwentyTwo"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/twentyTwo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/twenty"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="twenty two"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorTwentyFour"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/twentyFour"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/twentyTwo"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="twenty four"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorTwentySix"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/twentySix"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/twentyFour"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="twenty six"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorTwentyEight"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/twentyEight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/twentySix"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="twenty eight"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/colorThirty"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="1dp"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="7dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/thirty"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/twentySix"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="17"
+                    android:text="thirty"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

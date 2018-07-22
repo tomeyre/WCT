@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.eyresapps.crimetracker.R;
-import com.eyresapps.utils.CrimeNumbers;
+import com.eyresapps.utils.CrimeNumberForYear;
 
 import java.util.ArrayList;
 
 public class StreetTotalFragmentWithColor extends Fragment {
 
-    CrimeNumbers crimeNumbers = CrimeNumbers.getInstance();
+    CrimeNumberForYear crimeNumbers = CrimeNumberForYear.getInstance();
 
     private TextView one;
     private TextView two;
@@ -49,6 +49,35 @@ public class StreetTotalFragmentWithColor extends Fragment {
     private TextView thirty;
 
     private CardView colorOne;
+    private CardView colorTwo;
+    private CardView colorThree;
+    private CardView colorFour;
+    private CardView colorFive;
+    private CardView colorSix;
+    private CardView colorSeven;
+    private CardView colorEight;
+    private CardView colorNine;
+    private CardView colorTen;
+    private CardView colorEleven;
+    private CardView colorTwelve;
+    private CardView colorThirteen;
+    private CardView colorFourteen;
+    private CardView colorFifteen;
+    private CardView colorSixteen;
+    private CardView colorSeventeen;
+    private CardView colorEighteen;
+    private CardView colorNineteen;
+    private CardView colorTwenty;
+    private CardView colorTwentyOne;
+    private CardView colorTwentyTwo;
+    private CardView colorTwentyThree;
+    private CardView colorTwentyFour;
+    private CardView colorTwentyFive;
+    private CardView colorTwentySix;
+    private CardView colorTwentySeven;
+    private CardView colorTwentyEight;
+    private CardView colorTwentyNine;
+    private CardView colorThirty;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,6 +119,35 @@ public class StreetTotalFragmentWithColor extends Fragment {
         thirty = view.findViewById(R.id.thirty);
 
         colorOne = view.findViewById(R.id.colorOne);
+        colorTwo = view.findViewById(R.id.colorTwo);
+        colorThree = view.findViewById(R.id.colorThree);
+        colorFour = view.findViewById(R.id.colorFour);
+        colorFive = view.findViewById(R.id.colorFive);
+        colorSix = view.findViewById(R.id.colorSix);
+        colorSeven = view.findViewById(R.id.colorSeven);
+        colorEight = view.findViewById(R.id.colorEight);
+        colorNine = view.findViewById(R.id.colorNine);
+        colorTen = view.findViewById(R.id.colorTen);
+        colorEleven = view.findViewById(R.id.colorEleven);
+        colorTwelve = view.findViewById(R.id.colorTwelve);
+        colorThirteen = view.findViewById(R.id.colorThirteen);
+        colorFourteen = view.findViewById(R.id.colorFourteen);
+        colorFifteen = view.findViewById(R.id.colorFifteen);
+        colorSixteen = view.findViewById(R.id.colorSixteen);
+        colorSeventeen = view.findViewById(R.id.colorSeventeen);
+        colorEighteen = view.findViewById(R.id.colorEighteen);
+        colorNineteen = view.findViewById(R.id.colorNineteen);
+        colorTwenty = view.findViewById(R.id.colorTwenty);
+        colorTwentyOne = view.findViewById(R.id.colorTwentyOne);
+        colorTwentyTwo = view.findViewById(R.id.colorTwentyTwo);
+        colorTwentyThree = view.findViewById(R.id.colorTwentyThree);
+        colorTwentyFour = view.findViewById(R.id.colorTwentyFour);
+        colorTwentyFive = view.findViewById(R.id.colorTwentyFive);
+        colorTwentySix = view.findViewById(R.id.colorTwentySix);
+        colorTwentySeven = view.findViewById(R.id.colorTwentySeven);
+        colorTwentyEight = view.findViewById(R.id.colorTwentyEight);
+        colorTwentyNine = view.findViewById(R.id.colorTwentyNine);
+        colorThirty = view.findViewById(R.id.colorThirty);
 
         views.add(one);
         views.add(two);
@@ -123,6 +181,35 @@ public class StreetTotalFragmentWithColor extends Fragment {
         views.add(thirty);
 
         colors.add(colorOne);
+        colors.add(colorTwo);
+        colors.add(colorThree);
+        colors.add(colorFour);
+        colors.add(colorFive);
+        colors.add(colorSix);
+        colors.add(colorSeven);
+        colors.add(colorEight);
+        colors.add(colorNine);
+        colors.add(colorTen);
+        colors.add(colorEleven);
+        colors.add(colorTwelve);
+        colors.add(colorThirteen);
+        colors.add(colorFourteen);
+        colors.add(colorFifteen);
+        colors.add(colorSixteen);
+        colors.add(colorSeventeen);
+        colors.add(colorEighteen);
+        colors.add(colorNineteen);
+        colors.add(colorTwenty);
+        colors.add(colorTwentyOne);
+        colors.add(colorTwentyTwo);
+        colors.add(colorTwentyThree);
+        colors.add(colorTwentyFour);
+        colors.add(colorTwentyFive);
+        colors.add(colorTwentySix);
+        colors.add(colorTwentySeven);
+        colors.add(colorTwentyEight);
+        colors.add(colorTwentyNine);
+        colors.add(colorThirty);
 
         crimeNumbers.setStreetTextViews(views);
         crimeNumbers.setStreetColors(colors);

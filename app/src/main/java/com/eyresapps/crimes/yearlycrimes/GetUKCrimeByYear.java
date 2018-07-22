@@ -46,6 +46,8 @@ public class GetUKCrimeByYear extends AsyncTask<String, Integer, ArrayList<Crime
                 System.out.println(url);
                 int year = dateUtil.getYearStats();
                 int month = dateUtil.getMonthStats();
+                final int innerMonth = month;
+                final int innerYear = year;
                 if (month == 1) {
                     year--;
                     month = 12;
@@ -66,7 +68,7 @@ public class GetUKCrimeByYear extends AsyncTask<String, Integer, ArrayList<Crime
 
                             // Get JSON object contains an object and an array
                             final JSONArray jsonArray = new JSONArray(json);
-                            getCrimes(jsonArray);
+                            getCrimes(jsonArray, innerMonth, innerYear);
                         }catch (Exception e){e.printStackTrace();}
                     }
                 };
@@ -87,7 +89,7 @@ public class GetUKCrimeByYear extends AsyncTask<String, Integer, ArrayList<Crime
     }
 
 
-    private void getCrimes(JSONArray jsonArray) {
+    private void getCrimes(JSONArray jsonArray, final int month, final int year) {
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 if (jsonArray.getJSONObject(i).isNull("outcome_status")) {
@@ -113,6 +115,9 @@ public class GetUKCrimeByYear extends AsyncTask<String, Integer, ArrayList<Crime
                             jsonArray.getJSONObject(i).getJSONObject("location").getJSONObject("street").getString("id")));
                 }
                 addToList(crime);
+            }
+            if(jsonArray.length() == 0){
+                addToList(new Crimes("none",Integer.toString(month),Integer.toString(year),"","",new Double(0),new Double(0),"","","","",""));
             }
             finishedCounter++;
         } catch (Exception e) {

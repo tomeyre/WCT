@@ -127,6 +127,38 @@ public class DateUtil {
         return monthString;
     }
 
+    public String getShortMonthAsString(Integer month){
+        String monthString;
+
+        if(month == 0){
+            monthString = "JAN";
+        }else if(month == 1){
+            monthString = "FEB";
+        }else if(month == 2){
+            monthString = "MAR";
+        }else if(month == 3){
+            monthString = "APR";
+        }else if(month == 4){
+            monthString = "MAY";
+        }else if(month == 5){
+            monthString = "JUN";
+        }else if(month == 6){
+            monthString = "JUL";
+        }else if(month == 7){
+            monthString = "AUG";
+        }else if(month == 8){
+            monthString = "SEP";
+        }else if(month == 9){
+            monthString = "OCT";
+        }else if(month == 10){
+            monthString = "NOV";
+        }else {
+            monthString = "DEC";
+        }
+
+        return monthString;
+    }
+
     public int getMaxMonth() {
         return maxMonth;
     }

@@ -33,25 +33,26 @@
     <color name="green">#74DF00</color>
     <color name="yellow">#D7DF01</color>
 
-    <color name="one">#a93226</color>
-    <color name="two">#cb4335</color>
-    <color name="three">#884ea0</color>
-    <color name="four">#7d3c98</color>
-    <color name="five">#2471a3</color>
-    <color name="six">#2e86c1</color>
-    <color name="seven">#17a589</color>
-    <color name="eight">#138d75</color>
-    <color name="nine">#229954</color>
-    <color name="ten">#28b463</color>
-    <color name="eleven">#d4ac0d</color>
-    <color name="twelve">#d68910</color>
-    <color name="thirteen">#ca6f1e</color>
-    <color name="fourteen">#ba4a00</color>
-    <color name="fifteen">#d0d3d4</color>
-    <color name="sixteen">#a6acaf</color>
-    <color name="seventeen">#839192</color>
-    <color name="eighteen">#707b7c</color>
-    <color name="nineteen">#2e4053</color>
-    <color name="twenty">#273746</color>
+    <color name="one">#0d47a1</color>
+    <color name="two">#66bb6a</color>
+    <color name="three">#ed0000</color>
+    <color name="four">#2e7d32</color>
+    <color name="five">#bdbdbd</color>
+    <color name="six">#911eb4</color>
+    <color name="seven">#808080</color>
+    <color name="eight">#e6beff</color>
+    <color name="nine">#4fc3f7</color>
+    <color name="ten">#ffab91</color>
+    <color name="eleven">#a04000</color>
+    <color name="twelve">#ffeb3b</color>
+    <color name="thirteen">#aaffc3</color>
+    <color name="fourteen">#f032e6</color>
+
+    <color name="fifteen">#800000</color>
+    <color name="sixteen">#aaffc3</color>
+    <color name="seventeen">#808000</color>
+    <color name="eighteen">#ffd8b1</color>
+    <color name="nineteen">#000080</color>
+    <color name="twenty">#808080</color>
     <!--https://htmlcolorcodes.com/color-chart/ yellow next row 4-->
 </resources>

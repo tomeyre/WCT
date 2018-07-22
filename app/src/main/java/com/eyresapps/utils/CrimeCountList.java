@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.text.Html;
+import android.view.View;
 import android.widget.TextView;
 
 import com.eyresapps.crimetracker.MainActivity;
@@ -26,6 +27,7 @@ public class CrimeCountList {
     private ArrayList<TextView> textViews;
 
     CrimeNumbers crimeNumbers = CrimeNumbers.getInstance();
+    CrimeNumberForYear crimeNumberForYear = CrimeNumberForYear.getInstance();
 
     public CrimeCountList(Context context) {
 
@@ -153,20 +155,21 @@ public class CrimeCountList {
 
                 @Override
                 public void run() {
-                    ArrayList<CardView> colorViews = crimeNumbers.getStreetColors();
-                    textViews = crimeNumbers.getTextViews(totals);
+                    ArrayList<CardView> colorViews = crimeNumberForYear.getStreetColors();
+                    textViews = crimeNumberForYear.getTextViews();
                     Colors color = Colors.getInstance();
                     ArrayList<Integer> colors = color.getColors(context);
 
-                    colorViews.get(0).setCardBackgroundColor(colors.get(0));
-
                     for (int i = 0; i < textViews.size(); i++) {
-                        if (i < counter.size()) {
+                        if (i < counter.size() && !counter.get(i).getName().equalsIgnoreCase("none")) {
                             textViews.get(i).setVisibility(VISIBLE);
                             String text = new CapitalizeString().getString(counter.get(i).getName()) + ": <b>" + counter.get(i).getCount() + "</b>";
                             textViews.get(i).setText(Html.fromHtml(text));
+                            colorViews.get(i).setVisibility(VISIBLE);
+                            colorViews.get(i).setCardBackgroundColor(colors.get(i));
                         } else {
                             textViews.get(i).setVisibility(GONE);
+                            colorViews.get(i).setVisibility(View.GONE);
                         }
                     }
                 }

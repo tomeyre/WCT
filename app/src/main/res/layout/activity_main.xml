@@ -5,170 +5,171 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context="com.eyresapps.crimetracker.MainActivity"
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    tools:context="com.eyresapps.crimetracker.MainActivity">
 
-    <com.google.android.gms.ads.AdView
-        android:background="@color/black"
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
-        android:elevation="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/black"
+        android:elevation="6dp"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/test">
-    </com.google.android.gms.ads.AdView>
+        ads:adUnitId="@string/test"></com.google.android.gms.ads.AdView>
 
     <android.support.v7.widget.CardView
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="13dp"
-        app:cardCornerRadius="2dp"
-        android:layout_alignParentRight="true"
         android:id="@+id/locateMe"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        app:cardElevation="1dp"
-        app:cardBackgroundColor="@color/whiteFaded"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="13dp"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        android:clickable="true">
+        app:cardBackgroundColor="@color/whiteFaded"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="1dp">
+
         <RelativeLayout
-            android:background="@color/whiteFaded"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/whiteFaded">
 
             <ImageView
-                android:background="@color/whiteFaded"
+                android:id="@+id/btnLocate"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:id="@+id/btnLocate"
-                android:src="@drawable/locate"
-                android:layout_width="28dp"
-                android:layout_height="28dp" />
+                android:background="@color/whiteFaded"
+                android:src="@drawable/locate" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-        android:layout_marginTop="56dp"
-        android:layout_marginRight="13dp"
-        app:cardCornerRadius="2dp"
-        android:layout_alignParentRight="true"
         android:id="@+id/heatMapBtn"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        app:cardElevation="1dp"
-        app:cardBackgroundColor="@color/whiteFaded"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="13dp"
+        android:layout_marginTop="56dp"
+        android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        android:clickable="true">
+        app:cardBackgroundColor="@color/whiteFaded"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="1dp">
+
         <RelativeLayout
-            android:background="@color/whiteFaded"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/whiteFaded">
 
             <ImageView
-                android:background="@color/whiteFaded"
+                android:id="@+id/btnImage"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:id="@+id/btnImage"
-                android:src="@drawable/maps"
-                android:layout_width="28dp"
-                android:layout_height="28dp" />
+                android:background="@color/whiteFaded"
+                android:src="@drawable/maps" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
-<!-- 36dp -->
+    <!-- 36dp -->
     <android.support.v7.widget.CardView
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="13dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
-        app:cardCornerRadius="2dp"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/heatMapBtn"
         android:id="@+id/filterBtn"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        app:cardElevation="1dp"
-        app:cardBackgroundColor="@color/whiteFaded"
-        android:visibility='invisible'
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/heatMapBtn"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="13dp"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        android:clickable="true">
+        android:visibility='invisible'
+        app:cardBackgroundColor="@color/whiteFaded"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="1dp">
+
         <RelativeLayout
-            android:background="@color/whiteFaded"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/whiteFaded">
 
             <fragment
                 android:id="@+id/filterFrag"
+                android:name="com.eyresapps.fragment.FilterFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:name="com.eyresapps.fragment.FilterFragment"/>
+                android:layout_height="match_parent" />
 
             <ImageView
-                android:background="@color/whiteFaded"
+                android:id="@+id/bntFilter"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:id="@+id/bntFilter"
-                android:src="@drawable/filter"
-                android:layout_width="26dp"
-                android:layout_height="26dp" />
+                android:background="@color/whiteFaded"
+                android:src="@drawable/filter" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
 
     <android.support.v7.widget.CardView
         android:id="@+id/searchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        app:cardCornerRadius="0dp"
-        app:cardBackgroundColor="#e6ffffff"
-        android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/heatMapBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        app:cardBackgroundColor="#e6ffffff"
+        app:cardCornerRadius="0dp">
 
         <RelativeLayout
-            android:background="#00ffffff"
             android:id="@+id/bottomLayout"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:background="#00ffffff">
 
             <EditText
-                android:background="#00ffffff"
-                android:textCursorDrawable="@null"
                 android:id="@+id/search"
-                android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:background="#00ffffff"
+                android:hint="Search here..."
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:layout_height="50dp"
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/transparentBlack"
-                android:hint="Search here..."/>
+                android:textCursorDrawable="@null" />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
     <TextView
-        android:layout_margin="10dp"
-        android:layout_below="@+id/searchLayout"
-        android:paddingRight="80dp"
-        android:paddingLeft="10dp"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:background="@drawable/blue_fade_from_left"
-        android:textColor="@color/white"
         android:id="@+id/dateTxt"
-        android:text="date"
-        android:textStyle="bold"
-        android:elevation="1dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"/>
+        android:layout_below="@+id/searchLayout"
+        android:layout_margin="10dp"
+        android:background="@drawable/blue_fade_from_left"
+        android:elevation="1dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="80dp"
+        android:paddingTop="5dp"
+        android:text="date"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:visibility="invisible" />
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -245,10 +246,10 @@
                 android:id="@+id/crimesCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="30dp"
                 app:cardCornerRadius="0dp">
 
                 <!--
@@ -269,24 +270,22 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
-                        android:text="Area Crime"
                         android:gravity="center"
+                        android:text="Area Crime"
                         android:textColor="#000000"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
 
-
-                        <fragment
-                            android:layout_below="@id/crimesTitle"
-                            android:id="@+id/totalsFrag"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:name="com.eyresapps.fragment.TotalFragment"/>
+                    <fragment
+                        android:id="@+id/totalsFrag"
+                        android:name="com.eyresapps.fragment.TotalFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/crimesTitle" />
 
 
                     <TextView
-                        android:textAlignment="center"
                         android:id="@+id/areaTotalsTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -294,44 +293,49 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:text="Totals"
+                        android:textAlignment="center"
                         android:textColor="#000000"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
 
+                    <fragment
+                        android:id="@+id/streetTotalsFrag"
+                        android:name="com.eyresapps.fragment.StreetTotalFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/areaTotalsTitle" />
 
-                        <fragment
-                            android:layout_below="@id/areaTotalsTitle"
-                            android:id="@+id/streetTotalsFrag"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:name="com.eyresapps.fragment.StreetTotalFragment"/>
-
-
-                    <Button
-                        android:id="@+id/additionalInformationBtn"
-                        android:background="@color/blue"
-                        android:layout_centerHorizontal="true"
-                        android:padding="10dp"
-                        android:textSize="15sp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_below="@+id/streetTotalsFrag"
-                        android:text="More Details"
-                        android:layout_width="wrap_content"
-                        android:layout_height="45dp" />
+                        android:orientation="horizontal"
+                        android:weightSum="2">
 
-                    <Button
-                        android:id="@+id/yearStats"
-                        android:background="@color/blue"
-                        android:layout_centerHorizontal="true"
-                        android:padding="10dp"
-                        android:textSize="15sp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_below="@+id/additionalInformationBtn"
-                        android:text="Yearly"
-                        android:layout_width="wrap_content"
-                        android:layout_height="45dp" />
+
+                        <Button
+                            android:id="@+id/additionalInformationBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@color/blue"
+                            android:text="More Details"
+                            android:textSize="15sp" />
+
+                        <Button
+                            android:id="@+id/yearStats"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@color/blue"
+                            android:text="Yearly Stats"
+                            android:textSize="15sp" />
+                    </LinearLayout>
 
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
