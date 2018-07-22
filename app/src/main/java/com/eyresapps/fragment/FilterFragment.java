@@ -8,11 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
+import com.eyresapps.crimetracker.R;
 import com.eyresapps.data.FilterItem;
 import com.eyresapps.utils.FilterList;
-import com.eyresapps.crimetracker.R;
+
+import java.util.ArrayList;
 
 public class FilterFragment extends Fragment {
 
@@ -44,6 +44,20 @@ public class FilterFragment extends Fragment {
     private CardView filterTwentyTwo;
     private CardView filterTwentyThree;
     private CardView filterTwentyFour;
+    private CardView filterTwentyFive;
+    private CardView filterTwentySix;
+    private CardView filterTwentySeven;
+    private CardView filterTwentyEight;
+    private CardView filterTwentyNine;
+    private CardView filterThirty;
+    private CardView filterThirtyOne;
+    private CardView filterThirtyTwo;
+    private CardView filterThirtyThree;
+    private CardView filterThirtyFour;
+    private CardView filterThirtyFive;
+    private CardView filterThirtySix;
+
+
     private TextView filterOneTxt;
     private TextView filterTwoTxt;
     private TextView filterThreeTxt;
@@ -68,6 +82,18 @@ public class FilterFragment extends Fragment {
     private TextView filterTwentyTwoTxt;
     private TextView filterTwentyThreeTxt;
     private TextView filterTwentyFourTxt;
+    private TextView filterTwentyFiveTxt;
+    private TextView filterTwentySixTxt;
+    private TextView filterTwentySevenTxt;
+    private TextView filterTwentyEightTxt;
+    private TextView filterTwentyNineTxt;
+    private TextView filterThirtyTxt;
+    private TextView filterThirtyOneTxt;
+    private TextView filterThirtyTwoTxt;
+    private TextView filterThirtyThreeTxt;
+    private TextView filterThirtyFourTxt;
+    private TextView filterThirtyFiveTxt;
+    private TextView filterThirtySixTxt;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,6 +124,18 @@ public class FilterFragment extends Fragment {
         filterTwentyTwo = view.findViewById(R.id.filterTwentyTwo);
         filterTwentyThree = view.findViewById(R.id.filterTwentyThree);
         filterTwentyFour = view.findViewById(R.id.filterTwentyFour);
+        filterTwentyFive = view.findViewById(R.id.filterTwentyFive);
+        filterTwentySix = view.findViewById(R.id.filterTwentySix);
+        filterTwentySeven = view.findViewById(R.id.filterTwentySeven);
+        filterTwentyEight = view.findViewById(R.id.filterTwentyEight);
+        filterTwentyNine = view.findViewById(R.id.filterTwentyNine);
+        filterThirty = view.findViewById(R.id.filterThirty);
+        filterThirtyOne = view.findViewById(R.id.filterThirtyOne);
+        filterThirtyTwo = view.findViewById(R.id.filterThirtyTwo);
+        filterThirtyThree = view.findViewById(R.id.filterThirtyThree);
+        filterThirtyFour = view.findViewById(R.id.filterThirtyFour);
+        filterThirtyFive = view.findViewById(R.id.filterThirtyFive);
+        filterThirtySix = view.findViewById(R.id.filterThirtySix);
 
         //-----filter text view
         filterOneTxt = view.findViewById(R.id.filterOneTxt);
@@ -124,6 +162,18 @@ public class FilterFragment extends Fragment {
         filterTwentyTwoTxt = view.findViewById(R.id.filterTwentyTwoTxt);
         filterTwentyThreeTxt = view.findViewById(R.id.filterTwentyThreeTxt);
         filterTwentyFourTxt = view.findViewById(R.id.filterTwentyFourTxt);
+        filterTwentyFiveTxt = view.findViewById(R.id.filterTwentyFiveTxt);
+        filterTwentySixTxt = view.findViewById(R.id.filterTwentySixTxt);
+        filterTwentySevenTxt = view.findViewById(R.id.filterTwentySevenTxt);
+        filterTwentyEightTxt = view.findViewById(R.id.filterTwentyEightTxt);
+        filterTwentyNineTxt = view.findViewById(R.id.filterTwentyNineTxt);
+        filterThirtyTxt = view.findViewById(R.id.filterThirtyTxt);
+        filterThirtyOneTxt = view.findViewById(R.id.filterThirtyOneTxt);
+        filterThirtyTwoTxt = view.findViewById(R.id.filterThirtyTwoTxt);
+        filterThirtyThreeTxt = view.findViewById(R.id.filterThirtyThreeTxt);
+        filterThirtyFourTxt = view.findViewById(R.id.filterThirtyFourTxt);
+        filterThirtyFiveTxt = view.findViewById(R.id.filterThirtyFiveTxt);
+        filterThirtySixTxt = view.findViewById(R.id.filterThirtySixTxt);
 
         tempFilterList = new ArrayList<>();
         tempFilterList.add(new FilterItem(filterOne, filterOneTxt,"",true));
@@ -150,6 +200,19 @@ public class FilterFragment extends Fragment {
         tempFilterList.add(new FilterItem(filterTwentyTwo,filterTwentyTwoTxt,"", true));
         tempFilterList.add(new FilterItem(filterTwentyThree,filterTwentyThreeTxt,"", true));
         tempFilterList.add(new FilterItem(filterTwentyFour,filterTwentyFourTxt,"", true));
+
+        tempFilterList.add(new FilterItem(filterTwentyFive,filterTwentyFiveTxt,"", true));
+        tempFilterList.add(new FilterItem(filterTwentySix,filterTwentySixTxt,"", true));
+        tempFilterList.add(new FilterItem(filterTwentySeven,filterTwentySevenTxt,"", true));
+        tempFilterList.add(new FilterItem(filterTwentyEight,filterTwentyEightTxt,"", true));
+        tempFilterList.add(new FilterItem(filterTwentyNine,filterTwentyNineTxt,"", true));
+        tempFilterList.add(new FilterItem(filterThirty,filterThirtyTxt,"", true));
+        tempFilterList.add(new FilterItem(filterThirtyOne,filterThirtyOneTxt,"", true));
+        tempFilterList.add(new FilterItem(filterThirtyTwo,filterThirtyTwoTxt,"", true));
+        tempFilterList.add(new FilterItem(filterThirtyThree,filterThirtyThreeTxt,"", true));
+        tempFilterList.add(new FilterItem(filterThirtyFour,filterThirtyFourTxt,"", true));
+        tempFilterList.add(new FilterItem(filterThirtyFive,filterThirtyFiveTxt,"", true));
+        tempFilterList.add(new FilterItem(filterThirtySix,filterThirtySixTxt,"", true));
 
         filterList.setFilterList(tempFilterList);
 

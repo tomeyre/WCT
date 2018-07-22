@@ -22,8 +22,11 @@ public class DateParserUtil {
         if(currentAddress.getAddress().toLowerCase().contains("chicago")) {
             return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", locale);
         }
-        if(currentAddress.getAddress().toLowerCase().contains("los angeles")) {
+        if(currentAddress.getAddress().toLowerCase().contains("CA")) {
             return new SimpleDateFormat("yyyy-MM-dd", locale);
+        }
+        if(currentAddress.getAddress().toLowerCase().contains("seattle")) {
+            return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", locale);
         }
         if(currentAddress.getAddress().toLowerCase().contains("durham, nc")) {
             return new SimpleDateFormat("yyyy-MM-dd", locale);

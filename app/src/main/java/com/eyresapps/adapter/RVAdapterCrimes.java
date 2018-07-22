@@ -11,12 +11,16 @@ import com.eyresapps.bindviewholders.BindViewHolderChicargo;
 import com.eyresapps.bindviewholders.BindViewHolderDurham;
 import com.eyresapps.bindviewholders.BindViewHolderLa;
 import com.eyresapps.bindviewholders.BindViewHolderNewOrleans;
+import com.eyresapps.bindviewholders.BindViewHolderSanFran;
+import com.eyresapps.bindviewholders.BindViewHolderSeattle;
 import com.eyresapps.crimetracker.R;
 import com.eyresapps.data.Crimes;
 import com.eyresapps.data.viewholders.CrimeViewHolder;
 import com.eyresapps.data.viewholders.CrimeViewHolderDurham;
 import com.eyresapps.data.viewholders.CrimeViewHolderLa;
 import com.eyresapps.data.viewholders.CrimeViewHolderNewOrleans;
+import com.eyresapps.data.viewholders.CrimeViewHolderSanFran;
+import com.eyresapps.data.viewholders.CrimeViewHolderSeattle;
 import com.eyresapps.utils.CurrentAddressUtil;
 
 import java.util.ArrayList;
@@ -50,7 +54,7 @@ public class RVAdapterCrimes extends RecyclerView.Adapter<CrimeViewHolder> {
             v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.crime_chicago, viewGroup, false);
             return new CrimeViewHolder(v);
         }
-        else if(address.toUpperCase().contains("CA") && address.toUpperCase().contains("USA")){
+        else if(address.toLowerCase().contains("los angeles") && address.toUpperCase().contains("USA")){
             v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.crime_la, viewGroup, false);
             return new CrimeViewHolderLa(v);
         }
@@ -61,6 +65,14 @@ public class RVAdapterCrimes extends RecyclerView.Adapter<CrimeViewHolder> {
         else if (address.toLowerCase().contains("new orleans")) {
             v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.crime_new_orleans, viewGroup, false);
             return new CrimeViewHolderNewOrleans(v);
+        }
+        else if (address.toLowerCase().contains("san francisco")) {
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.crime_san_fran, viewGroup, false);
+            return new CrimeViewHolderSanFran(v);
+        }
+        else if (address.toLowerCase().contains("seattle")) {
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.crime_seattle, viewGroup, false);
+            return new CrimeViewHolderSeattle(v);
         }
         v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.crime, viewGroup, false);
         return new CrimeViewHolder(v);
@@ -74,7 +86,7 @@ public class RVAdapterCrimes extends RecyclerView.Adapter<CrimeViewHolder> {
         else if(address.contains("chicago")){
             new BindViewHolderChicargo().bind(crimeViewHolder, i, crimes, context);
         }
-        else if(address.toUpperCase().contains("CA") && address.toUpperCase().contains("USA")){
+        else if(address.toLowerCase().contains("los angeles") && address.toUpperCase().contains("USA")){
             new BindViewHolderLa().bind((CrimeViewHolderLa) crimeViewHolder, i, crimes, context);
         }
         else if (address.toLowerCase().contains("durham, nc")) {
@@ -82,6 +94,12 @@ public class RVAdapterCrimes extends RecyclerView.Adapter<CrimeViewHolder> {
         }
         else if (address.toLowerCase().contains("new orleans")) {
             new BindViewHolderNewOrleans().bind((CrimeViewHolderNewOrleans) crimeViewHolder, i, crimes, context);
+        }
+        else if (address.toLowerCase().contains("san francisco")) {
+            new BindViewHolderSanFran().bind((CrimeViewHolderSanFran) crimeViewHolder, i, crimes, context);
+        }
+        else if (address.toLowerCase().contains("seattle")) {
+            new BindViewHolderSeattle().bind((CrimeViewHolderSeattle) crimeViewHolder, i, crimes, context);
         }
     }
 

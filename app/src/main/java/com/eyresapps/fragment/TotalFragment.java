@@ -7,10 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
-import com.eyresapps.utils.CrimeNumbers;
 import com.eyresapps.crimetracker.R;
+import com.eyresapps.utils.CrimeNumbers;
+
+import java.util.ArrayList;
 
 public class TotalFragment extends Fragment {
 
@@ -46,6 +46,12 @@ public class TotalFragment extends Fragment {
     private TextView twentyEightTotal;
     private TextView twentyNineTotal;
     private TextView thirtyTotal;
+    private TextView thirtyOneTotal;
+    private TextView thirtyTwoTotal;
+    private TextView thirtyThreeTotal;
+    private TextView thirtyFourTotal;
+    private TextView thirtyFiveTotal;
+    private TextView thirtySixTotal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,6 +90,12 @@ public class TotalFragment extends Fragment {
         twentyEightTotal = view.findViewById(R.id.twentyEightTotal);
         twentyNineTotal = view.findViewById(R.id.twentyNineTotal);
         thirtyTotal = view.findViewById(R.id.thirtyTotal);
+        thirtyOneTotal = view.findViewById(R.id.thirtyOneTotal);
+        thirtyTwoTotal = view.findViewById(R.id.thirtyTwoTotal);
+        thirtyThreeTotal = view.findViewById(R.id.thirtyThreeTotal);
+        thirtyFourTotal = view.findViewById(R.id.thirtyFourTotal);
+        thirtyFiveTotal = view.findViewById(R.id.thirtyFiveTotal);
+        thirtySixTotal = view.findViewById(R.id.thirtySixTotal);
 
         views.add(oneTotal);
         views.add(twoTotal);
@@ -115,6 +127,12 @@ public class TotalFragment extends Fragment {
         views.add(twentyEightTotal);
         views.add(twentyNineTotal);
         views.add(thirtyTotal);
+        views.add(thirtyOneTotal);
+        views.add(thirtyTwoTotal);
+        views.add(thirtyThreeTotal);
+        views.add(thirtyFourTotal);
+        views.add(thirtyFiveTotal);
+        views.add(thirtySixTotal);
 
         crimeNumbers.setTotalTextViews(views);
 

@@ -179,6 +179,38 @@
             android:textColor="#000000"
             android:textSize="12sp" />
 
+        <TextView
+            android:id="@+id/thirtyOneTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/thirtyTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="thirty"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/thirtyThreeTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/thirtyTwoTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="thirty"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/thirtyFiveTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/thirtyFourTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="thirty"
+            android:textColor="#000000"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -347,6 +379,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/twentySixTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="thirty"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/thirtyTwoTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/thirtyTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="thirty"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/thirtyFourTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/thirtyTwoTotal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="thirty"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/thirtySixTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/thirtyFourTotal"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:text="thirty"

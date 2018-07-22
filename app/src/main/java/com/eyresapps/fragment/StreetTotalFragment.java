@@ -7,10 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
-import com.eyresapps.utils.CrimeNumbers;
 import com.eyresapps.crimetracker.R;
+import com.eyresapps.utils.CrimeNumbers;
+
+import java.util.ArrayList;
 
 public class StreetTotalFragment extends Fragment {
 
@@ -46,6 +46,12 @@ public class StreetTotalFragment extends Fragment {
     private TextView twentyEight;
     private TextView twentyNine;
     private TextView thirty;
+    private TextView thirtyOne;
+    private TextView thirtyTwo;
+    private TextView thirtyThree;
+    private TextView thirtyFour;
+    private TextView thirtyFive;
+    private TextView thirtySix;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,6 +90,12 @@ public class StreetTotalFragment extends Fragment {
         twentyEight = view.findViewById(R.id.twentyEight);
         twentyNine = view.findViewById(R.id.twentyNine);
         thirty = view.findViewById(R.id.thirty);
+        thirtyOne = view.findViewById(R.id.thirtyOne);
+        thirtyTwo = view.findViewById(R.id.thirtyTwo);
+        thirtyThree = view.findViewById(R.id.thirtyThree);
+        thirtyFour = view.findViewById(R.id.thirtyFour);
+        thirtyFive = view.findViewById(R.id.thirtyFive);
+        thirtySix = view.findViewById(R.id.thirtySix);
 
         views.add(one);
         views.add(two);
@@ -115,6 +127,12 @@ public class StreetTotalFragment extends Fragment {
         views.add(twentyEight);
         views.add(twentyNine);
         views.add(thirty);
+        views.add(thirtyOne);
+        views.add(thirtyTwo);
+        views.add(thirtyThree);
+        views.add(thirtyFour);
+        views.add(thirtyFive);
+        views.add(thirtySix);
 
         crimeNumbers.setStreetTextViews(views);
 

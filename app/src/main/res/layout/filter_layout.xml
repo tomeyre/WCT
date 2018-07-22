@@ -1,801 +1,1272 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <LinearLayout
-        android:id="@+id/rowOne"
-        android:orientation="horizontal"
-        android:weightSum="4"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/scrollViewNoRefNeeded"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp">
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/dateRow">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterOne"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/rowOne"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterOneTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </android.support.v7.widget.CardView>
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:weightSum="4">
 
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterTwo"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterOne"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterOneTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterTwo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterTwoTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterThree"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterThreeTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterFour"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterFourTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowTwo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterTwoTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+                android:layout_below="@+id/rowOne"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:orientation="horizontal"
+                android:weightSum="4">
 
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterThree"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterFive"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterFiveTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterSix"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterSixTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterSeven"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterSevenTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterEight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterEightTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowThree"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
+                android:layout_below="@+id/rowTwo"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:orientation="horizontal"
+                android:weightSum="4">
 
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterThreeTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </android.support.v7.widget.CardView>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterNine"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterFour"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
+                        <TextView
+                            android:id="@+id/filterNineTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterTen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterTenTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterEleven"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterElevenTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterTwelve"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterTwelveTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowFour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterFourTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+                android:layout_below="@+id/rowThree"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:orientation="horizontal"
+                android:weightSum="4">
 
-        </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-    </LinearLayout>
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterThirteen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
 
-    <LinearLayout
-        android:layout_below="@+id/rowOne"
-        android:id="@+id/rowTwo"
-        android:orientation="horizontal"
-        android:weightSum="4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/filterThirteenTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterFive"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterFourteen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterFourteenTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterFifteen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterFifteenTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterSixteen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterSixteenTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowFive"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterFiveTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+                android:layout_below="@+id/rowFour"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:orientation="horizontal"
+                android:weightSum="4">
 
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterSix"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterSeventeen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterSeventeenTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterEighteen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterEighteenTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterNineteen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterNineteenTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterTwenty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterTwentyTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowSix"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterSixTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+                android:layout_below="@+id/rowFive"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:orientation="horizontal"
+                android:weightSum="4">
 
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterSeven"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterTwentyOne"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterTwentyOneTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterTwentyTwo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterTwentyTwoTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterTwentyThree"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterTwentyThreeTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterTwentyFour"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterTwentyFourTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowSeven"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterSevenTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+                android:layout_below="@+id/rowSix"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:orientation="horizontal"
+                android:weightSum="4">
 
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterEight"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterTwentyFive"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterTwentyFiveTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterTwentySix"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterTwentySixTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterTwentySeven"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterTwentySevenTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterTwentyEight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterTwentyEightTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowEight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterEightTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+                android:layout_below="@+id/rowSeven"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:orientation="horizontal"
+                android:weightSum="4">
 
-        </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-    </LinearLayout>
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterTwentyNine"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
 
-    <LinearLayout
-        android:layout_below="@+id/rowTwo"
-        android:id="@+id/rowThree"
-        android:orientation="horizontal"
-        android:weightSum="4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/filterTwentyNineTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterNine"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterThirty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterThirtyTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterThirtyOne"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterThirtyOneTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterThirtyTwo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterThirtyTwoTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowNine"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterNineTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
+                android:layout_below="@+id/rowEight"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:orientation="horizontal"
+                android:weightSum="4">
 
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterThirtyThree"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterThirtyThreeTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterThirtyFour"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterThirtyFourTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterThirtyFive"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterThirtyFiveTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/filterThirtySix"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:alpha="0.0"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="2dp">
+
+                        <TextView
+                            android:id="@+id/filterThirtySixTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:text="one"
+                            android:textColor="@color/white" />
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+            </LinearLayout>
         </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterTen"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterTenTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
-
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterEleven"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterElevenTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
-
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterTwelve"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterTwelveTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_below="@+id/rowThree"
-        android:id="@+id/rowFour"
-        android:orientation="horizontal"
-        android:weightSum="4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterThirteen"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterThirteenTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
-
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterFourteen"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterFourteenTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
-
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterFifteen"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterFifteenTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
-
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterSixteen"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterSixteenTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_below="@+id/rowFour"
-        android:id="@+id/rowFive"
-        android:orientation="horizontal"
-        android:weightSum="4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterSeventeen"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterSeventeenTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
-
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterEighteen"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterEighteenTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
-
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterNineteen"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterNineteenTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
-
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterTwenty"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterTwentyTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_below="@+id/rowFive"
-        android:id="@+id/rowSix"
-        android:orientation="horizontal"
-        android:weightSum="4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterTwentyOne"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterTwentyOneTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
-
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterTwentyTwo"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterTwentyTwoTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
-
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterTwentyThree"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterTwentyThreeTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
-
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterTwentyFour"
-                android:alpha="0.0"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                app:cardCornerRadius="2dp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/blue">
-                <TextView
-                    android:layout_margin="4dp"
-                    android:id="@+id/filterTwentyFourTxt"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="one"
-                    android:autoSizeTextType="uniform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" /></android.support.v7.widget.CardView>
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
+    </ScrollView>
     <!--android:layout_below="@+id/rowSix"-->
 
     <LinearLayout
-        android:layout_above="@+id/btnRow"
         android:id="@+id/dateRow"
-        android:orientation="horizontal"
-        android:layout_marginBottom="5dp"
-        android:weightSum="1"
-        android:alpha="0"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnRow"
+        android:layout_marginBottom="5dp"
+        android:alpha="0"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:weightSum="1">
+
         <RelativeLayout
-            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
             <RelativeLayout
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:background="@color/white">
+
                 <Spinner
-                    android:backgroundTint="@color/black"
-                    android:layout_margin="5dp"
                     android:id="@+id/monthSpinner"
-                    android:spinnerMode="dropdown"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"></Spinner>
-                <Spinner
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:backgroundTint="@color/black"
+                    android:spinnerMode="dropdown"></Spinner>
+
+                <Spinner
+                    android:id="@+id/yearSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_toRightOf="@+id/monthSpinner"
-                    android:id="@+id/yearSpinner"
-                    android:spinnerMode="dropdown"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"></Spinner>
+                    android:backgroundTint="@color/black"
+                    android:spinnerMode="dropdown"></Spinner>
             </RelativeLayout>
 
         </RelativeLayout>
     </LinearLayout>
+
     <LinearLayout
-        android:layout_alignParentBottom="true"
         android:id="@+id/btnRow"
-        android:orientation="horizontal"
-        android:weightSum="3"
-        android:alpha="0"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:alpha="0"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
         <RelativeLayout
-            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <Button
                 android:id="@+id/filterSearchBtn"
-                android:layout_centerHorizontal="true"
-                android:text="Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="5dp"
                 android:background="@color/blue"
-                android:layout_margin="5dp"/>
+                android:text="Filter" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <Button
                 android:id="@+id/resetBtn"
-                android:layout_centerHorizontal="true"
-                android:text="Reset"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="5dp"
                 android:background="@color/blue"
-                android:layout_margin="5dp"/>
+                android:text="Reset" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <Button
                 android:id="@+id/closeBtn"
-                android:layout_centerHorizontal="true"
-                android:text="Close"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="5dp"
                 android:background="@color/blue"
-                android:layout_margin="5dp"/>
+                android:text="Close" />
 
         </RelativeLayout>
 
