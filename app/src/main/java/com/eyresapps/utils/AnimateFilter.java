@@ -56,6 +56,7 @@ public class AnimateFilter {
             new AnimateFilter().showAll(filterList,dateRow,btnRow);
             new AnimateFilter().hideBackground();
             new AnimateFilter().enableButtons(monthSpinner,yearSpinner, filterSearchBtn);
+            System.out.println("SHOW ALL exp");
         }
     }
 

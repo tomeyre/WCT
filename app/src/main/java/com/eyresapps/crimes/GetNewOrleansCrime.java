@@ -47,6 +47,7 @@ public class GetNewOrleansCrime extends AsyncTask<String, String, ArrayList<Arra
         this.attempts = attempts;
         this.firstLoad = firstLoad;
         progressDialog = new ProgressDialog(context);
+        progressDialog.setCanceledOnTouchOutside(false);
     }
 
     @Override
@@ -227,6 +228,7 @@ public class GetNewOrleansCrime extends AsyncTask<String, String, ArrayList<Arra
             new GetNewOrleansCrime(context, filterByCrime, filterByMonth, firstLoad, attempts).execute("https://data.nola.gov/resource/j5wk-jv3p.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and timecreate between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00,000' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00.000'");
         } else {
             ((MainActivity) context).dismissDialog("No crime Statistics for this date");
+            ((MainActivity)context).setScreenEnabled();
         }
     }
 }

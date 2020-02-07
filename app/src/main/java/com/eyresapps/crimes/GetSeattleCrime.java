@@ -48,6 +48,7 @@ public class GetSeattleCrime extends AsyncTask<String, Integer, ArrayList<ArrayL
         this.attempts = attempts;
         this.firstLoad = firstLoad;
         progressDialog = new ProgressDialog(context);
+        progressDialog.setCanceledOnTouchOutside(false);
     }
 
     @Override
@@ -66,7 +67,7 @@ public class GetSeattleCrime extends AsyncTask<String, Integer, ArrayList<ArrayL
             if (crimeList != null || crimeList.size() > 0) {
                 crimeList.clear();
             }
-            Log.i("Get SEATTLE crime : ", "https://data.seattle.gov/resource/pu5n-trf4.json?$where=within_circle(incident_location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and at_scene_time between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00,000' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00.000'");
+            Log.i("SEATTLE ", "https://data.seattle.gov/resource/pu5n-trf4.json?$where=within_circle(incident_location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and at_scene_time between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00,000' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00.000'");
 
             // create new instance of the httpConnect class
             HttpConnectUtil jParser = new HttpConnectUtil();
@@ -228,6 +229,7 @@ public class GetSeattleCrime extends AsyncTask<String, Integer, ArrayList<ArrayL
             new GetSeattleCrime(context, filterByCrime, filterByMonth, firstLoad, attempts).execute("https://data.seattle.gov/resource/pu5n-trf4.json?$where=within_circle(incident_location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and at_scene_time between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00,000' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00.000'");
         } else {
             ((MainActivity) context).dismissDialog("No crime Statistics for this date");
+            ((MainActivity)context).setScreenEnabled();
         }
     }
 }

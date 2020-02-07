@@ -8,15 +8,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.eyresapps.crimes.yearlycrimes.GetNewYorkCrimeByYear;
 import com.eyresapps.crimes.yearlycrimes.GetUKCrimeByYear;
 import com.eyresapps.data.Counter;
-import com.eyresapps.data.CrimeCount;
 import com.eyresapps.data.Crimes;
 import com.eyresapps.data.MonthCountList;
 import com.eyresapps.data.MonthCounter;
 import com.eyresapps.utils.Colors;
 import com.eyresapps.utils.CrimeCountList;
 import com.eyresapps.utils.CrimeNumberForYear;
+import com.eyresapps.utils.CurrentAddressUtil;
 import com.eyresapps.utils.DateParserUtil;
 import com.eyresapps.utils.DateUtil;
 import com.google.android.gms.ads.AdRequest;
@@ -35,7 +36,7 @@ import static com.eyresapps.utils.ScreenUtils.convertDpToPixel;
 
 public class YearStats extends AppCompatActivity {
 
-    private String id;
+    private Crimes id;
     private ArrayList<Counter> counts = new ArrayList<>();
     private MonthCountList monthCountList;
     private ArrayList<Integer> colors = new ArrayList<>();
@@ -55,15 +56,15 @@ public class YearStats extends AppCompatActivity {
     private LinearLayout llTwelve;
     private TextView streetName;
     private Colors color = Colors.getInstance();
-    CrimeCount crimeCount = CrimeCount.getInstance();
     CrimeNumberForYear crimeNumbers = CrimeNumberForYear.getInstance();
     private AdView mAdView;
     private AdRequest adRequest;
+    private CurrentAddressUtil currentAddressUtil = CurrentAddressUtil.getInstance();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
-        id = extras.getString("id");
+        id = (Crimes) extras.getSerializable("id");
         setContentView(R.layout.yearly_crime_stats);
 
         MobileAds.initialize(getApplicationContext(),
@@ -102,7 +103,11 @@ public class YearStats extends AppCompatActivity {
         barChartMonthLayouts.add(llEleven);
         barChartMonthLayouts.add(llTwelve);
 
-        new GetUKCrimeByYear(this, id).execute();
+        if(currentAddressUtil.getAddress().toLowerCase().contains("uk")) {
+            new GetUKCrimeByYear(this, id.getId()).execute();
+        } else if(currentAddressUtil.getAddress().toLowerCase().contains(", ny") && currentAddressUtil.getAddress().toLowerCase().contains("usa")){
+            new GetNewYorkCrimeByYear(this, id).execute();
+        }
     }
 
 //    public void customProgressBar(ArrayList<Counter> counters) {
@@ -210,7 +215,12 @@ public class YearStats extends AppCompatActivity {
     }
 
     public void setCrimes(ArrayList<Crimes> crimes) {
-        streetName.setText(crimes.get(0).getStreetName());
+        for(Crimes crime : crimes) {
+            if(!crime.getStreetName().equalsIgnoreCase("")) {
+                streetName.setText(crime.getStreetName());
+                break;
+            }
+        }
         counts = new ArrayList<>();
         monthCountList = new MonthCountList();
         Integer month = 0;

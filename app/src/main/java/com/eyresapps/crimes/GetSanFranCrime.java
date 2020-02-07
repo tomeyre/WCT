@@ -48,6 +48,7 @@ public class GetSanFranCrime extends AsyncTask<String, Integer, ArrayList<ArrayL
         this.attempts = attempts;
         this.firstLoad = firstLoad;
         progressDialog = new ProgressDialog(context);
+        progressDialog.setCanceledOnTouchOutside(false);
     }
 
     @Override
@@ -66,7 +67,7 @@ public class GetSanFranCrime extends AsyncTask<String, Integer, ArrayList<ArrayL
             if (crimeList != null || crimeList.size() > 0) {
                 crimeList.clear();
             }
-            Log.i("Get SAN FRAN crime : ", "https://data.sfgov.org/resource/cuks-n6tp.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00,000' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00.000'");
+            Log.i("SAN FRAN ", "https://data.sfgov.org/resource/cuks-n6tp.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00,000' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00.000'");
 
             // create new instance of the httpConnect class
             HttpConnectUtil jParser = new HttpConnectUtil();
@@ -228,6 +229,7 @@ public class GetSanFranCrime extends AsyncTask<String, Integer, ArrayList<ArrayL
             new GetSanFranCrime(context, filterByCrime, filterByMonth, firstLoad, attempts).execute("https://data.sfgov.org/resource/cuks-n6tp.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00,000' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00.000'");
         } else {
             ((MainActivity) context).dismissDialog("No crime Statistics for this date");
+            ((MainActivity)context).setScreenEnabled();
         }
     }
 }

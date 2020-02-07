@@ -26,6 +26,7 @@ public class UpdateMap extends AsyncTask<Integer, Integer, Integer> {
     @Override
     protected void onPreExecute() {
         updatingMapDialog = new ProgressDialog(context);
+        updatingMapDialog.setCanceledOnTouchOutside(false);
         updatingMapDialog.setMessage("Updating map...");
         updatingMapDialog.show();
     }

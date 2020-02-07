@@ -47,6 +47,7 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
         this.attempts = attempts;
         this.firstLoad = firstLoad;
         progressDialog = new ProgressDialog(context);
+        progressDialog.setCanceledOnTouchOutside(false);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
             if (crimeList != null || crimeList.size() > 0) {
                 crimeList.clear();
             }
-            Log.i("GET CHICARGO Crime URL ", "https://data.cityofchicago.org/resource/6zsd-86xi.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00'");
+            Log.i("CHICARGO ", "https://data.cityofchicago.org/resource/6zsd-86xi.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00'");
 
             // create new instance of the httpConnect class
             HttpConnectUtil jParser = new HttpConnectUtil();
@@ -222,6 +223,7 @@ public class GetChicargoCrime extends AsyncTask<String, String, ArrayList<ArrayL
             new GetChicargoCrime(context, filterByCrime, filterByMonth, firstLoad, attempts).execute("https://data.cityofchicago.org/resource/6zsd-86xi.json?$where=within_circle(location, " + latLng.getLatLng().latitude + ", " + latLng.getLatLng().longitude + ", 1000) and date between '" + dateUtil.getYear() + "-" + dateUtil.getMonth() + "-01T00:00:00' and '" + dateUtil.getYearAhead() + "-" + dateUtil.getMonthAhead() + "-01T00:00:00'");
         } else {
             ((MainActivity) context).dismissDialog("No crime Statistics for this date");
+            ((MainActivity)context).setScreenEnabled();
         }
     }
 }

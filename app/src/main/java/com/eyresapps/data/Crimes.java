@@ -57,4 +57,56 @@ public class Crimes implements Serializable{
     public String getDescription(){ return description; }
     public String getId(){ return id; }
 
+    public void setCrimeType(String crimeType) {
+        this.crimeType = crimeType;
+    }
+
+    public void setWeapon(String weapon) {
+        this.weapon = weapon;
+    }
+
+    public void setDateOccur(String dateOccur) {
+        this.dateOccur = dateOccur;
+    }
+
+    public void setDateReport(String dateReport) {
+        this.dateReport = dateReport;
+    }
+
+    public void setTimeOccur(String timeOccur) {
+        this.timeOccur = timeOccur;
+    }
+
+    public void setTimeReport(String timeReport) {
+        this.timeReport = timeReport;
+    }
+
+    public void setOutcome(String outcome) {
+        this.outcome = outcome;
+    }
+
+    public void setStreetName(String streetName) {
+        this.streetName = streetName;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString(){
+        return "TYPE : " + crimeType + " DATE : " + dateOccur + " YEAR : " + dateReport;
+    }
 }

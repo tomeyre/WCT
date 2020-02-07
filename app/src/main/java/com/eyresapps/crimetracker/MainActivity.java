@@ -106,6 +106,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         NetworkStateReceiver.NetworkStateReceiverListener,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
+    private boolean screenEnabled = true;
+
     private Integer animationTime = 350;
     private boolean timeRunning = false;
     private boolean haveCheckedIdleness = false;
@@ -498,7 +500,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
 
                 Intent intent = new Intent(MainActivity.this, YearStats.class);
-                intent.putExtra("id", markerCrimes.get(0).getId());
+                intent.putExtra("id", markerCrimes.get(0));
                 startActivity(intent);
             }
         });
@@ -586,8 +588,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 if (filterBtn.getHeight() > convertDpToPixel(36, MainActivity.this)) {
-//                    new AnimateFilter().shrinkFilter(filterBtn, filterImage, MainActivity.this, filterHeight, filterList.getFilterList(), dateRow, btnRow,
-//                            monthSpinner, yearSpinner, filterSearchBtn);
+                    new AnimateFilter().shrinkFilter(filterBtn, filterImage, MainActivity.this, filterHeight, filterList.getFilterList(), dateRow, btnRow,
+                            monthSpinner, yearSpinner, filterSearchBtn);
                 } else {
                     hideSoftKeyboard();
                     hidePopUpView();
@@ -605,8 +607,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
+                                        System.out.println("SHOW ALL1");
                                         yearSpinner.setSelection(dateUtil.getMaxYear() - dateUtil.getYear());
+                                        System.out.println("SHOW ALL2");
                                         monthSpinner.setSelection(dateUtil.getMonth() - 1);
+                                        System.out.println("SHOW ALL3");
                                     }
                                 });
                             }
@@ -615,6 +620,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     },100);
 
                 }
+                System.out.println("SHOW ALL4");
             }
         });
 
@@ -810,6 +816,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             dateTxt.setVisibility(VISIBLE);
         }
         hideSoftKeyboard();
+        System.out.println("SHOW ALLv");
     }
 
     public void showPopUpViewTitle() {
@@ -884,18 +891,25 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         if (null != currentAddress.getAddress() && currentAddress.getAddress().toLowerCase().contains("uk")) {
             locale.setLocale(Locale.UK);
             df.setTimeZone(TimeZone.getTimeZone("Europe/London"));
-        } else if (null != currentAddress.getAddress() && currentAddress.getAddress().toLowerCase().contains("los angeles")) {
-            locale.setLocale(Locale.US);
-            df.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
         } else if (null != currentAddress.getAddress() && currentAddress.getAddress().toLowerCase().contains("chicago")) {
             locale.setLocale(Locale.US);
             df.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
-        } else if (null != currentAddress.getAddress() && currentAddress.getAddress().toLowerCase().contains("durham, nc")) {
+        } else if (null != currentAddress.getAddress() && (currentAddress.getAddress().toLowerCase().contains("durham, nc") ||
+                (currentAddress.getAddress().toLowerCase().contains(", md") || currentAddress.getAddress().toLowerCase().contains(", ny"))
+                        && currentAddress.getAddress().toLowerCase().contains("usa"))
+                ) {
             locale.setLocale(Locale.US);
             df.setTimeZone(TimeZone.getTimeZone("America/New_York"));
         } else if (null != currentAddress.getAddress() && currentAddress.getAddress().toLowerCase().contains("new orleans")) {
             locale.setLocale(Locale.US);
             df.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
+        } else if (null != currentAddress.getAddress() && currentAddress.getAddress().toLowerCase().contains("los angeles") ||
+                (currentAddress.getAddress().toLowerCase().contains("san francisco") ||
+                currentAddress.getAddress().toLowerCase().contains("seattle") ||
+                currentAddress.getAddress().toLowerCase().contains("hartford, ct") ||
+                currentAddress.getAddress().toLowerCase().contains("baton rouge, la"))) {
+            locale.setLocale(Locale.US);
+            df.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
         } else {
             locale.setLocale(Locale.UK);
             df.setTimeZone(TimeZone.getTimeZone("Europe/London"));
@@ -934,7 +948,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void showPosition(boolean alreadyHaveAdress) {
-
+        screenEnabled = false;
         if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) && new Network().isNetworkEnabled(MainActivity.this)) {
             cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng.getLatLng(), 16);
             mMap.animateCamera(cameraUpdate);
@@ -946,6 +960,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return screenEnabled ?
+                super.dispatchTouchEvent(ev) :
+                true;
+    }
+
     //------------public methods
 
     public void dismissDialog(final String text) {
@@ -953,7 +974,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             public void run() {
                 if(!text.equals("")) {
                     Toast.makeText(getApplicationContext(), text,
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -1074,7 +1095,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });
+        setScreenEnabled();
+    }
 
+    public void setScreenEnabled(){
+        screenEnabled = true;
     }
 
     public void setFilterViews(ArrayList<Counter> list) {
@@ -1561,6 +1586,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         imm.hideSoftInputFromWindow(search.getWindowToken(),
                 InputMethodManager.RESULT_UNCHANGED_SHOWN);
         search.clearFocus();
+        System.out.println("SHOW ALLk");
 
     }
 

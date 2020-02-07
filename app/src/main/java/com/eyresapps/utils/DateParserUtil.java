@@ -19,19 +19,11 @@ public class DateParserUtil {
         if(currentAddress.getAddress().toLowerCase().contains("uk")) {
             return new SimpleDateFormat("yyyy-MM", locale);
         }
-        if(currentAddress.getAddress().toLowerCase().contains("chicago")) {
-            return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", locale);
-        }
-        if(currentAddress.getAddress().toLowerCase().contains("CA")) {
-            return new SimpleDateFormat("yyyy-MM-dd", locale);
-        }
-        if(currentAddress.getAddress().toLowerCase().contains("seattle")) {
-            return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", locale);
-        }
-        if(currentAddress.getAddress().toLowerCase().contains("durham, nc")) {
-            return new SimpleDateFormat("yyyy-MM-dd", locale);
-        }
-        if(currentAddress.getAddress().toLowerCase().contains("new orleans")) {
+        if((currentAddress.getAddress().toLowerCase().contains("chicago") ||
+                currentAddress.getAddress().toLowerCase().contains("seattle") ||
+                currentAddress.getAddress().toLowerCase().contains("new orleans") ||
+                currentAddress.getAddress().toLowerCase().contains(", ny") ||
+                currentAddress.getAddress().toLowerCase().contains(", md")) && currentAddress.getAddress().toLowerCase().contains("usa")) {
             return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", locale);
         }
         return new SimpleDateFormat("yyyy-MM-dd", locale);

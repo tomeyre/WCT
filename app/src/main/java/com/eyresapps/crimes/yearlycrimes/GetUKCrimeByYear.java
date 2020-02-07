@@ -25,6 +25,7 @@ public class GetUKCrimeByYear extends AsyncTask<String, Integer, ArrayList<Crime
 
     public GetUKCrimeByYear(Context context, String id) {
         this.context = context;
+        dateUtil.resetStatsDate();
         progressDialog = new ProgressDialog(context);
         this.id = id;
     }
@@ -34,6 +35,7 @@ public class GetUKCrimeByYear extends AsyncTask<String, Integer, ArrayList<Crime
         ((YearStats)context).runOnUiThread(new Runnable() {
             public void run() {
                 progressDialog.setMessage("Getting stats...");
+                progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
             }
         });
@@ -82,6 +84,7 @@ public class GetUKCrimeByYear extends AsyncTask<String, Integer, ArrayList<Crime
             }
         }
         catch (Exception e) {
+            progressDialog.dismiss();
             e.printStackTrace();
         }
 
@@ -132,7 +135,6 @@ public class GetUKCrimeByYear extends AsyncTask<String, Integer, ArrayList<Crime
     @Override
     protected void onPostExecute(ArrayList<Crimes> list) {
         progressDialog.dismiss();
-        dateUtil.resetStatsDate();
         ((YearStats)context).setCrimes(list);
     }
 }
